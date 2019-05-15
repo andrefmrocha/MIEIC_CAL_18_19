@@ -124,3 +124,4 @@ pkg/
 src/
 .idea
 
+cmake-build-debug
