@@ -131,6 +131,7 @@ public:
 
 	// Fp05 - single source
 	void dijkstraShortestPath(const T &s);
+	void aStarShortestPath(const T &s):
 	void unweightedShortestPath(const T &s);
 	void bellmanFordShortestPath(const T &s);
 	vector<T> getPath(const T &origin, const T &dest) const;
@@ -415,6 +416,24 @@ vector<Vertex<T>*> Graph<T>::calculateKruskal() {
 	return vertexSet;
 }
 
+template<class T>
+void Graph<T>::aStarShortestPath(const T &origin) {
+    auto s = initSingleSource(origin);
+    MutablePriorityQueue<Vertex<T>> q;
+    q.insert(s);
+    while( ! q.empty() ) {
+        auto v = q.extractMin();
+        for(auto e : v->adj) {
+            auto oldDist = e.dest->dist;
+            if (relax(v, e.dest, e.weight)) {
+                if (oldDist == INF)
+                    q.insert(e.dest);
+                else
+                    q.decreaseKey(e.dest);
+            }
+        }
+    }
+}
 
 
 #endif /* GRAPH_H_ */
