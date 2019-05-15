@@ -26,6 +26,7 @@ class Vertex {
 	Coordinates info;                // contents
 	vector<Edge> adj;  // outgoing edges
 	bool visited;          // auxiliary field
+	double weight = 0;
 	double dist = 0;
 	Vertex *path = nullptr;
 	int queueIndex = 0; 		// required by MutablePriorityQueue
@@ -38,7 +39,7 @@ public:
 	Vertex(Coordinates in);
 	bool operator<(Vertex& vertex) const; // // required by MutablePriorityQueue
 	Coordinates getInfo() const;
-	double getDist() const;
+	double getWeight() const;
 	Vertex *getPath() const;
 	friend class Graph;
 	friend class MutablePriorityQueue<Vertex>;
@@ -55,15 +56,15 @@ void Vertex::addEdge(Vertex *d, double w) {
 }
 
 bool Vertex::operator<(Vertex & vertex) const {
-	return this->dist < vertex.dist;
+	return this->weight < vertex.weight;
 }
 
 Coordinates Vertex::getInfo() const {
 	return this->info;
 }
 
-double Vertex::getDist() const {
-	return this->dist;
+double Vertex::getWeight() const {
+	return this->weight;
 }
 
 Vertex *Vertex::getPath() const {
@@ -105,7 +106,8 @@ class Graph {
 	// Fp05
 	Vertex * initSingleSource(const Coordinates &orig);
 	bool relax(Vertex *v, Vertex *w, double weight);
-	double ** W = nullptr;   // dist
+    static bool aStarRelax(Vertex *v, Vertex *w, double weight, bool ( *heu)(Vertex *, Vertex *, double));
+    double ** W = nullptr;   // weight
 	int **P = nullptr;   // path
 	int findVertexIdx(const Coordinates &in) const;
 
@@ -119,7 +121,7 @@ public:
 
 	// Fp05 - single source
 	void dijkstraShortestPath(const Coordinates &s);
-	void aStarShortestPath(const Coordinates &s):
+    void Graph::aStarShortestPath(const Coordinates &origin, bool ( *heu)(Vertex *, Vertex *, double) );
 	vector<Coordinates> getPath(const Coordinates &origin, const Coordinates &dest) const;
 
 	~Graph();
@@ -191,11 +193,12 @@ bool Graph::addEdge(const Coordinates &sourc, const Coordinates &dest, double w)
  */
 Vertex * Graph::initSingleSource(const Coordinates &origin) {
 	for(auto v : vertexSet) {
-		v->dist = INF;
+		v->weight = INF;
 		v->path = nullptr;
+		v->dist = INF;
 	}
 	auto s = findVertex(origin);
-	s->dist = 0;
+	s->weight = 0;
 	return s;
 }
 
@@ -205,8 +208,8 @@ Vertex * Graph::initSingleSource(const Coordinates &origin) {
  * Used by all single-source shortest path algorithms.
  */
 inline bool Graph::relax(Vertex *v, Vertex *w, double weight) {
-	if (v->dist + weight < w->dist) {
-		w->dist = v->dist + weight;
+	if (v->weight + weight < w->weight) {
+		w->weight = v->weight + weight;
 		w->path = v;
 		return true;
 	}
@@ -221,7 +224,7 @@ void Graph::dijkstraShortestPath(const Coordinates &origin) {
 	while( ! q.empty() ) {
 		auto v = q.extractMin();
 		for(auto e : v->adj) {
-			auto oldDist = e.dest->dist;
+			auto oldDist = e.dest->weight;
 			if (relax(v, e.dest, e.weight)) {
 				if (oldDist == INF)
 					q.insert(e.dest);
@@ -235,7 +238,7 @@ void Graph::dijkstraShortestPath(const Coordinates &origin) {
 vector<Coordinates> Graph::getPath(const Coordinates &origin, const Coordinates &dest) const{
 	vector<Coordinates> res;
 	auto v = findVertex(dest);
-	if (v == nullptr || v->dist == INF) // missing or disconnected
+	if (v == nullptr || v->weight == INF) // missing or disconnected
 		return res;
 	for ( ; v != nullptr; v = v->path)
 		res.push_back(v->info);
@@ -243,15 +246,15 @@ vector<Coordinates> Graph::getPath(const Coordinates &origin, const Coordinates 
 	return res;
 }
 
-void Graph::aStarShortestPath(const Coordinates &origin) {
+void Graph::aStarShortestPath(const Coordinates &origin, bool ( *heu)(Vertex *, Vertex *, double) ) {
     auto s = initSingleSource(origin);
     MutablePriorityQueue<Vertex> q;
     q.insert(s);
     while( ! q.empty() ) {
         auto v = q.extractMin();
         for(auto e : v->adj) {
-            auto oldDist = e.dest->dist;
-            if (relax(v, e.dest, e.weight)) {
+            auto oldDist = e.dest->weight;
+            if (aStarRelax(v, e.dest, e.weight, heu)) {
                 if (oldDist == INF)
                     q.insert(e.dest);
                 else
@@ -259,6 +262,17 @@ void Graph::aStarShortestPath(const Coordinates &origin) {
             }
         }
     }
+}
+
+inline bool Graph::aStarRelax(Vertex *v, Vertex *w, double weight, bool (*heu)(Vertex *, Vertex *, double)) {
+    if (v->weight + weight + heu(v, w, weight)< w->weight) {
+        w->weight = v->weight + weight + heu(v, w, weight);
+        w->dist = v->weight + weight;
+        w->path = v;
+        return true;
+    }
+    else
+        return false;
 }
 
 
