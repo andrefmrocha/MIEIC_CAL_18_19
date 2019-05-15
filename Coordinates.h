@@ -7,7 +7,15 @@
 
 
 class Coordinates {
-
+    double latitude;
+    double longitude;
+    unsigned long idNode;
+public:
+    Coordinates(double latitude, double longitude, unsigned long idNode);
+    double getLat();
+    double getLong();
+    unsigned long getId();
+    bool operator==(Coordinates right);
 };
 
 
