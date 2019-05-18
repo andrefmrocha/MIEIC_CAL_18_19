@@ -38,6 +38,7 @@ class Vertex {
 public:
 	Vertex(Coordinates in);
 	bool operator<(Vertex& vertex) const; // // required by MutablePriorityQueue
+	bool operator==(Vertex v) const;
 	Coordinates getInfo() const;
 	double getWeight() const;
 	Vertex *getPath() const;
@@ -79,6 +80,7 @@ public:
 	friend class Graph;
 	friend class Vertex;
 	bool operator<(Edge edge) const;
+	bool operator==(Edge edge) const;
 
 	// Fp07
 	double getWeight() const;
@@ -105,6 +107,7 @@ void Vertex::addEdge(Vertex *d, double w) {
 
 class Graph {
 	vector<Vertex *> vertexSet;    // vertex set
+	vector<Edge> edgeSet;
 
 	// Fp05
 	Vertex * initSingleSource(const Coordinates &orig);
@@ -121,6 +124,7 @@ public:
 	bool addEdge(const Coordinates &sourc, const Coordinates &dest, double w);
 	int getNumVertex() const;
 	vector<Vertex *> getVertexSet() const;
+	double getEdgeWeight(Edge e);
 
 	// Fp05 - single source
 	void dijkstraShortestPath(const Coordinates &s);
@@ -130,8 +134,16 @@ public:
 	//~Graph();
 };
 
+bool Vertex::operator==(Vertex v) const {
+    return this->getInfo() == v.getInfo();
+}
+
 bool Edge::operator<(Edge edge) const {
     return this->getWeight() > edge.getWeight();
+}
+
+bool Edge::operator==(Edge edge) const {
+    return this->orig == edge.orig && this->dest == edge.dest && this->weight == edge.getWeight();
 }
 
 int Graph::getNumVertex() const {
@@ -183,6 +195,7 @@ bool Graph::addEdge(const Coordinates &sourc, const Coordinates &dest, double w)
 	if (v1 == nullptr || v2 == nullptr)
 		return false;
 	v1->addEdge(v2, w);
+	edgeSet.push_back(Edge(v1,v2,w));
 	return true;
 }
 
@@ -276,6 +289,15 @@ inline bool Graph::aStarRelax(Vertex *v, Vertex *w, double weight, bool (*heu)(V
     }
     else
         return false;
+}
+
+double Graph::getEdgeWeight(Edge e) {
+    vector<Edge>::iterator it = find(edgeSet.begin(),edgeSet.end(),e);
+    if(it != edgeSet.end()) {
+        return it->getWeight();
+    }
+    else
+        return -1;
 }
 
 #endif /* GRAPH_H_ */
