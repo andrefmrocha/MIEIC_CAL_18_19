@@ -47,13 +47,7 @@ public:
 
 Vertex::Vertex(Coordinates in): info(in) {}
 
-/*
- * Auxiliary function to add an outgoing edge to a vertex (this),
- * with a given destination vertex (d) and edge weight (w).
- */
-void Vertex::addEdge(Vertex *d, double w) {
-	adj.push_back(Edge(this, d, w));
-}
+
 
 bool Vertex::operator<(Vertex & vertex) const {
 	return this->weight < vertex.weight;
@@ -97,6 +91,15 @@ double Edge::getWeight() const {
 	return weight;
 }
 
+//////////////////Vertex Method/////////////////////////////////////////
+//Added here because compilation errors
+/*
+ * Auxiliary function to add an outgoing edge to a vertex (this),
+ * with a given destination vertex (d) and edge weight (w).
+ */
+void Vertex::addEdge(Vertex *d, double w) {
+    adj.push_back(Edge(this, d, w));
+}
 
 /*************************** Graph  **************************/
 
@@ -121,10 +124,10 @@ public:
 
 	// Fp05 - single source
 	void dijkstraShortestPath(const Coordinates &s);
-    void Graph::aStarShortestPath(const Coordinates &origin, bool ( *heu)(Vertex *, Vertex *, double) );
+    void aStarShortestPath(const Coordinates &origin, bool ( *heu)(Vertex *, Vertex *, double) );
 	vector<Coordinates> getPath(const Coordinates &origin, const Coordinates &dest) const;
 
-	~Graph();
+	//~Graph();
 };
 
 bool Edge::operator<(Edge edge) const {
@@ -274,6 +277,5 @@ inline bool Graph::aStarRelax(Vertex *v, Vertex *w, double weight, bool (*heu)(V
     else
         return false;
 }
-
 
 #endif /* GRAPH_H_ */
