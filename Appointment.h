@@ -15,7 +15,7 @@ class Appointment {
     Coordinates coord;
     struct tm start;
     int duration; //in minutes
-    std::deque<Edge> path;
+    std::deque<Edge *> path;
 
     /**
     * @brief Converts a string in format "YYYY-MM-DD hh:mm:ss" into a struct tm type.
@@ -31,9 +31,9 @@ public:
 
     const tm &getStart() const;
 
-    const deque<Edge> &getPath() const;
+    const deque<Edge *> &getPath() const;
 
-    void setPath(const deque<Edge> &path);
+    void setPath(const deque<Edge *> &path);
 
     /**
     * @brief Checks if THIS appointment overlaps the one passed as argument.

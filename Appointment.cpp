@@ -6,7 +6,7 @@
 
 Appointment::Appointment(const Coordinates &coord, const std::string &start, int duration) :
         coord(coord), duration(duration) {
-    this->path = deque<Edge>();
+    this->path = deque<Edge *>();
     this->start = stringToTM(start);
 }
 
@@ -32,11 +32,11 @@ const tm &Appointment::getStart() const {
     return start;
 }
 
-const deque<Edge> &Appointment::getPath() const {
+const deque<Edge *> &Appointment::getPath() const {
     return path;
 }
 
-void Appointment::setPath(const deque<Edge> &path) {
+void Appointment::setPath(const deque<Edge *> &path) {
     Appointment::path = path;
 }
 
