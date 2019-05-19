@@ -19,7 +19,7 @@ class GraphicalInterface {
 public:
     GraphicalInterface(int width, int height);
 
-    void showPath(std::deque<Edge> path);
+    void showPath(std::deque<Edge*> path);
 };
 
 

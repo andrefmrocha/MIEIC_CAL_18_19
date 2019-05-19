@@ -19,26 +19,26 @@ int GraphicalInterface::getEdgeId(int oriID, int destID) {
     return oriID + destID;
 }
 
-void GraphicalInterface::showPath(std::deque<Edge> path) {
+void GraphicalInterface::showPath(std::deque<Edge*> path) {
     gv->createWindow(this->width, this->height);
     double lat = 0;
     double longi = 0;
-    for(Edge edge: path){
-        if(edge.getOrig()->getInfo().getLat() > lat){
-            lat = edge.getOrig()->getInfo().getLat();
+    for(Edge* edge: path){
+        if(edge->getOrig()->getInfo().getLat() > lat){
+            lat = edge->getOrig()->getInfo().getLat();
         }
-        if(edge.getOrig()->getInfo().getLong() > longi){
-            longi = edge.getOrig()->getInfo().getLong();
+        if(edge->getOrig()->getInfo().getLong() > longi){
+            longi = edge->getOrig()->getInfo().getLong();
         }
     }
 
-    for(Edge edge: path){
-        Vertex * ori = edge.getOrig();
+    for(Edge* edge: path){
+        Vertex * ori = edge->getOrig();
         this->gv->addNode(ori->getInfo().getId(),
                 this->calculateCoord(this->width, longi, ori->getInfo().getLong()),
                 this->calculateCoord(this->height, lat, ori->getInfo().getLat())
                         );
-        Vertex * dest = edge.getDest();
+        Vertex * dest = edge->getDest();
         this->gv->addNode(dest->getInfo().getId(),
                           this->calculateCoord(this->width, longi, dest->getInfo().getLong()),
                           this->calculateCoord(this->height, lat, dest->getInfo().getLat())
@@ -48,11 +48,11 @@ void GraphicalInterface::showPath(std::deque<Edge> path) {
                 ori->getInfo().getId(),
                 dest->getInfo().getId(),
                 EdgeType::DIRECTED);
-        if(edge.isBus()){
+        if(edge->isBus()){
             this->gv->setVertexColor(ori->getInfo().getId(), BLUE);
             this->gv->setVertexColor(dest->getInfo().getId(), BLUE);
             this->gv->setEdgeColor(this->getEdgeId(ori->getInfo().getId(), dest->getInfo().getId()), BLUE);
-        } else if(edge.isSubway()){
+        } else if(edge->isSubway()){
             this->gv->setVertexColor(ori->getInfo().getId(), YELLOW);
             this->gv->setVertexColor(dest->getInfo().getId(), YELLOW);
             this->gv->setEdgeColor(this->getEdgeId(ori->getInfo().getId(), dest->getInfo().getId()), YELLOW);
