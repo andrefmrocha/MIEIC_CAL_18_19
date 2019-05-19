@@ -25,11 +25,15 @@ Vertex *Edge::getDest() const {
 }
 
 bool Edge::isBus() const {
-    return bus;
+    return type == bus;
 }
 
 bool Edge::isSubway() const {
-    return subway;
+    return type == subway;
+}
+
+bool Edge::isOnFoot() const {
+    return type == foot;
 }
 
 int Graph::getNumVertex() const {
@@ -72,16 +76,16 @@ bool Graph::addVertex(const Coordinates &in) {
 
 /*
  * Adds an edge to a graph (this), given the contents of the source and
- * destination vertices and the edge weight (w).
+ * destination vertices and the edge weight (w) and transportation type.
  * Returns true if successful, and false if the source or destination vertex does not exist.
  */
-bool Graph::addEdge(const Coordinates &sourc, const Coordinates &dest, double w) {
+bool Graph::addEdge(const Coordinates &sourc, const Coordinates &dest, double w,Transport type) {
     auto v1 = findVertex(sourc);
     auto v2 = findVertex(dest);
     if (v1 == nullptr || v2 == nullptr)
         return false;
-    v1->addEdge(v2, w);
-    edgeSet.push_back(Edge(v1,v2,w));
+    v1->addEdge(v2, w,type);
+    edgeSet.push_back(Edge(v1,v2,w,type));
     return true;
 }
 
@@ -187,11 +191,13 @@ double Graph::getEdgeWeight(Edge e) {
 }
 
 
-Edge::Edge(Vertex *o, Vertex *d, double w): orig(o), dest(d), weight(w) {}
+Edge::Edge(Vertex *o, Vertex *d, double w,Transport type): orig(o), dest(d), weight(w), type(type) {}
 
 double Edge::getWeight() const {
     return weight;
 }
+
+
 
 //////////////////Vertex Method/////////////////////////////////////////
 //Added here because compilation errors
@@ -199,8 +205,8 @@ double Edge::getWeight() const {
  * Auxiliary function to add an outgoing edge to a vertex (this),
  * with a given destination vertex (d) and edge weight (w).
  */
-void Vertex::addEdge(Vertex *d, double w) {
-    adj.push_back(Edge(this, d, w));
+void Vertex::addEdge(Vertex *d, double w,Transport type) {
+    adj.push_back(Edge(this, d, w,type));
 }
 
 Vertex::Vertex(Coordinates in): info(in) {}

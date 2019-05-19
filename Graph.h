@@ -18,6 +18,12 @@ class Edge;
 class Graph;
 class Vertex;
 
+//type of transportation
+enum Transport  {
+    foot,
+    bus,
+    subway
+};
 #define INF std::numeric_limits<double>::max()
 
 /************************* Vertex  **************************/
@@ -32,7 +38,7 @@ class Vertex {
 	int queueIndex = 0; 		// required by MutablePriorityQueue
 	vector<Vertex* > disjSet;
 
-	void addEdge(Vertex *dest, double w);
+	void addEdge(Vertex *dest, double w,Transport type);
 
 
 public:
@@ -49,17 +55,19 @@ public:
 /********************** Edge  ****************************/
 
 class Edge {
-	Vertex *orig;
 
-	bool bus;
+
+
+    Vertex *orig;
+
+	Transport type;
 public:
     bool isBus() const;
 
     bool isSubway() const;
 
-private:
-    bool subway;
-public:
+    bool isOnFoot() const;
+
     Vertex *getOrig() const;
 
     Vertex *getDest() const;
@@ -72,7 +80,7 @@ private:
 	bool selected; // Fp07
 
 public:
-	Edge(Vertex *o, Vertex *d, double w);
+	Edge(Vertex *o, Vertex *d, double w, Transport type);
 	friend class Graph;
 	friend class Vertex;
 	bool operator<(Edge edge) const;
@@ -101,7 +109,7 @@ class Graph {
 public:
 	Vertex *findVertex(const Coordinates &in) const;
 	bool addVertex(const Coordinates &in);
-	bool addEdge(const Coordinates &sourc, const Coordinates &dest, double w);
+	bool addEdge(const Coordinates &sourc, const Coordinates &dest, double w,Transport type);
 	int getNumVertex() const;
 	vector<Vertex *> getVertexSet() const;
 	double getEdgeWeight(Edge e);
