@@ -15,7 +15,7 @@ public:
     double getLat();
     double getLong();
     unsigned long getId();
-    bool operator==(Coordinates right);
+    bool operator==(const Coordinates &right) const;
 };
 
 
