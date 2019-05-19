@@ -4,6 +4,7 @@
 
 #include "GraphicalInterface.h"
 
+
 GraphicalInterface::GraphicalInterface(int width, int height) {
     this->gv = new GraphViewer(width, height, false);
     this->width = width;
@@ -48,17 +49,17 @@ void GraphicalInterface::showPath(std::deque<Edge> path) {
                 dest->getInfo().getId(),
                 EdgeType::DIRECTED);
         if(edge.isBus()){
-            this->gv->setVertexColor(ori->getInfo().getId(), "blue");
-            this->gv->setVertexColor(dest->getInfo().getId(), "blue");
-            this->gv->setEdgeColor(this->getEdgeId(ori->getInfo().getId(), dest->getInfo().getId()), "blue");
+            this->gv->setVertexColor(ori->getInfo().getId(), BLUE);
+            this->gv->setVertexColor(dest->getInfo().getId(), BLUE);
+            this->gv->setEdgeColor(this->getEdgeId(ori->getInfo().getId(), dest->getInfo().getId()), BLUE);
         } else if(edge.isSubway()){
-            this->gv->setVertexColor(ori->getInfo().getId(), "yellow");
-            this->gv->setVertexColor(dest->getInfo().getId(), "yellow");
-            this->gv->setEdgeColor(this->getEdgeId(ori->getInfo().getId(), dest->getInfo().getId()), "yellow");
+            this->gv->setVertexColor(ori->getInfo().getId(), YELLOW);
+            this->gv->setVertexColor(dest->getInfo().getId(), YELLOW);
+            this->gv->setEdgeColor(this->getEdgeId(ori->getInfo().getId(), dest->getInfo().getId()), YELLOW);
         } else {
-            this->gv->setVertexColor(ori->getInfo().getId(), "green");
-            this->gv->setVertexColor(dest->getInfo().getId(), "green");
-            this->gv->setEdgeColor(this->getEdgeId(ori->getInfo().getId(), dest->getInfo().getId()), "green");
+            this->gv->setVertexColor(ori->getInfo().getId(), GREEN);
+            this->gv->setVertexColor(dest->getInfo().getId(), GREEN);
+            this->gv->setEdgeColor(this->getEdgeId(ori->getInfo().getId(), dest->getInfo().getId()), GREEN);
         }
     }
     this->gv->rearrange();
