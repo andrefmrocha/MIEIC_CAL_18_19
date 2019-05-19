@@ -69,7 +69,23 @@ Vertex *Vertex::getPath() const {
 /********************** Edge  ****************************/
 
 class Edge {
-	Vertex *orig; 	// Fp07
+	Vertex *orig;
+
+	bool bus;
+public:
+    bool isBus() const;
+
+    bool isSubway() const;
+
+private:
+    bool subway;
+public:
+    Vertex *getOrig() const;
+
+    Vertex *getDest() const;
+
+private:
+    // Fp07
 	Vertex *dest;      // destination vertex
 	double weight;         // edge weight
 
@@ -144,6 +160,22 @@ bool Edge::operator<(Edge edge) const {
 
 bool Edge::operator==(Edge edge) const {
     return this->orig == edge.orig && this->dest == edge.dest && this->weight == edge.getWeight();
+}
+
+Vertex *Edge::getOrig() const {
+        return orig;
+}
+
+Vertex *Edge::getDest() const {
+    return dest;
+}
+
+bool Edge::isBus() const {
+    return bus;
+}
+
+bool Edge::isSubway() const {
+    return subway;
 }
 
 int Graph::getNumVertex() const {
