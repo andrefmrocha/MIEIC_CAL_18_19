@@ -26,6 +26,7 @@ class Vertex {
 	Coordinates info;                // contents
 	vector<Edge> adj;  // outgoing edges
 	bool visited;          // auxiliary field
+	double weight = 0;
 	double dist = 0;
 	Vertex *path = nullptr;
 	int queueIndex = 0; 		// required by MutablePriorityQueue
@@ -37,8 +38,9 @@ class Vertex {
 public:
 	Vertex(Coordinates in);
 	bool operator<(Vertex& vertex) const; // // required by MutablePriorityQueue
+	bool operator==(Vertex v) const;
 	Coordinates getInfo() const;
-	double getDist() const;
+	double getWeight() const;
 	Vertex *getPath() const;
 	friend class Graph;
 	friend class MutablePriorityQueue<Vertex>;
@@ -46,24 +48,18 @@ public:
 
 Vertex::Vertex(Coordinates in): info(in) {}
 
-/*
- * Auxiliary function to add an outgoing edge to a vertex (this),
- * with a given destination vertex (d) and edge weight (w).
- */
-void Vertex::addEdge(Vertex *d, double w) {
-	adj.push_back(Edge(this, d, w));
-}
+
 
 bool Vertex::operator<(Vertex & vertex) const {
-	return this->dist < vertex.dist;
+	return this->weight < vertex.weight;
 }
 
 Coordinates Vertex::getInfo() const {
 	return this->info;
 }
 
-double Vertex::getDist() const {
-	return this->dist;
+double Vertex::getWeight() const {
+	return this->weight;
 }
 
 Vertex *Vertex::getPath() const {
@@ -84,6 +80,7 @@ public:
 	friend class Graph;
 	friend class Vertex;
 	bool operator<(Edge edge) const;
+	bool operator==(Edge edge) const;
 
 	// Fp07
 	double getWeight() const;
@@ -96,16 +93,27 @@ double Edge::getWeight() const {
 	return weight;
 }
 
+//////////////////Vertex Method/////////////////////////////////////////
+//Added here because compilation errors
+/*
+ * Auxiliary function to add an outgoing edge to a vertex (this),
+ * with a given destination vertex (d) and edge weight (w).
+ */
+void Vertex::addEdge(Vertex *d, double w) {
+    adj.push_back(Edge(this, d, w));
+}
 
 /*************************** Graph  **************************/
 
 class Graph {
 	vector<Vertex *> vertexSet;    // vertex set
+	vector<Edge> edgeSet;
 
 	// Fp05
 	Vertex * initSingleSource(const Coordinates &orig);
 	bool relax(Vertex *v, Vertex *w, double weight);
-	double ** W = nullptr;   // dist
+    static bool aStarRelax(Vertex *v, Vertex *w, double weight, bool ( *heu)(Vertex *, Vertex *, double));
+    double ** W = nullptr;   // weight
 	int **P = nullptr;   // path
 	int findVertexIdx(const Coordinates &in) const;
 
@@ -116,17 +124,26 @@ public:
 	bool addEdge(const Coordinates &sourc, const Coordinates &dest, double w);
 	int getNumVertex() const;
 	vector<Vertex *> getVertexSet() const;
+	double getEdgeWeight(Edge e);
 
 	// Fp05 - single source
 	void dijkstraShortestPath(const Coordinates &s);
-	void aStarShortestPath(const Coordinates &s):
+    void aStarShortestPath(const Coordinates &origin, bool ( *heu)(Vertex *, Vertex *, double) );
 	vector<Coordinates> getPath(const Coordinates &origin, const Coordinates &dest) const;
 
-	~Graph();
+	//~Graph();
 };
+
+bool Vertex::operator==(Vertex v) const {
+    return this->getInfo() == v.getInfo();
+}
 
 bool Edge::operator<(Edge edge) const {
     return this->getWeight() > edge.getWeight();
+}
+
+bool Edge::operator==(Edge edge) const {
+    return this->orig == edge.orig && this->dest == edge.dest && this->weight == edge.getWeight();
 }
 
 int Graph::getNumVertex() const {
@@ -178,6 +195,7 @@ bool Graph::addEdge(const Coordinates &sourc, const Coordinates &dest, double w)
 	if (v1 == nullptr || v2 == nullptr)
 		return false;
 	v1->addEdge(v2, w);
+	edgeSet.push_back(Edge(v1,v2,w));
 	return true;
 }
 
@@ -191,11 +209,12 @@ bool Graph::addEdge(const Coordinates &sourc, const Coordinates &dest, double w)
  */
 Vertex * Graph::initSingleSource(const Coordinates &origin) {
 	for(auto v : vertexSet) {
-		v->dist = INF;
+		v->weight = INF;
 		v->path = nullptr;
+		v->dist = INF;
 	}
 	auto s = findVertex(origin);
-	s->dist = 0;
+	s->weight = 0;
 	return s;
 }
 
@@ -205,8 +224,8 @@ Vertex * Graph::initSingleSource(const Coordinates &origin) {
  * Used by all single-source shortest path algorithms.
  */
 inline bool Graph::relax(Vertex *v, Vertex *w, double weight) {
-	if (v->dist + weight < w->dist) {
-		w->dist = v->dist + weight;
+	if (v->weight + weight < w->weight) {
+		w->weight = v->weight + weight;
 		w->path = v;
 		return true;
 	}
@@ -221,7 +240,7 @@ void Graph::dijkstraShortestPath(const Coordinates &origin) {
 	while( ! q.empty() ) {
 		auto v = q.extractMin();
 		for(auto e : v->adj) {
-			auto oldDist = e.dest->dist;
+			auto oldDist = e.dest->weight;
 			if (relax(v, e.dest, e.weight)) {
 				if (oldDist == INF)
 					q.insert(e.dest);
@@ -235,7 +254,7 @@ void Graph::dijkstraShortestPath(const Coordinates &origin) {
 vector<Coordinates> Graph::getPath(const Coordinates &origin, const Coordinates &dest) const{
 	vector<Coordinates> res;
 	auto v = findVertex(dest);
-	if (v == nullptr || v->dist == INF) // missing or disconnected
+	if (v == nullptr || v->weight == INF) // missing or disconnected
 		return res;
 	for ( ; v != nullptr; v = v->path)
 		res.push_back(v->info);
@@ -243,15 +262,15 @@ vector<Coordinates> Graph::getPath(const Coordinates &origin, const Coordinates 
 	return res;
 }
 
-void Graph::aStarShortestPath(const Coordinates &origin) {
+void Graph::aStarShortestPath(const Coordinates &origin, bool ( *heu)(Vertex *, Vertex *, double) ) {
     auto s = initSingleSource(origin);
     MutablePriorityQueue<Vertex> q;
     q.insert(s);
     while( ! q.empty() ) {
         auto v = q.extractMin();
         for(auto e : v->adj) {
-            auto oldDist = e.dest->dist;
-            if (relax(v, e.dest, e.weight)) {
+            auto oldDist = e.dest->weight;
+            if (aStarRelax(v, e.dest, e.weight, heu)) {
                 if (oldDist == INF)
                     q.insert(e.dest);
                 else
@@ -261,5 +280,24 @@ void Graph::aStarShortestPath(const Coordinates &origin) {
     }
 }
 
+inline bool Graph::aStarRelax(Vertex *v, Vertex *w, double weight, bool (*heu)(Vertex *, Vertex *, double)) {
+    if (v->weight + weight + heu(v, w, weight)< w->weight) {
+        w->weight = v->weight + weight + heu(v, w, weight);
+        w->dist = v->weight + weight;
+        w->path = v;
+        return true;
+    }
+    else
+        return false;
+}
+
+double Graph::getEdgeWeight(Edge e) {
+    vector<Edge>::iterator it = find(edgeSet.begin(),edgeSet.end(),e);
+    if(it != edgeSet.end()) {
+        return it->getWeight();
+    }
+    else
+        return -1;
+}
 
 #endif /* GRAPH_H_ */
