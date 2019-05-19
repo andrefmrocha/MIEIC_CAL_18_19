@@ -61,7 +61,8 @@ void GraphicalInterface::showPath(std::deque<Edge> path) {
             this->gv->setVertexColor(dest->getInfo().getId(), GREEN);
             this->gv->setEdgeColor(this->getEdgeId(ori->getInfo().getId(), dest->getInfo().getId()), GREEN);
         }
+        this->gv->rearrange();
+        sleep(1);
     }
-    this->gv->rearrange();
 
 }
