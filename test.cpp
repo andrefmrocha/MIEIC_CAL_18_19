@@ -118,6 +118,64 @@ void generateMetroLineB(Graph &g) {
     g.addEdge(Coordinates(9,2,92),Coordinates(9,0,90),dis(gen)*metroF);
 }
 
+void generateBusRouteGraph(Graph &g) {
+    g.addVertex(Coordinates(0,9,9));
+    g.addVertex(Coordinates(1,1,11));
+    g.addVertex(Coordinates(1,5,15));
+    g.addVertex(Coordinates(1,7,17));
+    g.addVertex(Coordinates(2,1,21));
+    g.addVertex(Coordinates(2,8,28));
+    g.addVertex(Coordinates(2,9,29));
+    g.addVertex(Coordinates(3,2,32));
+    g.addVertex(Coordinates(3,7,37));
+    g.addVertex(Coordinates(3,8,38));
+    g.addVertex(Coordinates(4,6,46));
+    g.addVertex(Coordinates(5,0,50));
+    g.addVertex(Coordinates(5,2,52));
+    g.addVertex(Coordinates(5,8,58));
+    g.addVertex(Coordinates(6,6,66));
+    g.addVertex(Coordinates(7,0,70));
+    g.addVertex(Coordinates(7,5,75));
+    g.addVertex(Coordinates(7,8,78));
+    g.addVertex(Coordinates(8,1,81));
+    g.addVertex(Coordinates(8,3,83));
+    g.addVertex(Coordinates(8,5,85));
+    g.addVertex(Coordinates(9,0,90));
+    g.addVertex(Coordinates(9,2,92));
+    g.addVertex(Coordinates(9,4,94));
+    g.addVertex(Coordinates(9,6,96));
+    g.addVertex(Coordinates(9,8,98));
+
+    generateBusRoute1(g);
+    generateBusRoute2(g);
+    generateBusRoute3(g);
+
+}
+
+void generateMetroLinesGraph(Graph &g) {
+    g.addVertex(Coordinates(0,2,2));
+    g.addVertex(Coordinates(0,9,9));
+    g.addVertex(Coordinates(2,2,22));
+    g.addVertex(Coordinates(2,8,28));
+    g.addVertex(Coordinates(2,9,29));
+    g.addVertex(Coordinates(3,3,33));
+    g.addVertex(Coordinates(3,7,37));
+    g.addVertex(Coordinates(4,6,46));
+    g.addVertex(Coordinates(5,4,54));
+    g.addVertex(Coordinates(6,6,66));
+    g.addVertex(Coordinates(7,5,75));
+    g.addVertex(Coordinates(7,6,76));
+    g.addVertex(Coordinates(8,3,83));
+    g.addVertex(Coordinates(8,7,87));
+    g.addVertex(Coordinates(8,9,89));
+    g.addVertex(Coordinates(9,0,90));
+    g.addVertex(Coordinates(9,2,92));
+
+    generateMetroLineA(g);
+    generateMetroLineB(g);
+
+}
+
 void generateRandomGridGraph(int n, Graph & g) {
 
 
@@ -134,13 +192,11 @@ void generateRandomGridGraph(int n, Graph & g) {
 }
 
 int main() {
-    Graph myGraph;
-    generateRandomGridGraph(10,myGraph);
-    generateBusRoute1(myGraph);
-    generateBusRoute2(myGraph);
-    generateBusRoute3(myGraph);
-    generateMetroLineA(myGraph);
-    generateMetroLineB(myGraph);
-
+    Graph pedestrian;
+    Graph busRoutes;
+    Graph metroLines;
+    generateRandomGridGraph(10,pedestrian);
+    generateBusRouteGraph(busRoutes);
+    generateMetroLinesGraph(metroLines);
     return 0;
 }
