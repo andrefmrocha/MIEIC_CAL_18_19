@@ -106,6 +106,7 @@ Vertex * Graph::initSingleSource(const Coordinates &origin) {
     }
     auto s = findVertex(origin);
     s->weight = 0;
+    this->visited = vector<bool> (this->vertexSet.size(), false);
     return s;
 }
 
@@ -124,7 +125,8 @@ inline bool Graph::relax(Vertex *v, Vertex *w, double weight) {
         return false;
 }
 
-void Graph::dijkstraShortestPath(const Coordinates &origin, const Coordinates &dest) {
+void Graph::dijkstraShortestPath(const Coordinates &origin, const Coordinates &dest, double & time_elapsed) {
+    clock_t begin = clock();
     auto s = initSingleSource(origin);
     MutablePriorityQueue<Vertex> q;
     q.insert(s);
@@ -133,14 +135,21 @@ void Graph::dijkstraShortestPath(const Coordinates &origin, const Coordinates &d
         if(v->getInfo() == dest){
             break;
         }
-        for(auto e : v->adj) {
-            auto oldDist = e.dest->weight;
-            if (relax(v, e.dest, e.weight)) {
-                if (oldDist == INF)
-                    q.insert(e.dest);
-                else
-                    q.decreaseKey(e.dest);
-            }
+        dijkstraStep(q, v);
+    }
+    clock_t end = clock();
+    time_elapsed = (double)(end - begin) / CLOCKS_PER_SEC;
+}
+
+void Graph::dijkstraStep(MutablePriorityQueue<Vertex> &q, Vertex *v) {
+    this->visited[distance(this->vertexSet.end(), find(this->vertexSet.begin(), this->vertexSet.end(), v))] = true;
+    for (auto e : v->adj) {
+        auto oldDist = e.dest->weight;
+        if (relax(v, e.dest, e.weight)) {
+            if (oldDist == INF)
+                q.insert(e.dest);
+            else
+                q.decreaseKey(e.dest);
         }
     }
 }
@@ -156,7 +165,9 @@ vector<Coordinates> Graph::getPath(const Coordinates &origin, const Coordinates 
     return res;
 }
 
-void Graph::aStarShortestPath(const Coordinates &origin, const Coordinates &dest, double ( *heu)(Vertex *, Vertex *) ) {
+void Graph::aStarShortestPath(const Coordinates &origin, const Coordinates &dest, double ( *heu)(Vertex *, Vertex *),
+                              double & time_elapsed ) {
+    clock_t begin = clock();
     auto s = initSingleSource(origin);
     MutablePriorityQueue<Vertex> q;
     q.insert(s);
@@ -165,14 +176,21 @@ void Graph::aStarShortestPath(const Coordinates &origin, const Coordinates &dest
         if(v->getInfo() == dest){
             break;
         }
-        for(auto e : v->adj) {
-            auto oldDist = e.dest->weight;
-            if (aStarRelax(v, e.dest, e.weight, heu)) {
-                if (oldDist == INF)
-                    q.insert(e.dest);
-                else
-                    q.decreaseKey(e.dest);
-            }
+        aStarStep(heu, q, v);
+    }
+    clock_t end = clock();
+    time_elapsed = (double)(end - begin) / CLOCKS_PER_SEC;
+}
+
+void Graph::aStarStep(double (*heu)(Vertex *, Vertex *), MutablePriorityQueue<Vertex> &q, Vertex *v)  {
+    this->visited[distance(this->vertexSet.end(), find(this->vertexSet.begin(), this->vertexSet.end(), v))] = true;
+    for (auto e : v->adj) {
+        auto oldDist = e.dest->weight;
+        if (aStarRelax(v, e.dest, e.weight, heu)) {
+            if (oldDist == INF)
+                q.insert(e.dest);
+            else
+                q.decreaseKey(e.dest);
         }
     }
 }
@@ -208,7 +226,14 @@ double Edge::getWeight() const {
     return weight;
 }
 
-void Graph::biDirSearch(const Coordinates &origin, const Coordinates &destination) {
+Transport Edge::getType() const {
+    return type;
+}
+
+void Graph::biDirSearch(const Coordinates &origin, const Coordinates &destination,
+double & time_elapsed) {
+    clock_t begin = clock();
+    Graph inverted = this->invertGraph();
 
     Vertex* orig = findVertex(origin);
     Vertex* dest = findVertex(destination);
@@ -218,36 +243,40 @@ void Graph::biDirSearch(const Coordinates &origin, const Coordinates &destinatio
         return;
     }
 
-    //may not be sufficient to check nodes visited in both searches
-    for(Vertex* v: vertexSet) {
-        v->visited = false;
-    }
+    this->initSingleSource(origin);
+    inverted.initSingleSource(origin);
 
-    MutablePriorityQueue<Vertex> o_que, d_que;
+    MutablePriorityQueue<Vertex> originalQ, invertedQ;
 
     Vertex* intersectV;
 
-    o_que.insert(orig);
+    originalQ.insert(orig);
     orig->visited = true;
     orig->path = nullptr;
 
-    d_que.insert(dest);
+    invertedQ.insert(dest);
     dest->visited = true;
     dest->path = nullptr;
 
-    while(!o_que.empty() && !d_que.empty()) {
+    while(!originalQ.empty() && !invertedQ.empty()) {
 
         //threads init and run searches
 
+
         //check if searches visited the same vertex
+        this->dijkstraStep(originalQ, originalQ.extractMin());
+        inverted.dijkstraStep(invertedQ, invertedQ.extractMin());
+
+        intersectV = isIntersecting(this->getVisited(), inverted.getVisited());
 
         if(intersectV != nullptr) {
+            // TODO: Rebuild the path
 
-            //the path exists
-
+            break;
         }
-        break;
     }
+    clock_t end = clock();
+    time_elapsed = (double)(end - begin) / CLOCKS_PER_SEC;
 }
 
 void Graph::concateEdges(vector<Edge *> edges) {
@@ -256,6 +285,29 @@ void Graph::concateEdges(vector<Edge *> edges) {
 
 void Graph::concateVertexs(vector<Vertex *> vertexs) {
     this->vertexSet.insert(this->vertexSet.end(), vertexs.begin(), vertexs.end());
+}
+
+Graph Graph::invertGraph() {
+    Graph inverted;
+    for(auto i: this->getVertexSet()){
+        inverted.addVertex(i->getInfo());
+    }
+    for(auto i: this->getEdgeSet()){
+        inverted.addEdge(i->getDest()->getInfo(), i->getOrig()->getInfo(), i->getWeight(), i->getType());
+    }
+    return inverted;
+}
+
+const vector<bool> &Graph::getVisited() const {
+    return visited;
+}
+
+Vertex *Graph::isIntersecting(const vector<bool> &visited1, const vector<bool> &visited2) {
+    for(int i = 0; i < visited1.size(); i++){
+        if(visited1[i] && visited2[i])
+            return this->vertexSet[i];
+    }
+    return nullptr;
 }
 
 
