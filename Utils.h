@@ -6,6 +6,7 @@
 #define MIEIC_CAL_PROJ_UTILS_H
 
 #include "Graph.h"
+
 /**
  * @brief Unification of three different graphs
  * @param g1 - first graph and where all information is stored

@@ -100,7 +100,7 @@ class Graph {
 	// Fp05
 	Vertex * initSingleSource(const Coordinates &orig);
 	bool relax(Vertex *v, Vertex *w, double weight);
-    static bool aStarRelax(Vertex *v, Vertex *w, double weight, bool ( *heu)(Vertex *, Vertex *, double));
+    static bool aStarRelax(Vertex *v, Vertex *w, double weight, double ( *heu)(Vertex *, Vertex *));
     double ** W = nullptr;   // weight
 	int **P = nullptr;   // path
 	int findVertexIdx(const Coordinates &in) const;
@@ -117,8 +117,8 @@ public:
 	double getEdgeWeight(Edge e);
 
 	// Fp05 - single source
-	void dijkstraShortestPath(const Coordinates &s);
-    void aStarShortestPath(const Coordinates &origin, bool ( *heu)(Vertex *, Vertex *, double) );
+	void dijkstraShortestPath(const Coordinates &s, const Coordinates &dest);
+    void aStarShortestPath(const Coordinates &origin, const Coordinates &dest, double ( *heu)(Vertex *, Vertex *) );
 	vector<Coordinates> getPath(const Coordinates &origin, const Coordinates &dest) const;
     void biDirSearch(const Coordinates & origin, const Coordinates &destination);
     void concateEdges(vector<Edge *> edges);

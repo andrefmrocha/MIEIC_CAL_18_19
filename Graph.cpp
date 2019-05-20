@@ -124,12 +124,15 @@ inline bool Graph::relax(Vertex *v, Vertex *w, double weight) {
         return false;
 }
 
-void Graph::dijkstraShortestPath(const Coordinates &origin) {
+void Graph::dijkstraShortestPath(const Coordinates &origin, const Coordinates &dest) {
     auto s = initSingleSource(origin);
     MutablePriorityQueue<Vertex> q;
     q.insert(s);
     while( ! q.empty() ) {
         auto v = q.extractMin();
+        if(v->getInfo() == dest){
+            break;
+        }
         for(auto e : v->adj) {
             auto oldDist = e.dest->weight;
             if (relax(v, e.dest, e.weight)) {
@@ -153,12 +156,15 @@ vector<Coordinates> Graph::getPath(const Coordinates &origin, const Coordinates 
     return res;
 }
 
-void Graph::aStarShortestPath(const Coordinates &origin, bool ( *heu)(Vertex *, Vertex *, double) ) {
+void Graph::aStarShortestPath(const Coordinates &origin, const Coordinates &dest, double ( *heu)(Vertex *, Vertex *) ) {
     auto s = initSingleSource(origin);
     MutablePriorityQueue<Vertex> q;
     q.insert(s);
     while( ! q.empty() ) {
         auto v = q.extractMin();
+        if(v->getInfo() == dest){
+            break;
+        }
         for(auto e : v->adj) {
             auto oldDist = e.dest->weight;
             if (aStarRelax(v, e.dest, e.weight, heu)) {
@@ -171,9 +177,9 @@ void Graph::aStarShortestPath(const Coordinates &origin, bool ( *heu)(Vertex *, 
     }
 }
 
-inline bool Graph::aStarRelax(Vertex *v, Vertex *w, double weight, bool (*heu)(Vertex *, Vertex *, double)) {
-    if (v->weight + weight + heu(v, w, weight)< w->weight) {
-        w->weight = v->weight + weight + heu(v, w, weight);
+inline bool Graph::aStarRelax(Vertex *v, Vertex *w, double weight, double (*heu)(Vertex *, Vertex *)) {
+    if (v->weight + weight + heu(v, w)< w->weight) {
+        w->weight = v->weight + weight + heu(v, w);
         w->dist = v->weight + weight;
         w->path = v;
         return true;
