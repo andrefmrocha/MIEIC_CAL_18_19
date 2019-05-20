@@ -2,9 +2,8 @@
 // Created by joaom on 15-05-2019.
 //
 
-#include <random>
-#include "Graph.h"
-#include "GraphViewer/GraphicalInterface.h"
+#include "TestGraph.h"
+
 
 std::random_device rd;
 std::mt19937 gen(rd());
@@ -14,6 +13,7 @@ double busF = 0.6; //bus weight factor
 double metroF = 0.4; //metro weight factor
 
 //Coords: (lat,long)
+
 
 void generateBusRoute1(Graph &g) {
     //Direction (1,1) -> (9,4)
@@ -36,6 +36,7 @@ void generateBusRoute1(Graph &g) {
     g.addEdge(Coordinates(2,1,21),Coordinates(1,1,11),dis(gen)*busF,bus);
 }
 
+
 void generateBusRoute2(Graph &g) {
     //Direction (1,5) -> (9,4)
     g.addEdge(Coordinates(1,5,15),Coordinates(1,7,17),dis(gen)*busF,bus);
@@ -56,6 +57,7 @@ void generateBusRoute2(Graph &g) {
     g.addEdge(Coordinates(2,8,28),Coordinates(1,7,17),dis(gen)*busF,bus);
     g.addEdge(Coordinates(1,7,17),Coordinates(1,5,15),dis(gen)*busF,bus);
 }
+
 
 void generateBusRoute3(Graph &g) {
     //Direction (1,3) -> (8,5)
@@ -78,6 +80,7 @@ void generateBusRoute3(Graph &g) {
     g.addEdge(Coordinates(2,3,23),Coordinates(1,3,13),dis(gen)*busF,bus);
 }
 
+
 void generateMetroLineA(Graph &g) {
     //Direction (0,2) -> (8,9)
     g.addEdge(Coordinates(0,2,2),Coordinates(2,2,22),dis(gen)*metroF,subway);
@@ -95,6 +98,7 @@ void generateMetroLineA(Graph &g) {
     g.addEdge(Coordinates(2,2,22),Coordinates(0,2,2),dis(gen)*metroF,subway);
 
 }
+
 
 void generateMetroLineB(Graph &g) {
     //Direction (9,0) -> (0,9)
@@ -118,6 +122,7 @@ void generateMetroLineB(Graph &g) {
     g.addEdge(Coordinates(8,3,83),Coordinates(9,2,92),dis(gen)*metroF,subway);
     g.addEdge(Coordinates(9,2,92),Coordinates(9,0,90),dis(gen)*metroF,subway);
 }
+
 
 void generateBusRouteGraph(Graph &g) {
     g.addVertex(Coordinates(0,9,9));
@@ -153,6 +158,7 @@ void generateBusRouteGraph(Graph &g) {
 
 }
 
+
 void generateMetroLinesGraph(Graph &g) {
     g.addVertex(Coordinates(0,2,2));
     g.addVertex(Coordinates(0,9,9));
@@ -177,7 +183,8 @@ void generateMetroLinesGraph(Graph &g) {
 
 }
 
-void generateRandomGridGraph(int n, Graph & g) {
+
+void generateRandomGridGraph(int n, Graph &g) {
 
 
     for (int i = 0; i < n; i++)
@@ -192,6 +199,7 @@ void generateRandomGridGraph(int n, Graph & g) {
                         g.addEdge(Coordinates(i,j,i*n+j), Coordinates(i+di,j+dj,i*n+j), dis(gen),foot);
 }
 
+/*
 int main() {
     Graph pedestrian;
     Graph busRoutes;
@@ -206,4 +214,4 @@ int main() {
     }
     interface.showPath(edges);
     return 0;
-}
+}*/

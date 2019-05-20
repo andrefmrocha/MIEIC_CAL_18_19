@@ -244,6 +244,14 @@ void Graph::biDirSearch(const Coordinates &origin, const Coordinates &destinatio
     }
 }
 
+void Graph::concateEdges(vector<Edge *> edges) {
+    this->edgeSet.insert(this->edgeSet.end(), edges.begin(), edges.end());
+}
+
+void Graph::concateVertexs(vector<Vertex *> vertexs) {
+    this->vertexSet.insert(this->vertexSet.end(), vertexs.begin(), vertexs.end());
+}
+
 
 
 //////////////////Vertex Method/////////////////////////////////////////

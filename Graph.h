@@ -106,6 +106,7 @@ class Graph {
 	int findVertexIdx(const Coordinates &in) const;
 
 
+
 public:
 	Vertex *findVertex(const Coordinates &in) const;
 	bool addVertex(const Coordinates &in);
@@ -120,6 +121,8 @@ public:
     void aStarShortestPath(const Coordinates &origin, bool ( *heu)(Vertex *, Vertex *, double) );
 	vector<Coordinates> getPath(const Coordinates &origin, const Coordinates &dest) const;
     void biDirSearch(const Coordinates & origin, const Coordinates &destination);
+    void concateEdges(vector<Edge *> edges);
+    void concateVertexs(vector<Vertex *> vertexs);
 	//~Graph();
 };
 
