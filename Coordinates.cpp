@@ -8,7 +8,7 @@ Coordinates::Coordinates(double latitude, double longitude, unsigned long idNode
         : latitude(latitude), longitude(longitude), idNode(idNode) {}
 
 bool Coordinates::operator==(const Coordinates &right) const {
-    return this->latitude==right.latitude && this->longitude==right.longitude;
+    return this->idNode==right.idNode;
 }
 
 double Coordinates::getLat() {
