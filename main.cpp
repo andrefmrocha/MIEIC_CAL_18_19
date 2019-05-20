@@ -5,18 +5,10 @@
 #include "Heuristics.h"
 
 int main() {
-    Graph pedestrian;
-    Graph busRoutes;
-    Graph metroLines;
-    generateRandomGridGraph(10,pedestrian);
-    generateBusRouteGraph(busRoutes);
-    generateMetroLinesGraph(metroLines);
-    unifyGraphs(pedestrian, busRoutes, metroLines);
-    Coordinates ori = Coordinates(0,2,2);
-    Coordinates dest = Coordinates(6,6,66);
-    pedestrian.dijkstraShortestPath(ori, dest);
-    vector<Coordinates> coordsdji = pedestrian.getPath(ori, dest);
-    pedestrian.aStarShortestPath(ori, dest, euclidean_distance);
-    vector<Coordinates> coordsast = pedestrian.getPath(ori, dest);
+    vector<pair<int,int>> pairs;
+    for(int i = 0; i < 50; i++){
+        pairs.push_back(make_pair(i, i*20));
+    }
+    csv_writer(pairs, "teste.csv");
     return 0;
 }

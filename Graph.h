@@ -116,7 +116,6 @@ public:
 	vector<Edge*> getEdgeSet() const;
 	double getEdgeWeight(Edge e);
 
-	// Fp05 - single source
 	void dijkstraShortestPath(const Coordinates &s, const Coordinates &dest);
     void aStarShortestPath(const Coordinates &origin, const Coordinates &dest, double ( *heu)(Vertex *, Vertex *) );
 	vector<Coordinates> getPath(const Coordinates &origin, const Coordinates &dest) const;
