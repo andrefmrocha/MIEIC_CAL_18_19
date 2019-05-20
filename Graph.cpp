@@ -190,6 +190,10 @@ double Graph::getEdgeWeight(Edge e) {
         return -1;
 }
 
+vector<Edge> Graph::getEdgeSet() const {
+    return edgeSet;
+}
+
 
 Edge::Edge(Vertex *o, Vertex *d, double w,Transport type): orig(o), dest(d), weight(w), type(type) {}
 

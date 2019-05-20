@@ -112,6 +112,7 @@ public:
 	bool addEdge(const Coordinates &sourc, const Coordinates &dest, double w,Transport type);
 	int getNumVertex() const;
 	vector<Vertex *> getVertexSet() const;
+	vector<Edge> getEdgeSet() const;
 	double getEdgeWeight(Edge e);
 
 	// Fp05 - single source
