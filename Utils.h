@@ -5,6 +5,11 @@
 #ifndef MIEIC_CAL_PROJ_UTILS_H
 #define MIEIC_CAL_PROJ_UTILS_H
 
+#include <iostream>
+#include <sstream>
+#include <fstream>
+#include <cmath>
+#include <cstring>
 #include "Graph.h"
 
 /**
@@ -14,6 +19,15 @@
  * @param g3 - third graph
  */
 void unifyGraphs(Graph &g1, Graph &g2, Graph &g3);
+
+Graph loadGraph();
+
+Graph loadPedestrian(std::string edgesPath, std::string nodesPath);
+Graph loadBus(std::string filePath);
+Graph loadSubway(std::string filePath);
+
+double haversine(const Coordinates &source, const Coordinates &dest, const Graph &graph);
+double toRadians(double degrees);
 
 
 #endif //MIEIC_CAL_PROJ_UTILS_H
