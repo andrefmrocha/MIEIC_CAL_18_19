@@ -3,6 +3,7 @@
 //
 #include <iostream>
 #include "Graph.h"
+#include <future>
 
 
 bool Vertex::operator==(Vertex v) const {
@@ -261,11 +262,17 @@ double & time_elapsed) {
     while(!originalQ.empty() && !invertedQ.empty()) {
 
         //threads init and run searches
+        auto f1 = async([this, &originalQ] {
+            this->dijkstraStep(originalQ, originalQ.extractMin());
+        });
 
+        auto f2 = async([&inverted, &invertedQ]{
+           inverted.dijkstraStep(invertedQ, invertedQ.extractMin());
+        });
 
         //check if searches visited the same vertex
-        this->dijkstraStep(originalQ, originalQ.extractMin());
-        inverted.dijkstraStep(invertedQ, invertedQ.extractMin());
+        f1.get();
+        f2.get();
 
         intersectV = isIntersecting(this->getVisited(), inverted.getVisited());
 
