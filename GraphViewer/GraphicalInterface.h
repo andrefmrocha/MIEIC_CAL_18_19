@@ -13,10 +13,13 @@ class GraphicalInterface {
     GraphViewer * gv;
     int width;
     int height;
+    int id;
 
     static int calculateCoord(int maxScreen, double maxCoords, double coord);
-    static int getEdgeId(int oriID, int destID);
+    int getEdgeId();
+    void incrementEdgeId();
 public:
+
     GraphicalInterface(int width, int height);
 
     void showPath(std::deque<Edge*> path);

@@ -9,15 +9,17 @@ GraphicalInterface::GraphicalInterface(int width, int height) {
     this->gv = new GraphViewer(width, height, false);
     this->width = width;
     this->height = width;
+    this->id = 0;
 }
 
 int GraphicalInterface::calculateCoord(int maxScreen, double maxCoords, double coord){
     return (int)((maxScreen * coord)/(double)maxCoords);
 }
 
-int GraphicalInterface::getEdgeId(int oriID, int destID) {
-    return oriID + destID;
+int GraphicalInterface::getEdgeId() {
+    return id;
 }
+
 
 void GraphicalInterface::showPath(std::deque<Edge*> path) {
     gv->createWindow(this->width, this->height);
@@ -44,25 +46,30 @@ void GraphicalInterface::showPath(std::deque<Edge*> path) {
                           this->calculateCoord(this->height, lat, dest->getInfo().getLat())
                           );
         // TODO: Hashing the ID's?
-        this->gv->addEdge(this->getEdgeId(ori->getInfo().getId(), dest->getInfo().getId()),
+        this->gv->addEdge(this->getEdgeId(),
                 ori->getInfo().getId(),
                 dest->getInfo().getId(),
                 EdgeType::DIRECTED);
         if(edge->isBus()){
             this->gv->setVertexColor(ori->getInfo().getId(), BLUE);
             this->gv->setVertexColor(dest->getInfo().getId(), BLUE);
-            this->gv->setEdgeColor(this->getEdgeId(ori->getInfo().getId(), dest->getInfo().getId()), BLUE);
+            this->gv->setEdgeColor(this->getEdgeId(), BLUE);
         } else if(edge->isSubway()){
             this->gv->setVertexColor(ori->getInfo().getId(), YELLOW);
             this->gv->setVertexColor(dest->getInfo().getId(), YELLOW);
-            this->gv->setEdgeColor(this->getEdgeId(ori->getInfo().getId(), dest->getInfo().getId()), YELLOW);
+            this->gv->setEdgeColor(this->getEdgeId(), YELLOW);
         } else {
             this->gv->setVertexColor(ori->getInfo().getId(), GREEN);
             this->gv->setVertexColor(dest->getInfo().getId(), GREEN);
-            this->gv->setEdgeColor(this->getEdgeId(ori->getInfo().getId(), dest->getInfo().getId()), GREEN);
+            this->gv->setEdgeColor(this->getEdgeId(), GREEN);
         }
         this->gv->rearrange();
+        this->incrementEdgeId();
         sleep(1);
     }
 
+}
+
+void GraphicalInterface::incrementEdgeId() {
+    this->id++;
 }

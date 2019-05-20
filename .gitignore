@@ -112,7 +112,6 @@ dkms.conf
 ### ArchLinuxPackages template
 *.tar
 *.tar.*
-*.jar
 *.msi
 *.zip
 *.tgz
