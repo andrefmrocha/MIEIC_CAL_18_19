@@ -1,6 +1,7 @@
 //
 // Created by andrefmrocha on 5/19/19.
 //
+#include <iostream>
 #include "Graph.h"
 
 
@@ -85,7 +86,7 @@ bool Graph::addEdge(const Coordinates &sourc, const Coordinates &dest, double w,
     if (v1 == nullptr || v2 == nullptr)
         return false;
     v1->addEdge(v2, w,type);
-    edgeSet.push_back(Edge(v1,v2,w,type));
+    edgeSet.push_back(new Edge(v1,v2,w,type));
     return true;
 }
 
@@ -182,23 +183,65 @@ inline bool Graph::aStarRelax(Vertex *v, Vertex *w, double weight, bool (*heu)(V
 }
 
 double Graph::getEdgeWeight(Edge e) {
-    vector<Edge>::iterator it = find(edgeSet.begin(),edgeSet.end(),e);
-    if(it != edgeSet.end()) {
-        return it->getWeight();
+    for(Edge* edge: edgeSet) {
+        if(edge->getWeight()== e.getWeight() && edge->orig == e.orig && edge->dest == e.dest) {
+            return e.getWeight();
+        }
     }
-    else
-        return -1;
+    return -1;
 }
 
-vector<Edge> Graph::getEdgeSet() const {
+vector<Edge*> Graph::getEdgeSet() const {
     return edgeSet;
 }
 
-
 Edge::Edge(Vertex *o, Vertex *d, double w,Transport type): orig(o), dest(d), weight(w), type(type) {}
+
 
 double Edge::getWeight() const {
     return weight;
+}
+
+void Graph::biDirSearch(const Coordinates &origin, const Coordinates &destination) {
+
+    Vertex* orig = findVertex(origin);
+    Vertex* dest = findVertex(destination);
+
+    if(orig == nullptr || dest == nullptr) {
+        cout << "Invalid points chosen." << endl;
+        return;
+    }
+
+    //may not be sufficient to check nodes visited in both searches
+    for(Vertex* v: vertexSet) {
+        v->visited = false;
+    }
+
+    MutablePriorityQueue<Vertex> o_que, d_que;
+
+    Vertex* intersectV;
+
+    o_que.insert(orig);
+    orig->visited = true;
+    orig->path = nullptr;
+
+    d_que.insert(dest);
+    dest->visited = true;
+    dest->path = nullptr;
+
+    while(!o_que.empty() && !d_que.empty()) {
+
+        //threads init and run searches
+
+        //check if searches visited the same vertex
+
+        if(intersectV != nullptr) {
+
+            //the path exists
+
+        }
+        break;
+    }
 }
 
 

@@ -95,7 +95,7 @@ public:
 
 class Graph {
 	vector<Vertex *> vertexSet;    // vertex set
-	vector<Edge> edgeSet;
+	vector<Edge*> edgeSet;
 
 	// Fp05
 	Vertex * initSingleSource(const Coordinates &orig);
@@ -112,14 +112,14 @@ public:
 	bool addEdge(const Coordinates &sourc, const Coordinates &dest, double w,Transport type);
 	int getNumVertex() const;
 	vector<Vertex *> getVertexSet() const;
-	vector<Edge> getEdgeSet() const;
+	vector<Edge*> getEdgeSet() const;
 	double getEdgeWeight(Edge e);
 
 	// Fp05 - single source
 	void dijkstraShortestPath(const Coordinates &s);
     void aStarShortestPath(const Coordinates &origin, bool ( *heu)(Vertex *, Vertex *, double) );
 	vector<Coordinates> getPath(const Coordinates &origin, const Coordinates &dest) const;
-
+    void biDirSearch(const Coordinates & origin, const Coordinates &destination);
 	//~Graph();
 };
 

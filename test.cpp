@@ -4,6 +4,7 @@
 
 #include <random>
 #include "Graph.h"
+#include "GraphViewer/GraphicalInterface.h"
 
 std::random_device rd;
 std::mt19937 gen(rd());
@@ -198,5 +199,11 @@ int main() {
     generateRandomGridGraph(10,pedestrian);
     generateBusRouteGraph(busRoutes);
     generateMetroLinesGraph(metroLines);
+    GraphicalInterface interface = GraphicalInterface(600, 600);
+    deque<Edge*> edges;
+    for(Edge* e: metroLines.getEdgeSet()) {
+        edges.push_back(e);
+    }
+    interface.showPath(edges);
     return 0;
 }
