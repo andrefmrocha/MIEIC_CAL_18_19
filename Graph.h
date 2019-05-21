@@ -130,8 +130,10 @@ public:
     void aStarShortestPath(const Coordinates &origin, const Coordinates &dest, double ( *heu)(Vertex *, Vertex *),
                            double & time_elapsed);
     vector<Coordinates> getPath(const Coordinates &origin, const Coordinates &dest) const;
-    void biDirSearch(const Coordinates & origin, const Coordinates &destination,
+    void biDirDijkstra(const Coordinates & origin, const Coordinates &destination,
                      double & time_elapsed);
+    void biDirAstar(const Coordinates & origin, const Coordinates &destination, double ( *heu)(Vertex *, Vertex *),
+                       double & time_elapsed);
     void concateEdges(vector<Edge *> edges);
     void concateVertexs(vector<Vertex *> vertexs);
     void printPath(vector<Coordinates> coords) const;

@@ -239,7 +239,7 @@ Transport Edge::getType() const {
     return type;
 }
 
-void Graph::biDirSearch(const Coordinates &origin, const Coordinates &destination,
+void Graph::biDirDijkstra(const Coordinates &origin, const Coordinates &destination,
 double & time_elapsed) {
     clock_t begin = clock();
     Graph inverted = this->invertGraph();
@@ -278,6 +278,67 @@ double & time_elapsed) {
 
         auto f2 = async([&inverted, &invertedQ]{
            inverted.dijkstraStep(invertedQ, invertedQ.extractMin());
+        });
+
+        //check if searches visited the same vertex
+        f1.get();
+        f2.get();
+
+        intersectV = isIntersecting(this->getVisited(), inverted.getVisited());
+
+        if(intersectV != nullptr) {
+            fullPath = this->getPath(origin,intersectV->getInfo());
+            vector<Coordinates> inverseCoords = inverted.getPath(destination,intersectV->getInfo());
+            inverseCoords.pop_back();
+            reverse(inverseCoords.begin(),inverseCoords.end());
+            fullPath.insert(fullPath.end(),inverseCoords.begin(),inverseCoords.end());
+            break;
+        }
+    }
+    clock_t end = clock();
+    time_elapsed = (double)(end - begin) / CLOCKS_PER_SEC;
+    this->printPath(fullPath);
+}
+
+void Graph::biDirAstar(const Coordinates &origin, const Coordinates &destination, double (*heu)(Vertex *, Vertex *),
+                       double &time_elapsed) {
+    clock_t begin = clock();
+    Graph inverted = this->invertGraph();
+
+    Vertex* orig = findVertex(origin);
+    Vertex* dest = findVertex(destination);
+
+    if(orig == nullptr || dest == nullptr) {
+        cout << "Invalid points chosen." << endl;
+        return;
+    }
+
+    this->initSingleSource(origin);
+    inverted.initSingleSource(destination);
+
+    MutablePriorityQueue<Vertex> originalQ, invertedQ;
+
+    Vertex* intersectV;
+
+    originalQ.insert(orig);
+    orig->visited = true;
+    orig->path = nullptr;
+
+    invertedQ.insert(dest);
+    dest->visited = true;
+    dest->path = nullptr;
+
+    vector<Coordinates> fullPath;
+
+    while(!originalQ.empty() && !invertedQ.empty()) {
+
+        //threads init and run searches
+        auto f1 = async([this, &originalQ,heu] {
+            aStarStep(heu,originalQ,originalQ.extractMin());
+        });
+
+        auto f2 = async([&inverted, &invertedQ,&heu]{
+            inverted.aStarStep(heu,invertedQ,invertedQ.extractMin());
         });
 
         //check if searches visited the same vertex

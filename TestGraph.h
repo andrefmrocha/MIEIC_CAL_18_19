@@ -7,6 +7,7 @@
 #include <random>
 #include "Graph.h"
 #include "GraphViewer/GraphicalInterface.h"
+#include "Heuristics.h"
 
 
 void generateBusRoute1(Graph &g);

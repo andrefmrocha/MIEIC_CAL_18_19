@@ -406,7 +406,7 @@ int main() {
         edges.push_back(e);
     }
     double time;
-    pedestrian.biDirSearch(Coordinates(3,0,30),Coordinates(8,9,89),time);
+    pedestrian.biDirAstar(Coordinates(3,0,30),Coordinates(8,9,89),euclidean_distance,time);
     cout << "Time elapsed: " << time << endl;
     interface.showPath(edges);
 
