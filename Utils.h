@@ -20,6 +20,14 @@
  */
 void unifyGraphs(Graph &g1, Graph &g2, Graph &g3);
 
+/**
+ *
+ *
+ * @param values pair where the first value is the number of vertexs + edges of the graph used
+ * @param filename - the name of the file to save this information
+ */
+void csv_writer(const vector<pair<int, int>> &values, const string& filename);
+
 Graph loadGraph();
 
 Graph loadPedestrian(std::string edgesPath, std::string nodesPath);

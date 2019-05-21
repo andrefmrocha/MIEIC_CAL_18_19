@@ -15,7 +15,7 @@ double chebyshev_distance(Vertex *v, Vertex *w) {
     (v->getInfo().getY() - w->getInfo().getY()));
 }
 
-double manhattan(Vertex *v, Vertex *w) {
+double manhattan_distance(Vertex *v, Vertex *w) {
     return (abs(v->getInfo().getX() - w->getInfo().getX()) +
     abs(v->getInfo().getY() - w->getInfo().getY()));
 }

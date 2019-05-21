@@ -65,7 +65,7 @@ void GraphicalInterface::showPath(std::deque<Edge*> path) {
         }
         this->gv->rearrange();
         this->incrementEdgeId();
-        sleep(1);
+        //sleep(1);
     }
 
 }

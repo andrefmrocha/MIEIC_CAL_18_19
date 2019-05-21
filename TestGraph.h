@@ -7,6 +7,7 @@
 #include <random>
 #include "Graph.h"
 #include "GraphViewer/GraphicalInterface.h"
+#include "Heuristics.h"
 
 
 void generateBusRoute1(Graph &g);
@@ -19,11 +20,13 @@ void generateMetroLineA(Graph &g);
 
 void generateMetroLineB(Graph &g);
 
-void generateBusRouteGraph(Graph &g);
+void generateBusRouteGraph(Graph &g,int n);
 
-void generateMetroLinesGraph(Graph &g);
+void generateMetroLinesGraph(Graph &g,int n);
 
-void generateRandomGridGraph(int n, Graph & g);
+void generateTransportGraph(int n, Graph &ped, Graph &bus, Graph &metro);
+
+void runTests();
 
 
 #endif //MIEIC_CAL_PROJ_TESTGRAPH_H
