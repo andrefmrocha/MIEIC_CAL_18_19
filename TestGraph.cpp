@@ -399,15 +399,15 @@ int main() {
     Graph pedestrian;
     Graph busRoutes;
     Graph metroLines;
-    generateTransportGraph(100,pedestrian,pedestrian,pedestrian);
-    GraphicalInterface interface = GraphicalInterface(600, 600);
+    generateTransportGraph(10,pedestrian,pedestrian,pedestrian);
+    GraphicalInterface interface = GraphicalInterface(800, 800);
     deque<Edge*> edges;
-   for(Edge* e: pedestrian.getEdgeSet()) {
+    for(Edge* e: pedestrian.getEdgeSet()) {
         edges.push_back(e);
     }
     double time;
-    //busRoutes.biDirSearch(Coordinates(9,3,93),Coordinates(3,7,37),time);
-    //cout << "Time elapsed: " << time << endl;
+    pedestrian.biDirSearch(Coordinates(3,0,30),Coordinates(8,9,89),time);
+    cout << "Time elapsed: " << time << endl;
     interface.showPath(edges);
 
     return 0;

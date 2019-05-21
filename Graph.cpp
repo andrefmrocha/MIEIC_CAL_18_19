@@ -143,6 +143,10 @@ void Graph::dijkstraShortestPath(const Coordinates &origin, const Coordinates &d
 }
 
 void Graph::dijkstraStep(MutablePriorityQueue<Vertex> &q, Vertex *v) {
+    if(isInverted) {
+        v = findVertex(v->getInfo()); // do this only if its inverted graph
+    }
+
     this->visited[distance(this->vertexSet.begin(),find(this->vertexSet.begin(), this->vertexSet.end(), v))] = true;
     for (auto e : v->adj) {
         auto oldDist = e.dest->weight;
@@ -184,7 +188,11 @@ void Graph::aStarShortestPath(const Coordinates &origin, const Coordinates &dest
 }
 
 void Graph::aStarStep(double (*heu)(Vertex *, Vertex *), MutablePriorityQueue<Vertex> &q, Vertex *v)  {
-    this->visited[distance(this->vertexSet.end(), find(this->vertexSet.begin(), this->vertexSet.end(), v))] = true;
+    if(isInverted) {
+        v = findVertex(v->getInfo()); // do this only if its inverted graph
+    }
+
+    this->visited[distance(this->vertexSet.begin(), find(this->vertexSet.begin(), this->vertexSet.end(), v))] = true;
     for (auto e : v->adj) {
         auto oldDist = e.dest->weight;
         if (aStarRelax(v, e.dest, e.weight, heu)) {
@@ -308,6 +316,7 @@ Graph Graph::invertGraph() {
     for(auto i: this->getEdgeSet()){
         inverted.addEdge(i->getDest()->getInfo(), i->getOrig()->getInfo(), i->getWeight(), i->getType());
     }
+    inverted.isInverted = true;
     return inverted;
 }
 

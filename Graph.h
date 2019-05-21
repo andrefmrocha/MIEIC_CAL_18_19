@@ -114,6 +114,9 @@ private:
 	int findVertexIdx(const Coordinates &in) const;
     void aStarStep(double (*heu)(Vertex *, Vertex *), MutablePriorityQueue<Vertex> &q, Vertex *v);
     void dijkstraStep(MutablePriorityQueue<Vertex> &q, Vertex *v);
+
+    //check
+    bool isInverted=false;
 public:
     Vertex *findVertex(const Coordinates &in) const;
     bool addVertex(const Coordinates &in);
