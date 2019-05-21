@@ -19,11 +19,11 @@ void generateMetroLineA(Graph &g);
 
 void generateMetroLineB(Graph &g);
 
-void generateBusRouteGraph(Graph &g);
+void generateBusRouteGraph(Graph &g,int n);
 
-void generateMetroLinesGraph(Graph &g);
+void generateMetroLinesGraph(Graph &g,int n);
 
-void generateRandomGridGraph(int n, Graph & g);
+void generateTransportGraph(int n, Graph &ped, Graph &bus, Graph &metro);
 
 
 #endif //MIEIC_CAL_PROJ_TESTGRAPH_H
