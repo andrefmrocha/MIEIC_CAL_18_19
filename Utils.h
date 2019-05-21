@@ -27,6 +27,7 @@ Graph loadBus(std::string filePath);
 Graph loadSubway(std::string filePath);
 
 double haversine(const Coordinates &source, const Coordinates &dest, const Graph &graph);
+double euclidean(const Coordinates &source, const Coordinates &dest, const Graph &graph);
 double toRadians(double degrees);
 
 

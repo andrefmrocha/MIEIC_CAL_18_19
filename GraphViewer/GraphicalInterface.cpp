@@ -26,24 +26,24 @@ void GraphicalInterface::showPath(std::deque<Edge*> path) {
     double lat = 0;
     double longi = 0;
     for(Edge* edge: path){
-        if(edge->getOrig()->getInfo().getLat() > lat){
-            lat = edge->getOrig()->getInfo().getLat();
+        if(edge->getOrig()->getInfo().getY() > lat){
+            lat = edge->getOrig()->getInfo().getY();
         }
-        if(edge->getOrig()->getInfo().getLong() > longi){
-            longi = edge->getOrig()->getInfo().getLong();
+        if(edge->getOrig()->getInfo().getX() > longi){
+            longi = edge->getOrig()->getInfo().getX();
         }
     }
 
     for(Edge* edge: path){
         Vertex * ori = edge->getOrig();
         this->gv->addNode(ori->getInfo().getId(),
-                this->calculateCoord(this->width, longi, ori->getInfo().getLong()),
-                this->calculateCoord(this->height, lat, ori->getInfo().getLat())
+                this->calculateCoord(this->width, longi, ori->getInfo().getX()),
+                this->calculateCoord(this->height, lat, ori->getInfo().getY())
                         );
         Vertex * dest = edge->getDest();
         this->gv->addNode(dest->getInfo().getId(),
-                          this->calculateCoord(this->width, longi, dest->getInfo().getLong()),
-                          this->calculateCoord(this->height, lat, dest->getInfo().getLat())
+                          this->calculateCoord(this->width, longi, dest->getInfo().getX()),
+                          this->calculateCoord(this->height, lat, dest->getInfo().getY())
                           );
         // TODO: Hashing the ID's?
         this->gv->addEdge(this->getEdgeId(),

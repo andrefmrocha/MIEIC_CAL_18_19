@@ -6,18 +6,18 @@
 #include <algorithm>
 
 double euclidean_distance(Vertex *v, Vertex *w) {
-    return sqrt(pow(v->getInfo().getLong() - w->getInfo().getLong(), 2)
-    + pow(v->getInfo().getLat() - w->getInfo().getLat(), 2));
+    return sqrt(pow(v->getInfo().getX() - w->getInfo().getX(), 2)
+    + pow(v->getInfo().getY() - w->getInfo().getY(), 2));
 }
 
 double chebyshev_distance(Vertex *v, Vertex *w) {
-    return std::max((v->getInfo().getLong() - w->getInfo().getLong()),
-    (v->getInfo().getLat() - w->getInfo().getLat()));
+    return std::max((v->getInfo().getX() - w->getInfo().getX()),
+    (v->getInfo().getY() - w->getInfo().getY()));
 }
 
 double manhattan(Vertex *v, Vertex *w) {
-    return (abs(v->getInfo().getLong() - w->getInfo().getLong()) +
-    abs(v->getInfo().getLat() - w->getInfo().getLat()));
+    return (abs(v->getInfo().getX() - w->getInfo().getX()) +
+    abs(v->getInfo().getY() - w->getInfo().getY()));
 }
 
 

@@ -55,7 +55,7 @@ Graph loadPedestrian(std::string edgesPath, std::string nodesPath) {
         index = 0;
         stream.str("");
 
-        myGraph.addVertex(Coordinates(stod(args[1]), stod(args[2]), stod(args[0])));
+        myGraph.addVertex(Coordinates(stod(args[2]), stod(args[1]), stod(args[0])));
     }
 
     file.close();
@@ -92,7 +92,7 @@ Graph loadPedestrian(std::string edgesPath, std::string nodesPath) {
         stream.str("");
 
         Coordinates source(0, 0, stod(args[0])), dest(0, 0, stod(args[1]));
-        myGraph.addEdge(source, dest, haversine(source, dest, myGraph), foot);
+        myGraph.addEdge(source, dest, euclidean(source, dest, myGraph), foot);
     }
 
     return myGraph;
@@ -114,15 +114,26 @@ double haversine(const Coordinates &source, const Coordinates &dest, const Graph
         return INF;
 
     double radius = 6371e3;
-    double lat1 = toRadians(v1->getInfo().getLat());
-    double lat2 = toRadians(v2->getInfo().getLat());
-    double dLat = toRadians(v2->getInfo().getLat() - v1->getInfo().getLat());
-    double dLon = toRadians(v2->getInfo().getLong() - v1->getInfo().getLong());
+    double lat1 = toRadians(v1->getInfo().getY());
+    double lat2 = toRadians(v2->getInfo().getY());
+    double dLat = toRadians(v2->getInfo().getY() - v1->getInfo().getY());
+    double dLon = toRadians(v2->getInfo().getX() - v1->getInfo().getX());
 
     double a = sin(dLat/2.0) * sin(dLat/2.0) + cos(lat1) * cos(lat2) * sin(dLon/2.0) * sin(dLon/2.0);
     double c = 2 * atan2(sqrt(a), sqrt(1-a));
 
     return radius * c;
+}
+
+double euclidean(const Coordinates &source, const Coordinates &dest, const Graph &graph){
+    auto v1 = graph.findVertex(source);
+    auto v2 = graph.findVertex(dest);
+
+    if(v1 == nullptr || v2 == nullptr)
+        return INF;
+
+    return sqrt(pow(v1->getInfo().getX() - v2->getInfo().getX(), 2)
+                + pow(v1->getInfo().getY() - v2->getInfo().getY(), 2));
 }
 
 double toRadians(double degrees) {

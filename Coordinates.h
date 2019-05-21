@@ -7,13 +7,13 @@
 
 
 class Coordinates {
-    double latitude;
-    double longitude;
+    double y;
+    double x;
     unsigned long idNode;
 public:
-    Coordinates(double latitude, double longitude, unsigned long idNode);
-    double getLat();
-    double getLong();
+    Coordinates(double y, double x, unsigned long idNode);
+    double getY();
+    double getX();
     unsigned long getId();
     bool operator==(const Coordinates &right) const;
 };

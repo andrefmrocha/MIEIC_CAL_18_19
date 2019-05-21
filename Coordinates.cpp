@@ -4,19 +4,19 @@
 
 #include "Coordinates.h"
 
-Coordinates::Coordinates(double latitude, double longitude, unsigned long idNode)
-        : latitude(latitude), longitude(longitude), idNode(idNode) {}
+Coordinates::Coordinates(double y, double x, unsigned long idNode)
+        : y(y), x(x), idNode(idNode) {}
 
 bool Coordinates::operator==(const Coordinates &right) const {
     return this->idNode==right.idNode;
 }
 
-double Coordinates::getLat() {
-    return this->latitude;
+double Coordinates::getY() {
+    return this->y;
 }
 
-double Coordinates::getLong() {
-    return this->longitude;
+double Coordinates::getX() {
+    return this->x;
 }
 
 unsigned long Coordinates::getId() {
