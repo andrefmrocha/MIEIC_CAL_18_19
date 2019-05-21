@@ -35,6 +35,7 @@ void generateBusRoute1(Graph &g,int n) {
 
     }
 
+    cout << "Generated Bus Route 1 " << endl;
 
     /*
     //Direction (1,1) -> (9,4)
@@ -69,7 +70,7 @@ void generateBusRoute2(Graph &g,int n) {
             g.addEdge(Coordinates(i+2,j,(i+2)*n+j),Coordinates(i,j,i*n+j),dis(gen)*busF,bus);
             i+=2;
         }
-        if(i != 7*n/10) {
+        if(i == n/10 || i == 3*n/10 || i == 5*n/10) {
             g.addVertex(Coordinates(i,j+2,i*n+j+2));
             g.addEdge(Coordinates(i,j,i*n+j),Coordinates(i,j+2,i*n+j+2),dis(gen)*busF,bus);
             g.addEdge(Coordinates(i,j+2,i*n+j+2),Coordinates(i,j,i*n+j),dis(gen)*busF,bus);
@@ -79,17 +80,21 @@ void generateBusRoute2(Graph &g,int n) {
 
     while(j!= 5*n/10) {
 
-        if(j==7*n/10) {
+        if(j==7*n/10 && i != 9*n/10) {
             g.addVertex(Coordinates(i+2,j,(i+2)*n+j));
             g.addEdge(Coordinates(i,j,i*n+j),Coordinates(i+2,j,(i+2)*n+j),dis(gen)*busF,bus);
             g.addEdge(Coordinates(i+2,j,(i+2)*n+j),Coordinates(i,j,i*n+j),dis(gen)*busF,bus);
             i+=2;
         }
-        g.addVertex(Coordinates(i,j-2, i*n+j-2));
-        g.addEdge(Coordinates(i,j,i*n+j),Coordinates(i,j-2,i*n+j-2),dis(gen)*busF,bus);
-        g.addEdge(Coordinates(i,j-2,i*n+j-2),Coordinates(i,j,i*n+j),dis(gen)*busF,bus);
-        j-=2;
+        else {
+            g.addVertex(Coordinates(i,j-2, i*n+j-2));
+            g.addEdge(Coordinates(i,j,i*n+j),Coordinates(i,j-2,i*n+j-2),dis(gen)*busF,bus);
+            g.addEdge(Coordinates(i,j-2,i*n+j-2),Coordinates(i,j,i*n+j),dis(gen)*busF,bus);
+            j-=2;
+        }
     }
+
+    cout << "Generated Bus Route 2 " << endl;
 
     /*
     //Direction (1,5) -> (9,4)
@@ -138,6 +143,8 @@ void generateBusRoute3(Graph &g,int n) {
             j+=2;
         }
     }
+
+    cout << "Generated Bus Route 3 " << endl;
 
     /*
     //Direction (1,3) -> (8,5)
@@ -210,6 +217,7 @@ void generateMetroLineA(Graph &g,int n) {
         }
     }
 
+    cout << "Generated Subway Line A " << endl;
     /*
     //Direction (0,2) -> (8,9)
     g.addEdge(Coordinates(0,2,2),Coordinates(2,2,22),dis(gen)*metroF,subway);
@@ -277,6 +285,8 @@ void generateMetroLineB(Graph &g,int n) {
             j-=2;
         }
     }
+
+    cout << "Generated Subway Line B " << endl;
 
     /*
     //Direction (9,0) -> (0,9)
@@ -377,6 +387,9 @@ void generateTransportGraph(int n, Graph &ped, Graph &bus, Graph &metro) {
                     if ((di != 0) != (dj != 0) && i+di >= 0 && i+di < n && j+dj >= 0 && j+dj < n)
                         ped.addEdge(Coordinates(i,j,i*n+j), Coordinates(i+di,j+dj,i*n+j), dis(gen),foot);
 
+
+    cout << "Generated Pedestrian routes " << endl;
+
     generateBusRouteGraph(bus,n);
     generateMetroLinesGraph(metro,n);
 }
@@ -386,11 +399,15 @@ int main() {
     Graph pedestrian;
     Graph busRoutes;
     Graph metroLines;
-    generateTransportGraph(10,pedestrian,pedestrian,pedestrian);
+    generateTransportGraph(100,pedestrian,pedestrian,pedestrian);
     GraphicalInterface interface = GraphicalInterface(600, 600);
     deque<Edge*> edges;
-    for(Edge* e: pedestrian.getEdgeSet())
+   for(Edge* e: pedestrian.getEdgeSet()) {
         edges.push_back(e);
+    }
+    double time;
+    //busRoutes.biDirSearch(Coordinates(9,3,93),Coordinates(3,7,37),time);
+    //cout << "Time elapsed: " << time << endl;
     interface.showPath(edges);
 
     return 0;

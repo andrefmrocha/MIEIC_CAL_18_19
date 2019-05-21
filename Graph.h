@@ -131,6 +131,7 @@ public:
                      double & time_elapsed);
     void concateEdges(vector<Edge *> edges);
     void concateVertexs(vector<Vertex *> vertexs);
+    void printPath(vector<Coordinates> coords) const;
     Graph invertGraph();
 };
 

@@ -143,7 +143,7 @@ void Graph::dijkstraShortestPath(const Coordinates &origin, const Coordinates &d
 }
 
 void Graph::dijkstraStep(MutablePriorityQueue<Vertex> &q, Vertex *v) {
-    this->visited[distance(this->vertexSet.end(), find(this->vertexSet.begin(), this->vertexSet.end(), v))] = true;
+    this->visited[distance(this->vertexSet.begin(),find(this->vertexSet.begin(), this->vertexSet.end(), v))] = true;
     for (auto e : v->adj) {
         auto oldDist = e.dest->weight;
         if (relax(v, e.dest, e.weight)) {
@@ -245,7 +245,7 @@ double & time_elapsed) {
     }
 
     this->initSingleSource(origin);
-    inverted.initSingleSource(origin);
+    inverted.initSingleSource(destination);
 
     MutablePriorityQueue<Vertex> originalQ, invertedQ;
 
@@ -258,6 +258,8 @@ double & time_elapsed) {
     invertedQ.insert(dest);
     dest->visited = true;
     dest->path = nullptr;
+
+    vector<Coordinates> fullPath;
 
     while(!originalQ.empty() && !invertedQ.empty()) {
 
@@ -277,13 +279,17 @@ double & time_elapsed) {
         intersectV = isIntersecting(this->getVisited(), inverted.getVisited());
 
         if(intersectV != nullptr) {
-            // TODO: Rebuild the path
-
+            fullPath = this->getPath(origin,intersectV->getInfo());
+            vector<Coordinates> inverseCoords = inverted.getPath(destination,intersectV->getInfo());
+            inverseCoords.pop_back();
+            reverse(inverseCoords.begin(),inverseCoords.end());
+            fullPath.insert(fullPath.end(),inverseCoords.begin(),inverseCoords.end());
             break;
         }
     }
     clock_t end = clock();
     time_elapsed = (double)(end - begin) / CLOCKS_PER_SEC;
+    this->printPath(fullPath);
 }
 
 void Graph::concateEdges(vector<Edge *> edges) {
@@ -315,6 +321,12 @@ Vertex *Graph::isIntersecting(const vector<bool> &visited1, const vector<bool> &
             return this->vertexSet[i];
     }
     return nullptr;
+}
+
+void Graph::printPath(vector<Coordinates> coords) const {
+    for( Coordinates c: coords)
+        cout << c.getId() << " -> ";
+    cout << "NULL" << endl;
 }
 
 
