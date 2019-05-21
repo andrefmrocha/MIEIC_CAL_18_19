@@ -3,6 +3,7 @@
 //
 
 #include "TestGraph.h"
+#include "Utils.h"
 
 
 std::random_device rd;
@@ -21,13 +22,13 @@ void generateBusRoute1(Graph &g,int n) {
     g.addVertex(Coordinates(i,j,i*n+j));
     while(j!= 5*n/10) {
         if((i == n/10 && j != 3*n/10) || i==9*n/10 ) {
-            g.addVertex(Coordinates(i,j+2,i*n+j+2));
+//            g.addVertex(Coordinates(i,j+2,i*n+j+2));
             g.addEdge(Coordinates(i,j,i*n+j),Coordinates(i,j+2,i*n+j+2),dis(gen)*busF,bus);
             g.addEdge(Coordinates(i,j+2,i*n+j+2),Coordinates(i,j,i*n+j),dis(gen)*busF,bus);
             j+=2;
         }
         else {
-            g.addVertex(Coordinates(i+2,j,(i+2)*n+j));
+//            g.addVertex(Coordinates(i+2,j,(i+2)*n+j));
             g.addEdge(Coordinates(i,j,i*n+j),Coordinates(i+2,j,(i+2)*n+j),dis(gen)*busF,bus);
             g.addEdge(Coordinates(i+2,j,(i+2)*n+j),Coordinates(i,j,i*n+j),dis(gen)*busF,bus);
             i+=2;
@@ -65,13 +66,13 @@ void generateBusRoute2(Graph &g,int n) {
     g.addVertex(Coordinates(i,j,i*n+j));
     while(i != 7*n/10) {
         if(j == 5*n/10|| j == 7*n/10 || j == 9*n/10) {
-            g.addVertex(Coordinates(i+2,j,(i+2)*n+j));
+//            g.addVertex(Coordinates(i+2,j,(i+2)*n+j));
             g.addEdge(Coordinates(i,j,i*n+j),Coordinates(i+2,j,(i+2)*n+j),dis(gen)*busF,bus);
             g.addEdge(Coordinates(i+2,j,(i+2)*n+j),Coordinates(i,j,i*n+j),dis(gen)*busF,bus);
             i+=2;
         }
         if(i == n/10 || i == 3*n/10 || i == 5*n/10) {
-            g.addVertex(Coordinates(i,j+2,i*n+j+2));
+//            g.addVertex(Coordinates(i,j+2,i*n+j+2));
             g.addEdge(Coordinates(i,j,i*n+j),Coordinates(i,j+2,i*n+j+2),dis(gen)*busF,bus);
             g.addEdge(Coordinates(i,j+2,i*n+j+2),Coordinates(i,j,i*n+j),dis(gen)*busF,bus);
             j+=2;
@@ -81,13 +82,13 @@ void generateBusRoute2(Graph &g,int n) {
     while(j!= 5*n/10) {
 
         if(j==7*n/10 && i != 9*n/10) {
-            g.addVertex(Coordinates(i+2,j,(i+2)*n+j));
+//            g.addVertex(Coordinates(i+2,j,(i+2)*n+j));
             g.addEdge(Coordinates(i,j,i*n+j),Coordinates(i+2,j,(i+2)*n+j),dis(gen)*busF,bus);
             g.addEdge(Coordinates(i+2,j,(i+2)*n+j),Coordinates(i,j,i*n+j),dis(gen)*busF,bus);
             i+=2;
         }
         else {
-            g.addVertex(Coordinates(i,j-2, i*n+j-2));
+//            g.addVertex(Coordinates(i,j-2, i*n+j-2));
             g.addEdge(Coordinates(i,j,i*n+j),Coordinates(i,j-2,i*n+j-2),dis(gen)*busF,bus);
             g.addEdge(Coordinates(i,j-2,i*n+j-2),Coordinates(i,j,i*n+j),dis(gen)*busF,bus);
             j-=2;
@@ -125,19 +126,19 @@ void generateBusRoute3(Graph &g,int n) {
     g.addVertex(Coordinates(i,j,i*n+j));
     while(i!=0) {
         if(j==0 && i != 6*n/10) {
-            g.addVertex(Coordinates(i+2,j,(i+2)*n+j));
+//            g.addVertex(Coordinates(i+2,j,(i+2)*n+j));
             g.addEdge(Coordinates(i,j,i*n+j),Coordinates(i+2,j,(i+2)*n+j),dis(gen)*busF,bus);
             g.addEdge(Coordinates(i+2,j,(i+2)*n+j),Coordinates(i,j,i*n+j),dis(gen)*busF,bus);
             i+=2;
         }
         else if((j==4*n/10 && i != 4*n/10) || j== 8*n/10) {
-            g.addVertex(Coordinates(i-2,j,(i-2)*n+j));
+//            g.addVertex(Coordinates(i-2,j,(i-2)*n+j));
             g.addEdge(Coordinates(i,j,i*n+j),Coordinates(i-2,j,(i-2)*n+j),dis(gen)*busF,bus);
             g.addEdge(Coordinates(i-2,j,(i-2)*n+j),Coordinates(i,j,i*n+j),dis(gen)*busF,bus);
             i-=2;
         }
         else {
-            g.addVertex(Coordinates(i,j+2,i*n+j+2));
+//            g.addVertex(Coordinates(i,j+2,i*n+j+2));
             g.addEdge(Coordinates(i,j,i*n+j),Coordinates(i,j+2,i*n+j+2),dis(gen)*busF,bus);
             g.addEdge(Coordinates(i,j+2,i*n+j+2),Coordinates(i,j,i*n+j),dis(gen)*busF,bus);
             j+=2;
@@ -175,19 +176,19 @@ void generateMetroLineA(Graph &g,int n) {
     g.addVertex(Coordinates(i,j,i*n+j));
     while(i != n/10) {
         if(j == 2*n/10 || j == 6*n/10) {
-            g.addVertex(Coordinates(i,j+2,i*n+j+2));
+//            g.addVertex(Coordinates(i,j+2,i*n+j+2));
             g.addEdge(Coordinates(i,j,i*n+j),Coordinates(i,j+2,i*n+j+2),dis(gen)*metroF,subway);
             g.addEdge(Coordinates(i,j+2,i*n+j+2),Coordinates(i,j,i*n+j),dis(gen)*metroF,subway);
             j+=2;
         }
         else if((j == 4*n/10 && i != 5*n/10) || j == 8*n/10) {
-            g.addVertex(Coordinates(i-2,j,(i-2)*n+j));
+//            g.addVertex(Coordinates(i-2,j,(i-2)*n+j));
             g.addEdge(Coordinates(i,j,i*n+j),Coordinates(i-2,j,(i-2)*n+j),dis(gen)*metroF,subway);
             g.addEdge(Coordinates(i-2,j,(i-2)*n+j),Coordinates(i,j,i*n+j),dis(gen)*metroF,subway);
             i-=2;
         }
         else {
-            g.addVertex(Coordinates(i-2,j+2,(i-2)*n+j+2));
+//            g.addVertex(Coordinates(i-2,j+2,(i-2)*n+j+2));
             g.addEdge(Coordinates(i,j,i*n+j),Coordinates(i-2,j+2,(i-2)*n+j+2),dis(gen)*metroF,subway);
             g.addEdge(Coordinates(i-2,j+2,(i-2)*n+j+2),Coordinates(i,j,i*n+j),dis(gen)*metroF,subway);
             i-=2;
@@ -197,19 +198,19 @@ void generateMetroLineA(Graph &g,int n) {
 
     while(i != 9*n/10) {
         if(i == n/10 && j != 4*n/10) {
-            g.addVertex(Coordinates(i,j-2,i*n+j-2));
+//            g.addVertex(Coordinates(i,j-2,i*n+j-2));
             g.addEdge(Coordinates(i,j,i*n+j),Coordinates(i,j-2,i*n+j-2),dis(gen)*metroF,subway);
             g.addEdge(Coordinates(i,j-2,i*n+j-2),Coordinates(i,j,i*n+j),dis(gen)*metroF,subway);
             j-=2;
         }
         else if(j == 0) {
-            g.addVertex(Coordinates(i+2,j,(i+2)*n+j));
+//            g.addVertex(Coordinates(i+2,j,(i+2)*n+j));
             g.addEdge(Coordinates(i,j,i*n+j),Coordinates(i+2,j,(i+2)*n+j),dis(gen)*metroF,subway);
             g.addEdge(Coordinates(i+2,j,(i+2)*n+j),Coordinates(i,j,i*n+j),dis(gen)*metroF,subway);
             i+=2;
         }
         else {
-            g.addVertex(Coordinates(i+2,j-2,(i+2)*n+j-2));
+//            g.addVertex(Coordinates(i+2,j-2,(i+2)*n+j-2));
             g.addEdge(Coordinates(i,j,i*n+j),Coordinates(i+2,j-2,(i+2)*n+j-2),dis(gen)*metroF,subway);
             g.addEdge(Coordinates(i+2,j-2,(i+2)*n+j-2),Coordinates(i,j,i*n+j),dis(gen)*metroF,subway);
             i+=2;
@@ -244,19 +245,19 @@ void generateMetroLineB(Graph &g,int n) {
     g.addVertex(Coordinates(i,j,i*n+j));
     while(j != 8*n/10) {
         if((j==0 && i != 2*n/10) || (j == 6*n/10 && i != 8*n/10)) {
-            g.addVertex(Coordinates(i+2,j,(i+2)*n+j));
+//            g.addVertex(Coordinates(i+2,j,(i+2)*n+j));
             g.addEdge(Coordinates(i,j,i*n+j),Coordinates(i+2,j,(i+2)*n+j),dis(gen)*metroF,subway);
             g.addEdge(Coordinates(i+2,j,(i+2)*n+j),Coordinates(i,j,i*n+j),dis(gen)*metroF,subway);
             i+=2;
         }
         else if ((i==4*n/10 && j != 4*n/10) || (i==8*n/10 && j != 8*n/10)) {
-            g.addVertex(Coordinates(i,j+2,i*n+j+2));
+//            g.addVertex(Coordinates(i,j+2,i*n+j+2));
             g.addEdge(Coordinates(i,j,i*n+j),Coordinates(i,j+2,i*n+j+2),dis(gen)*metroF,subway);
             g.addEdge(Coordinates(i,j+2,i*n+j+2),Coordinates(i,j,i*n+j),dis(gen)*metroF,subway);
             j+=2;
         }
         else {
-            g.addVertex(Coordinates(i+2,j+2,(i+2)*n+j+2));
+//            g.addVertex(Coordinates(i+2,j+2,(i+2)*n+j+2));
             g.addEdge(Coordinates(i,j,i*n+j),Coordinates(i+2,j+2,(i+2)*n+j+2),dis(gen)*metroF,subway);
             g.addEdge(Coordinates(i+2,j+2,(i+2)*n+j+2),Coordinates(i,j,i*n+j),dis(gen)*metroF,subway);
             i+=2;
@@ -266,19 +267,19 @@ void generateMetroLineB(Graph &g,int n) {
 
     while( j !=0) {
         if(j == 8*n/10 && i != 4*n/10) {
-            g.addVertex(Coordinates(i-2,j,(i-2)*n+j));
+//            g.addVertex(Coordinates(i-2,j,(i-2)*n+j));
             g.addEdge(Coordinates(i,j,i*n+j),Coordinates(i-2,j,(i-2)*n+j),dis(gen)*metroF,subway);
             g.addEdge(Coordinates(i-2,j,(i-2)*n+j),Coordinates(i,j,i*n+j),dis(gen)*metroF,subway);
             i-=2;
         }
         else if((i == 2*n/10 && j != 4*n/10) || (i==0 && j!=0)) {
-            g.addVertex(Coordinates(i,j-2,i*n+j-2));
+//            g.addVertex(Coordinates(i,j-2,i*n+j-2));
             g.addEdge(Coordinates(i,j,i*n+j),Coordinates(i,j-2,i*n+j-2),dis(gen)*metroF,subway);
             g.addEdge(Coordinates(i,j-2,i*n+j-2),Coordinates(i,j,i*n+j),dis(gen)*metroF,subway);
             j-=2;
         }
         else {
-            g.addVertex(Coordinates(i-2,j-2,(i-2)*n+j-2));
+//            g.addVertex(Coordinates(i-2,j-2,(i-2)*n+j-2));
             g.addEdge(Coordinates(i,j,i*n+j),Coordinates(i-2,j-2,(i-2)*n+j-2),dis(gen)*metroF,subway);
             g.addEdge(Coordinates(i-2,j-2,(i-2)*n+j-2),Coordinates(i,j,i*n+j),dis(gen)*metroF,subway);
             i-=2;
@@ -394,8 +395,34 @@ void generateTransportGraph(int n, Graph &ped, Graph &bus, Graph &metro) {
     generateMetroLinesGraph(metro,n);
 }
 
+void runTests() {
+    vector<pair<int, int>> djikstra, euclidean, chebyshev, manhattan;
+    for(int i = 10; i < pow(10, 30); i *= 10){
+        Graph graph;
+        generateTransportGraph(i, graph, graph, graph);
+        double djisktraTime, euclideanTime, chebyshevTime, manhattanTime;
+        graph.dijkstraShortestPath(Coordinates(0, 0, 0), Coordinates(i, i, i * i + i), djisktraTime);
+        cout << "Finished djikstra" << endl;
+        graph.aStarShortestPath(Coordinates(0, 0, 0), Coordinates(i, i, i * i + i), euclidean_distance, euclideanTime);
+        cout << "Finished euclidean" << endl;
+        graph.aStarShortestPath(Coordinates(0, 0, 0), Coordinates(i, i, i * i + i), chebyshev_distance, chebyshevTime);
+        cout << "Finished chebyshev" << endl;
+        graph.aStarShortestPath(Coordinates(0, 0, 0), Coordinates(i, i, i * i + i), manhattan_distance, manhattanTime);
+        cout << "Finished manhattan" << endl;
+        djikstra.push_back(make_pair(graph.getEdgeSet().size() + graph.getVertexSet().size(), djisktraTime));
+        euclidean.push_back(make_pair(graph.getEdgeSet().size() + graph.getVertexSet().size(), euclideanTime));
+        chebyshev.push_back(make_pair(graph.getEdgeSet().size() + graph.getVertexSet().size(), chebyshevTime));
+        manhattan.push_back(make_pair(graph.getEdgeSet().size() + graph.getVertexSet().size(), manhattanTime));
+    }
+    csv_writer(djikstra, "djikstra.csv");
+    csv_writer(euclidean, "euclidean.csv");
+    csv_writer(chebyshev, "chebyshev.csv");
+    csv_writer(manhattan, "manhattan.csv");
 
-int main() {
+}
+
+
+/*int main() {
     Graph pedestrian;
     Graph busRoutes;
     Graph metroLines;
@@ -411,4 +438,4 @@ int main() {
     interface.showPath(edges);
 
     return 0;
-}
+}*/

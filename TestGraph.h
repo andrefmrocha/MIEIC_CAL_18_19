@@ -26,5 +26,7 @@ void generateMetroLinesGraph(Graph &g,int n);
 
 void generateTransportGraph(int n, Graph &ped, Graph &bus, Graph &metro);
 
+void runTests();
+
 
 #endif //MIEIC_CAL_PROJ_TESTGRAPH_H

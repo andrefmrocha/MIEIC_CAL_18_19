@@ -11,7 +11,7 @@ double euclidean_distance(Vertex *v, Vertex *w);
 
 double chebyshev_distance(Vertex *v, Vertex *w);
 
-double manhattan(Vertex *v, Vertex *w);
+double manhattan_distance(Vertex *v, Vertex *w);
 
 
 #endif //MIEIC_CAL_PROJ_HEURISTICS_H
