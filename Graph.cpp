@@ -306,7 +306,6 @@ double & time_elapsed) {
     }
     auto end = chrono::steady_clock::now();
     time_elapsed = chrono::duration_cast<chrono::milliseconds>(end - start).count();
-    this->printPath(fullPath);
 }
 
 void Graph::biDirAstar(const Coordinates &origin, Coordinates &destination, double (*heu)(Vertex *,  Coordinates &),
@@ -369,7 +368,6 @@ void Graph::biDirAstar(const Coordinates &origin, Coordinates &destination, doub
     }
     auto end = chrono::steady_clock::now();
     time_elapsed = chrono::duration_cast<chrono::milliseconds>(end - start).count();
-    this->printPath(fullPath);
 }
 
 void Graph::concateEdges(vector<Edge *> edges) {

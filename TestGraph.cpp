@@ -397,12 +397,15 @@ void generateTransportGraph(int n, Graph &ped, Graph &bus, Graph &metro) {
 }
 
 void runTests() {
-    vector<pair<int, double>> djikstra, euclidean, chebyshev, manhattan;
-    for(int i = 10; i < pow(10, 2) ; i += 10){
+    ofstream dijkstra("djikstra.csv"), euclidean("euclidean.csv"), chebyshev("chebyshev.csv"), manhattan("manhattan.csv");
+    ofstream bidijkstra("bidjikstra.csv"), bieuclidean("bieuclidean.csv"), bichebyshev("chebyshev.csv"), bimanhattan("manhattan.csv");
+    for(int i = 10; i < pow(10, 2) * 4 ; i += 10){
         cout << "Generating grid graph: " << i << "x" << i << endl;
         Graph graph;
         generateTransportGraph(i, graph, graph, graph);
-        double djisktraTime, euclideanTime, chebyshevTime, manhattanTime;
+        int numVE = graph.getVertexSet().size() + graph.getEdgeSet().size();
+        double djisktraTime, euclideanTime, chebyshevTime, manhattanTime,
+        bidjisktraTime, bieuclideanTime, bichebyshevTime, bimanhattanTime;
         Coordinates origin = Coordinates(0, 0, 0);
         Coordinates dest = Coordinates(0, i - 1, (i - 1) * i + i - 1);
         graph.dijkstraShortestPath(origin, dest, djisktraTime);
@@ -413,15 +416,23 @@ void runTests() {
         cout << "Finished chebyshev. Elapsed Time: "<< chebyshevTime << endl;
         graph.aStarShortestPath(origin, dest, manhattan_distance, manhattanTime);
         cout << "Finished manhattan. Elapsed Time: "<< manhattanTime << endl;
-        djikstra.push_back(make_pair(graph.getEdgeSet().size() + graph.getVertexSet().size(), djisktraTime));
-        euclidean.push_back(make_pair(graph.getEdgeSet().size() + graph.getVertexSet().size(), euclideanTime));
-        chebyshev.push_back(make_pair(graph.getEdgeSet().size() + graph.getVertexSet().size(), chebyshevTime));
-        manhattan.push_back(make_pair(graph.getEdgeSet().size() + graph.getVertexSet().size(), manhattanTime));
+        graph.biDirDijkstra(origin, dest, bidjisktraTime);
+        cout << "Finished bidjikstra. Elapsed Time: " << bidjisktraTime << endl;
+        graph.biDirAstar(origin, dest, euclidean_distance, bieuclideanTime);
+        cout << "Finished bieuclidean. Elapsed Time: " << bieuclideanTime << endl;
+        graph.biDirAstar(origin, dest, chebyshev_distance, bichebyshevTime);
+        cout << "Finished bichebyshev. Elapsed Time: " << bichebyshevTime << endl;
+        graph.biDirAstar(origin, dest, manhattan_distance, bimanhattanTime);
+        cout << "Finished bimanhattan. Elapsed Time: " << bimanhattanTime << endl;
+        csv_writer(make_pair(numVE, djisktraTime), dijkstra);
+        csv_writer(make_pair(numVE, euclideanTime), euclidean);
+        csv_writer(make_pair(numVE, chebyshevTime), chebyshev);
+        csv_writer(make_pair(numVE, manhattanTime), manhattan);
+        csv_writer(make_pair(numVE, bidjisktraTime), bidijkstra);
+        csv_writer(make_pair(numVE, bieuclideanTime), bieuclidean);
+        csv_writer(make_pair(numVE, bichebyshevTime), bichebyshev);
+        csv_writer(make_pair(numVE, bimanhattanTime), bimanhattan);
     }
-    csv_writer(djikstra, "djikstra.csv");
-    csv_writer(euclidean, "euclidean.csv");
-    csv_writer(chebyshev, "chebyshev.csv");
-    csv_writer(manhattan, "manhattan.csv");
 
 }
 
