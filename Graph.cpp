@@ -127,19 +127,22 @@ inline bool Graph::relax(Vertex *v, Vertex *w, double weight) {
 }
 
 void Graph::dijkstraShortestPath(const Coordinates &origin, const Coordinates &dest, double & time_elapsed) {
-    clock_t begin = clock();
+    auto start = chrono::steady_clock::now();
     auto s = initSingleSource(origin);
     MutablePriorityQueue<Vertex> q;
     q.insert(s);
+    int i = 0;
     while( ! q.empty() ) {
         auto v = q.extractMin();
         if(v->getInfo() == dest){
+            cout << "Num of iterations " << i << " " << this->vertexSet.size() << endl;
             break;
         }
         dijkstraStep(q, v);
+        i++;
     }
-    clock_t end = clock();
-    time_elapsed = (double)(end - begin) / CLOCKS_PER_SEC;
+    auto end = chrono::steady_clock::now();
+    time_elapsed = chrono::duration_cast<chrono::nanoseconds>(end - start).count();
 }
 
 void Graph::dijkstraStep(MutablePriorityQueue<Vertex> &q, Vertex *v) {
@@ -170,32 +173,35 @@ vector<Coordinates> Graph::getPath(const Coordinates &origin, const Coordinates 
     return res;
 }
 
-void Graph::aStarShortestPath(const Coordinates &origin, const Coordinates &dest, double ( *heu)(Vertex *, Vertex *),
+void Graph::aStarShortestPath(const Coordinates &origin, Coordinates &dest, double ( *heu)(Vertex *, Coordinates &),
                               double & time_elapsed ) {
-    clock_t begin = clock();
+                                  auto start = chrono::steady_clock::now();
     auto s = initSingleSource(origin);
     MutablePriorityQueue<Vertex> q;
     q.insert(s);
+    int i = 0;
     while( ! q.empty() ) {
         auto v = q.extractMin();
         if(v->getInfo() == dest){
+            cout << "Num of iterations " << i << " " << this->vertexSet.size() << endl;
             break;
         }
-        aStarStep(heu, q, v);
+        aStarStep(heu, q, v, dest);
+        i++;
     }
-    clock_t end = clock();
-    time_elapsed = (double)(end - begin) / CLOCKS_PER_SEC;
+    auto end = chrono::steady_clock::now();
+    time_elapsed = chrono::duration_cast<chrono::nanoseconds>(end - start).count();
 }
 
-void Graph::aStarStep(double (*heu)(Vertex *, Vertex *), MutablePriorityQueue<Vertex> &q, Vertex *v)  {
+void Graph::aStarStep(double (*heu)(Vertex *, Coordinates &), MutablePriorityQueue<Vertex> &q, Vertex *origin, Coordinates &dest)  {
     if(isInverted) {
-        v = findVertex(v->getInfo()); // do this only if its inverted graph
+        origin = findVertex(origin->getInfo()); // do this only if its inverted graph
     }
 
-    this->visited[distance(this->vertexSet.begin(), find(this->vertexSet.begin(), this->vertexSet.end(), v))] = true;
-    for (auto e : v->adj) {
+    this->visited[distance(this->vertexSet.begin(), find(this->vertexSet.begin(), this->vertexSet.end(), origin))] = true;
+    for (auto e : origin->adj) {
         auto oldDist = e.dest->weight;
-        if (aStarRelax(v, e.dest, e.weight, heu)) {
+        if (aStarRelax(origin, e.dest, e.weight, heu, dest)) {
             if (oldDist == INF)
                 q.insert(e.dest);
             else
@@ -204,9 +210,9 @@ void Graph::aStarStep(double (*heu)(Vertex *, Vertex *), MutablePriorityQueue<Ve
     }
 }
 
-inline bool Graph::aStarRelax(Vertex *v, Vertex *w, double weight, double (*heu)(Vertex *, Vertex *)) {
-    if (v->weight + weight + heu(v, w)< w->weight) {
-        w->weight = v->weight + weight + heu(v, w);
+inline bool Graph::aStarRelax(Vertex *v, Vertex *w, double weight, double (*heu)(Vertex *, Coordinates &), Coordinates &dest) {
+    if (v->weight + weight + heu(w, dest)< w->weight) {
+        w->weight = v->weight + weight + heu(v, dest);
         w->dist = v->weight + weight;
         w->path = v;
         return true;
@@ -241,7 +247,7 @@ Transport Edge::getType() const {
 
 void Graph::biDirDijkstra(const Coordinates &origin, const Coordinates &destination,
 double & time_elapsed) {
-    clock_t begin = clock();
+    auto start = chrono::steady_clock::now();
     Graph inverted = this->invertGraph();
 
     Vertex* orig = findVertex(origin);
@@ -295,14 +301,14 @@ double & time_elapsed) {
             break;
         }
     }
-    clock_t end = clock();
-    time_elapsed = (double)(end - begin) / CLOCKS_PER_SEC;
+    auto end = chrono::steady_clock::now();
+    time_elapsed = chrono::duration_cast<chrono::nanoseconds>(end - start).count();
     this->printPath(fullPath);
 }
 
-void Graph::biDirAstar(const Coordinates &origin, const Coordinates &destination, double (*heu)(Vertex *, Vertex *),
+void Graph::biDirAstar(const Coordinates &origin, Coordinates &destination, double (*heu)(Vertex *,  Coordinates &),
                        double &time_elapsed) {
-    clock_t begin = clock();
+                           auto start = chrono::steady_clock::now();
     Graph inverted = this->invertGraph();
 
     Vertex* orig = findVertex(origin);
@@ -333,12 +339,14 @@ void Graph::biDirAstar(const Coordinates &origin, const Coordinates &destination
     while(!originalQ.empty() && !invertedQ.empty()) {
 
         //threads init and run searches
-        auto f1 = async([this, &originalQ,heu] {
-            aStarStep(heu,originalQ,originalQ.extractMin());
+        auto f1 = async([this, &originalQ,heu, destination] {
+            Coordinates dest = destination;
+            aStarStep(heu,originalQ,originalQ.extractMin(), dest);
         });
 
-        auto f2 = async([&inverted, &invertedQ,&heu]{
-            inverted.aStarStep(heu,invertedQ,invertedQ.extractMin());
+        auto f2 = async([&inverted, &invertedQ,&heu, destination]{
+            Coordinates dest = destination;
+            inverted.aStarStep(heu,invertedQ,invertedQ.extractMin(), dest);
         });
 
         //check if searches visited the same vertex
@@ -356,8 +364,8 @@ void Graph::biDirAstar(const Coordinates &origin, const Coordinates &destination
             break;
         }
     }
-    clock_t end = clock();
-    time_elapsed = (double)(end - begin) / CLOCKS_PER_SEC;
+    auto end = chrono::steady_clock::now();
+    time_elapsed = chrono::duration_cast<chrono::nanoseconds>(end - start).count();
     this->printPath(fullPath);
 }
 

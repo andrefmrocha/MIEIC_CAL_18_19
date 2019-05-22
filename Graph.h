@@ -108,11 +108,11 @@ private:
     // Fp05
 	Vertex * initSingleSource(const Coordinates &orig);
 	bool relax(Vertex *v, Vertex *w, double weight);
-    static bool aStarRelax(Vertex *v, Vertex *w, double weight, double ( *heu)(Vertex *, Vertex *));
+    static bool aStarRelax(Vertex *v, Vertex *w, double weight, double ( *heu)(Vertex *, Coordinates &), Coordinates & dest);
     double ** W = nullptr;   // weight
 	int **P = nullptr;   // path
 	int findVertexIdx(const Coordinates &in) const;
-    void aStarStep(double (*heu)(Vertex *, Vertex *), MutablePriorityQueue<Vertex> &q, Vertex *v);
+    void aStarStep(double (*heu)(Vertex *, Coordinates &), MutablePriorityQueue<Vertex> &q, Vertex *origin, Coordinates & dest);
     void dijkstraStep(MutablePriorityQueue<Vertex> &q, Vertex *v);
 
     //check
@@ -127,12 +127,12 @@ public:
 
 	double getEdgeWeight(Edge e);
     void dijkstraShortestPath(const Coordinates &s, const Coordinates &dest,  double & time_elapsed);
-    void aStarShortestPath(const Coordinates &origin, const Coordinates &dest, double ( *heu)(Vertex *, Vertex *),
+    void aStarShortestPath(const Coordinates &origin, Coordinates &dest, double ( *heu)(Vertex *, Coordinates &),
                            double & time_elapsed);
     vector<Coordinates> getPath(const Coordinates &origin, const Coordinates &dest) const;
     void biDirDijkstra(const Coordinates & origin, const Coordinates &destination,
                      double & time_elapsed);
-    void biDirAstar(const Coordinates & origin, const Coordinates &destination, double ( *heu)(Vertex *, Vertex *),
+    void biDirAstar(const Coordinates & origin, Coordinates &destination, double ( *heu)(Vertex *, Coordinates &),
                        double & time_elapsed);
     void concateEdges(vector<Edge *> edges);
     void concateVertexs(vector<Vertex *> vertexs);

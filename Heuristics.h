@@ -7,11 +7,11 @@
 
 #include "Graph.h"
 
-double euclidean_distance(Vertex *v, Vertex *w);
+double euclidean_distance(Vertex *v, Coordinates &w);
 
-double chebyshev_distance(Vertex *v, Vertex *w);
+double chebyshev_distance(Vertex *v, Coordinates &w);
 
-double manhattan_distance(Vertex *v, Vertex *w);
+double manhattan_distance(Vertex *v, Coordinates &w);
 
 
 #endif //MIEIC_CAL_PROJ_HEURISTICS_H
