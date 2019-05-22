@@ -397,7 +397,7 @@ void generateTransportGraph(int n, Graph &ped, Graph &bus, Graph &metro) {
 
 void runTests() {
     vector<pair<int, int>> djikstra, euclidean, chebyshev, manhattan;
-    for(int i = 10; i < pow(10, 30); i *= 10){
+    for(int i = 10; i < pow(10, 5); i += 10){
         Graph graph;
         generateTransportGraph(i, graph, graph, graph);
         double djisktraTime, euclideanTime, chebyshevTime, manhattanTime;
@@ -426,7 +426,7 @@ void runTests() {
     Graph pedestrian;
     Graph busRoutes;
     Graph metroLines;
-    generateTransportGraph(10,pedestrian,pedestrian,pedestrian);
+    generateTransportGraph(30,pedestrian,pedestrian,pedestrian);
     GraphicalInterface interface = GraphicalInterface(800, 800);
     deque<Edge*> edges;
     for(Edge* e: pedestrian.getEdgeSet()) {
