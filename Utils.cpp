@@ -22,8 +22,26 @@ void csv_writer(const vector<pair<int, int>> &values, const string& filename) {
     outfile.close();
 }
 
-Graph loadGraph() {
-    return Graph();
+Graph loadGraph(std::string city) {
+    stringstream edges, nodes;
+    Graph pedestrian;
+
+    edges << "T11/" << city << "/T11_edges_" << city << ".txt";
+    nodes << "T11/" << city << "/T11_nodes_X_Y_" << city << ".txt";
+
+    pedestrian = loadPedestrian(edges.str(), nodes.str());
+
+    if(city == "Porto"){
+        Graph subway = loadSubway("T11/Porto/metro_edges_Porto.txt", "T11/Porto/metro_routes_Porto.txt", pedestrian);
+        Graph bus;
+        unifyGraphs(pedestrian, subway, bus);
+    }
+
+    for(Edge * e : pedestrian.getEdgeSet()){
+        std::cout << '(' << e->getOrig()->getInfo().getId() << ", " << e->getDest()->getInfo().getId() << ") w = " << e->getWeight() << endl;
+    }
+
+    return pedestrian;
 }
 
 Graph loadPedestrian(std::string edgesPath, std::string nodesPath) {
@@ -100,18 +118,171 @@ Graph loadPedestrian(std::string edgesPath, std::string nodesPath) {
         stream.str("");
 
         Coordinates source(0, 0, stod(args[0])), dest(0, 0, stod(args[1]));
-        myGraph.addEdge(source, dest, euclidean(source, dest, myGraph), foot);
+        double dist = euclidean(source, dest, myGraph);
+        if(dist != 0)
+            myGraph.addEdge(source, dest, dist, foot);
     }
 
     return myGraph;
 }
 
-Graph loadBus(std::string filePath) {
-    return Graph();
+Graph loadBus(std::string edgesPath, std::string nodesPath, const Graph &pedGraph) {
+    ifstream file(nodesPath);
+    std::string line;
+    std::string args[MAX_ARGS];
+    int index = 0;
+    bool firstLine = true;
+    stringstream stream;
+    Graph myGraph;
+
+    //LOADING NODES
+    if (!file.is_open()) {
+        std::cerr << "Couldn't open bus node file." << endl;
+        return myGraph;
+    }
+
+    while (std::getline(file, line)) {
+        if(firstLine){
+            firstLine = false;
+            continue;
+        }
+        line = line.substr(1, line.size() - 2);
+
+        for(size_t i = 0; i < line.size(); i++){
+            if(line[i] == ',') {
+                args[index] = stream.str();
+                index++;
+                stream.str("");
+                continue;
+            } else if (line[i] == ' ')
+                continue;
+            stream << line[i];
+        }
+
+        args[index] = stream.str();
+        index = 0;
+        stream.str("");
+
+        myGraph.addVertex(Coordinates(stod(args[2]), stod(args[1]), stod(args[0])));
+    }
+
+    file.close();
+
+    //LOADING EDGES
+    file.open(edgesPath);
+    firstLine = true;
+
+    if (!file.is_open()) {
+        std::cerr << "Couldn't open bus edge file." << endl;
+        return myGraph;
+    }
+
+    while (std::getline(file, line)) {
+        if(firstLine){
+            firstLine = false;
+            continue;
+        }
+        line = line.substr(1, line.size() - 2);
+
+        for(size_t i = 0; i < line.size(); i++){
+            if(line[i] == ',') {
+                args[index] = stream.str();
+                index++;
+                stream.str("");
+                continue;
+            } else if (line[i] == ' ')
+                continue;
+            stream << line[i];
+        }
+
+        args[index] = stream.str();
+        index = 0;
+        stream.str("");
+
+        Coordinates source(0, 0, stod(args[0])), dest(0, 0, stod(args[1]));
+        double dist = euclidean(source, dest, pedGraph);
+        if(dist != 0)
+            myGraph.addEdge(source, dest, dist, foot);
+    }
+
+    return myGraph;
 }
 
-Graph loadSubway(std::string filePath) {
-    return Graph();
+Graph loadSubway(std::string edgesPath, std::string nodesPath, const Graph &pedGraph) {
+    ifstream file(nodesPath);
+    std::string line;
+    std::string args[MAX_ARGS];
+    int index = 0;
+    bool firstLine = true;
+    stringstream stream;
+    Graph myGraph;
+
+    //LOADING NODES
+    if (!file.is_open()) {
+        std::cerr << "Couldn't open subway node file." << endl;
+        return myGraph;
+    }
+
+    while (std::getline(file, line)) {
+        if(firstLine){
+            firstLine = false;
+            continue;
+        }
+        line = line.substr(1, line.size() - 2);
+
+        for(size_t i = 0; i < line.size(); i++){
+            if(line[i] == ',') {
+                break;
+            }
+            stream << line[i];
+        }
+
+        args[index] = stream.str();
+        stream.str("");
+
+        myGraph.addVertex(Coordinates(0, 0, stod(args[0])));
+    }
+
+    file.close();
+
+    //LOADING EDGES
+    file.open(edgesPath);
+    firstLine = true;
+
+    if (!file.is_open()) {
+        std::cerr << "Couldn't open subway edge file." << endl;
+        return myGraph;
+    }
+
+    while (std::getline(file, line)) {
+        if(firstLine){
+            firstLine = false;
+            continue;
+        }
+        line = line.substr(1, line.size() - 2);
+
+        for(size_t i = 0; i < line.size(); i++){
+            if(line[i] == ',') {
+                args[index] = stream.str();
+                index++;
+                stream.str("");
+                continue;
+            } else if (line[i] == ' ')
+                continue;
+            stream << line[i];
+        }
+
+        args[index] = stream.str();
+        index = 0;
+        stream.str("");
+
+        Coordinates source(0, 0, stod(args[0])), dest(0, 0, stod(args[1]));
+        double dist = euclidean(source, dest, pedGraph);
+        if(dist != 0)
+            myGraph.addEdge(source, dest, dist, subway);
+    }
+
+    return myGraph;
 }
 
 double haversine(const Coordinates &source, const Coordinates &dest, const Graph &graph) {

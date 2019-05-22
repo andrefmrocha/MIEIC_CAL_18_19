@@ -1,7 +1,10 @@
 #include <iostream>
 #include "TestGraph.h"
+#include "Utils.h"
 
 int main() {
-    runTests();
+    //runTests();
+    Graph pedestrian = loadGraph("Porto");
+
     return 0;
 }

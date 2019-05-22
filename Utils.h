@@ -28,11 +28,11 @@ void unifyGraphs(Graph &g1, Graph &g2, Graph &g3);
  */
 void csv_writer(const vector<pair<int, int>> &values, const string& filename);
 
-Graph loadGraph();
+Graph loadGraph(std::string city);
 
 Graph loadPedestrian(std::string edgesPath, std::string nodesPath);
-Graph loadBus(std::string filePath);
-Graph loadSubway(std::string filePath);
+Graph loadBus(std::string edgesPath, std::string nodesPath, const Graph &pedGraph);
+Graph loadSubway(std::string edgesPath, std::string nodesPath, const Graph &pedGraph);
 
 double haversine(const Coordinates &source, const Coordinates &dest, const Graph &graph);
 double euclidean(const Coordinates &source, const Coordinates &dest, const Graph &graph);
