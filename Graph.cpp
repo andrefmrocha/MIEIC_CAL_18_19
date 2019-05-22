@@ -107,6 +107,7 @@ Vertex * Graph::initSingleSource(const Coordinates &origin) {
     }
     auto s = findVertex(origin);
     s->weight = 0;
+    s->visited = true;
     this->visited = vector<bool> (this->vertexSet.size(), false);
     return s;
 }
@@ -120,6 +121,8 @@ inline bool Graph::relax(Vertex *v, Vertex *w, double weight) {
     if (v->weight + weight < w->weight) {
         w->weight = v->weight + weight;
         w->path = v;
+        w->visited = true;
+
         return true;
     }
     else
@@ -142,7 +145,7 @@ void Graph::dijkstraShortestPath(const Coordinates &origin, const Coordinates &d
         i++;
     }
     auto end = chrono::steady_clock::now();
-    time_elapsed = chrono::duration_cast<chrono::nanoseconds>(end - start).count();
+    time_elapsed = chrono::duration_cast<chrono::milliseconds>(end - start).count();
 }
 
 void Graph::dijkstraStep(MutablePriorityQueue<Vertex> &q, Vertex *v) {
@@ -154,7 +157,7 @@ void Graph::dijkstraStep(MutablePriorityQueue<Vertex> &q, Vertex *v) {
     for (auto e : v->adj) {
         auto oldDist = e.dest->weight;
         if (relax(v, e.dest, e.weight)) {
-            if (oldDist == INF)
+            if (!q.find(e.dest))
                 q.insert(e.dest);
             else
                 q.decreaseKey(e.dest);
@@ -182,6 +185,7 @@ void Graph::aStarShortestPath(const Coordinates &origin, Coordinates &dest, doub
     int i = 0;
     while( ! q.empty() ) {
         auto v = q.extractMin();
+        v->visited = true;
         if(v->getInfo() == dest){
             cout << "Num of iterations " << i << " " << this->vertexSet.size() << endl;
             break;
@@ -190,7 +194,7 @@ void Graph::aStarShortestPath(const Coordinates &origin, Coordinates &dest, doub
         i++;
     }
     auto end = chrono::steady_clock::now();
-    time_elapsed = chrono::duration_cast<chrono::nanoseconds>(end - start).count();
+    time_elapsed = chrono::duration_cast<chrono::milliseconds>(end - start).count();
 }
 
 void Graph::aStarStep(double (*heu)(Vertex *, Coordinates &), MutablePriorityQueue<Vertex> &q, Vertex *origin, Coordinates &dest)  {
@@ -200,9 +204,8 @@ void Graph::aStarStep(double (*heu)(Vertex *, Coordinates &), MutablePriorityQue
 
     this->visited[distance(this->vertexSet.begin(), find(this->vertexSet.begin(), this->vertexSet.end(), origin))] = true;
     for (auto e : origin->adj) {
-        auto oldDist = e.dest->weight;
         if (aStarRelax(origin, e.dest, e.weight, heu, dest)) {
-            if (oldDist == INF)
+            if (!q.find(e.dest))
                 q.insert(e.dest);
             else
                 q.decreaseKey(e.dest);
@@ -302,7 +305,7 @@ double & time_elapsed) {
         }
     }
     auto end = chrono::steady_clock::now();
-    time_elapsed = chrono::duration_cast<chrono::nanoseconds>(end - start).count();
+    time_elapsed = chrono::duration_cast<chrono::milliseconds>(end - start).count();
     this->printPath(fullPath);
 }
 
@@ -365,7 +368,7 @@ void Graph::biDirAstar(const Coordinates &origin, Coordinates &destination, doub
         }
     }
     auto end = chrono::steady_clock::now();
-    time_elapsed = chrono::duration_cast<chrono::nanoseconds>(end - start).count();
+    time_elapsed = chrono::duration_cast<chrono::milliseconds>(end - start).count();
     this->printPath(fullPath);
 }
 

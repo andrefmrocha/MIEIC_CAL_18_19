@@ -398,7 +398,7 @@ void generateTransportGraph(int n, Graph &ped, Graph &bus, Graph &metro) {
 
 void runTests() {
     vector<pair<int, double>> djikstra, euclidean, chebyshev, manhattan;
-    for(int i = 10; i < pow(10, 5); i += 10){
+    for(int i = 10; i < pow(10, 2) ; i += 10){
         cout << "Generating grid graph: " << i << "x" << i << endl;
         Graph graph;
         generateTransportGraph(i, graph, graph, graph);
@@ -408,20 +408,20 @@ void runTests() {
         graph.dijkstraShortestPath(origin, dest, djisktraTime);
         cout << "Finished djikstra. Elapsed Time: "<< djisktraTime << endl;
         graph.aStarShortestPath(origin, dest, euclidean_distance, euclideanTime);
-        cout << "Finished euclidean. Elapsed Time: "<< djisktraTime << endl;
+        cout << "Finished euclidean. Elapsed Time: "<< euclideanTime << endl;
         graph.aStarShortestPath(origin, dest, chebyshev_distance, chebyshevTime);
-        cout << "Finished chebyshev. Elapsed Time: "<< djisktraTime << endl;
+        cout << "Finished chebyshev. Elapsed Time: "<< chebyshevTime << endl;
         graph.aStarShortestPath(origin, dest, manhattan_distance, manhattanTime);
-        cout << "Finished manhattan. Elapsed Time: "<< djisktraTime << endl;
+        cout << "Finished manhattan. Elapsed Time: "<< manhattanTime << endl;
         djikstra.push_back(make_pair(graph.getEdgeSet().size() + graph.getVertexSet().size(), djisktraTime));
         euclidean.push_back(make_pair(graph.getEdgeSet().size() + graph.getVertexSet().size(), euclideanTime));
         chebyshev.push_back(make_pair(graph.getEdgeSet().size() + graph.getVertexSet().size(), chebyshevTime));
         manhattan.push_back(make_pair(graph.getEdgeSet().size() + graph.getVertexSet().size(), manhattanTime));
-        csv_writer(djikstra, "Results/djikstra" + to_string(i) + ".csv");
-        csv_writer(euclidean, "Results/euclidean" + to_string(i) + ".csv");
-        csv_writer(chebyshev, "Results/chebyshev" + to_string(i) + ".csv");
-        csv_writer(manhattan, "Results/manhattan" + to_string(i) + ".csv");
     }
+    csv_writer(djikstra, "djikstra.csv");
+    csv_writer(euclidean, "euclidean.csv");
+    csv_writer(chebyshev, "chebyshev.csv");
+    csv_writer(manhattan, "manhattan.csv");
 
 }
 
