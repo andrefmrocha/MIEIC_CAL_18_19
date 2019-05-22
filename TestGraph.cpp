@@ -17,28 +17,6 @@ double metroF = 0.4; //metro weight factor
 //Coords: (lat,long)
 
 
-Graph CreateTestGraph() {
-    Graph myGraph;
-
-    for(int i = 1; i <= 7; i++)
-        myGraph.addVertex(Coordinates(i, i, i));
-
-    myGraph.addEdge(Coordinates(1, 1, 1), Coordinates(2, 2, 2), 2, foot);
-    myGraph.addEdge(Coordinates(1, 1, 1), Coordinates(4, 4, 4), 7, foot);
-    myGraph.addEdge(Coordinates(2, 2, 2), Coordinates(4, 4, 4), 3, foot);
-    myGraph.addEdge(Coordinates(2, 2, 2), Coordinates(5, 5, 5), 5, foot);
-    myGraph.addEdge(Coordinates(3, 3, 3), Coordinates(1, 1, 1), 2, foot);
-    myGraph.addEdge(Coordinates(3, 3, 3), Coordinates(6, 6, 6), 5, foot);
-    myGraph.addEdge(Coordinates(4, 4, 4), Coordinates(3, 3, 3), 1, foot);
-    myGraph.addEdge(Coordinates(4, 4, 4), Coordinates(5, 5, 5), 1, foot);
-    myGraph.addEdge(Coordinates(4, 4, 4), Coordinates(6, 6, 6), 6, foot);
-    myGraph.addEdge(Coordinates(4, 4, 4), Coordinates(7, 7, 7), 4, foot);
-    myGraph.addEdge(Coordinates(5, 5, 5), Coordinates(7, 7, 7), 2, foot);
-    myGraph.addEdge(Coordinates(6, 6, 6), Coordinates(4, 4, 4), 3, foot);
-    myGraph.addEdge(Coordinates(7, 7, 7), Coordinates(6, 6, 6), 4, foot);
-    return myGraph;
-}
-
 void generateBusRoute1(Graph &g,int n) {
     int i = n/10;
     int j = n/10;
@@ -419,9 +397,9 @@ void generateTransportGraph(int n, Graph &ped, Graph &bus, Graph &metro) {
 }
 
 void runTests() {
-    vector<pair<int, int>> djikstra, euclidean, chebyshev, manhattan;
-    cout.precision(100);
+    vector<pair<int, double>> djikstra, euclidean, chebyshev, manhattan;
     for(int i = 10; i < pow(10, 5); i += 10){
+        cout << "Generating grid graph: " << i << "x" << i << endl;
         Graph graph;
         generateTransportGraph(i, graph, graph, graph);
         double djisktraTime, euclideanTime, chebyshevTime, manhattanTime;
@@ -439,16 +417,29 @@ void runTests() {
         euclidean.push_back(make_pair(graph.getEdgeSet().size() + graph.getVertexSet().size(), euclideanTime));
         chebyshev.push_back(make_pair(graph.getEdgeSet().size() + graph.getVertexSet().size(), chebyshevTime));
         manhattan.push_back(make_pair(graph.getEdgeSet().size() + graph.getVertexSet().size(), manhattanTime));
+        csv_writer(djikstra, "Results/djikstra" + to_string(i) + ".csv");
+        csv_writer(euclidean, "Results/euclidean" + to_string(i) + ".csv");
+        csv_writer(chebyshev, "Results/chebyshev" + to_string(i) + ".csv");
+        csv_writer(manhattan, "Results/manhattan" + to_string(i) + ".csv");
     }
-    csv_writer(djikstra, "djikstra.csv");
-    csv_writer(euclidean, "euclidean.csv");
-    csv_writer(chebyshev, "chebyshev.csv");
-    csv_writer(manhattan, "manhattan.csv");
 
 }
 
 
-int main() {
-    runTests();
+/*int main() {
+    Graph pedestrian;
+    Graph busRoutes;
+    Graph metroLines;
+    generateTransportGraph(30,pedestrian,pedestrian,pedestrian);
+    GraphicalInterface interface = GraphicalInterface(800, 800);
+    deque<Edge*> edges;
+    for(Edge* e: pedestrian.getEdgeSet()) {
+        edges.push_back(e);
+    }
+    double time;
+    pedestrian.biDirAstar(Coordinates(3,0,30),Coordinates(8,9,89),euclidean_distance,time);
+    cout << "Time elapsed: " << time << endl;
+    interface.showPath(edges);
+
     return 0;
-}
+}*/
