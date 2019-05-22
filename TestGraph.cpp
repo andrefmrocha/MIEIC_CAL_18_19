@@ -386,7 +386,7 @@ void generateTransportGraph(int n, Graph &ped, Graph &bus, Graph &metro) {
             for (int di = -1; di <= 1; di++)
                 for (int dj = -1; dj <= 1; dj++)
                     if ((di != 0) != (dj != 0) && i+di >= 0 && i+di < n && j+dj >= 0 && j+dj < n)
-                        ped.addEdge(Coordinates(i,j,i*n+j), Coordinates(i+di,j+dj,i*n+j), dis(gen),foot);
+                        ped.addEdge(Coordinates(i,j,i*n+j), Coordinates(i+di,j+dj,(i+di)*n+j+dj), dis(gen),foot);
 
 
     cout << "Generated Pedestrian routes " << endl;
@@ -402,13 +402,13 @@ void runTests() {
         generateTransportGraph(i, graph, graph, graph);
         double djisktraTime, euclideanTime, chebyshevTime, manhattanTime;
         graph.dijkstraShortestPath(Coordinates(0, 0, 0), Coordinates(i, i, i * i + i), djisktraTime);
-        cout << "Finished djikstra" << endl;
+        cout << "Finished djikstra. Elapsed Time: "<< djisktraTime << endl;
         graph.aStarShortestPath(Coordinates(0, 0, 0), Coordinates(i, i, i * i + i), euclidean_distance, euclideanTime);
-        cout << "Finished euclidean" << endl;
+        cout << "Finished euclidean. Elapsed Time: "<< djisktraTime << endl;
         graph.aStarShortestPath(Coordinates(0, 0, 0), Coordinates(i, i, i * i + i), chebyshev_distance, chebyshevTime);
-        cout << "Finished chebyshev" << endl;
+        cout << "Finished chebyshev. Elapsed Time: "<< djisktraTime << endl;
         graph.aStarShortestPath(Coordinates(0, 0, 0), Coordinates(i, i, i * i + i), manhattan_distance, manhattanTime);
-        cout << "Finished manhattan" << endl;
+        cout << "Finished manhattan. Elapsed Time: "<< djisktraTime << endl;
         djikstra.push_back(make_pair(graph.getEdgeSet().size() + graph.getVertexSet().size(), djisktraTime));
         euclidean.push_back(make_pair(graph.getEdgeSet().size() + graph.getVertexSet().size(), euclideanTime));
         chebyshev.push_back(make_pair(graph.getEdgeSet().size() + graph.getVertexSet().size(), chebyshevTime));
