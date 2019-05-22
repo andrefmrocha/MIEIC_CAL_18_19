@@ -398,6 +398,7 @@ void generateTransportGraph(int n, Graph &ped, Graph &bus, Graph &metro) {
 void runTests() {
     vector<pair<int, int>> djikstra, euclidean, chebyshev, manhattan;
     for(int i = 10; i < pow(10, 5); i += 10){
+        cout << "Generating grid graph: " << i << "x" << i << endl;
         Graph graph;
         generateTransportGraph(i, graph, graph, graph);
         double djisktraTime, euclideanTime, chebyshevTime, manhattanTime;
@@ -408,16 +409,16 @@ void runTests() {
         graph.aStarShortestPath(Coordinates(0, 0, 0), Coordinates(i, i, i * i + i), chebyshev_distance, chebyshevTime);
         cout << "Finished chebyshev. Elapsed Time: "<< djisktraTime << endl;
         graph.aStarShortestPath(Coordinates(0, 0, 0), Coordinates(i, i, i * i + i), manhattan_distance, manhattanTime);
-        cout << "Finished manhattan. Elapsed Time: "<< djisktraTime << endl;
+        cout << "Finished manhattan. Elapsed Time: "<< djisktraTime << endl << endl;
         djikstra.push_back(make_pair(graph.getEdgeSet().size() + graph.getVertexSet().size(), djisktraTime));
         euclidean.push_back(make_pair(graph.getEdgeSet().size() + graph.getVertexSet().size(), euclideanTime));
         chebyshev.push_back(make_pair(graph.getEdgeSet().size() + graph.getVertexSet().size(), chebyshevTime));
         manhattan.push_back(make_pair(graph.getEdgeSet().size() + graph.getVertexSet().size(), manhattanTime));
+        csv_writer(djikstra, "Results/djikstra" + to_string(i) + ".csv");
+        csv_writer(euclidean, "Results/euclidean" + to_string(i) + ".csv");
+        csv_writer(chebyshev, "Results/chebyshev" + to_string(i) + ".csv");
+        csv_writer(manhattan, "Results/manhattan" + to_string(i) + ".csv");
     }
-    csv_writer(djikstra, "djikstra.csv");
-    csv_writer(euclidean, "euclidean.csv");
-    csv_writer(chebyshev, "chebyshev.csv");
-    csv_writer(manhattan, "manhattan.csv");
 
 }
 
