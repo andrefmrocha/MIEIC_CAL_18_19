@@ -13,7 +13,7 @@ void unifyGraphs(Graph &g1, Graph &g2, Graph &g3) {
     g1.concateVertexs(g3.getVertexSet());
 }
 
-void csv_writer(const vector<pair<int, int>> &values, const string& filename) {
+void csv_writer(const vector<pair<int, double>> &values, const string& filename) {
     ofstream outfile(filename);
     outfile << "V+E" << "," << "time(ms)" << endl;
     for (auto i: values){

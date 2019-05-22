@@ -396,7 +396,7 @@ void generateTransportGraph(int n, Graph &ped, Graph &bus, Graph &metro) {
 }
 
 void runTests() {
-    vector<pair<int, int>> djikstra, euclidean, chebyshev, manhattan;
+    vector<pair<int, double>> djikstra, euclidean, chebyshev, manhattan;
     for(int i = 10; i < pow(10, 5); i += 10){
         cout << "Generating grid graph: " << i << "x" << i << endl;
         Graph graph;
