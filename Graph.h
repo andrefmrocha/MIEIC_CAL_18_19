@@ -103,6 +103,7 @@ class Graph {
 	vector<Vertex *> vertexSet;    // vertex set
 	vector<Edge*> edgeSet;
 	vector<bool> visited;
+	vector<bool> invertedVisited;
     const vector<bool> &getVisited() const;
     Vertex * isIntersecting(const vector<bool> &visited1, const vector<bool> &visited2);
 
@@ -130,6 +131,8 @@ public:
 
 	double getEdgeWeight(Edge e);
     void dijkstraShortestPath(const Coordinates &origin, const Coordinates &dest, double &time_elapsed);
+    void dijkstraShortestPathBi(const Coordinates &origin, const Coordinates &dest);
+    void dijkstraShortestPathBiInv(const Coordinates &origin, const Coordinates &dest;
     void aStarShortestPath(const Coordinates &origin, const Coordinates &dest, double ( *heu)(const Vertex *,
                                                                                               const Coordinates &),
                            double &time_elapsed);

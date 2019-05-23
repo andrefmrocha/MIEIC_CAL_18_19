@@ -83,5 +83,5 @@ int main () {
     }*/
 
 
-    displayTest();
+    runTests();
 }
