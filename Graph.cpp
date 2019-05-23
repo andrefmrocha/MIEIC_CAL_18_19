@@ -167,7 +167,7 @@ void Graph::dijkstraStep(MutablePriorityQueue<Vertex> &q, Vertex *v) {
 
     this->visited[distance(this->vertexSet.begin(),find(this->vertexSet.begin(), this->vertexSet.end(), v))] = true;
     for (auto e : v->adj) {
-        if (relax(v, e->dest, e->weight) && !e->dest->visited) {
+        if (relax(v, e->dest, e->weight)) {
             e->dest->predecessor = e;
             if (!q.find(e->dest))
                 q.insert(e->dest);
@@ -280,7 +280,6 @@ Edge *Edge::invertEdge() {
 
 void Graph::biDirDijkstra(const Coordinates &origin, const Coordinates &destination, double &time_elapsed,
                           vector<Coordinates> &coordsPath, deque<Edge *> &edgesPath) {
-    auto start = chrono::steady_clock::now();
     this->invertGraph();
 
     Vertex* orig = findVertex(origin);
@@ -295,13 +294,13 @@ void Graph::biDirDijkstra(const Coordinates &origin, const Coordinates &destinat
     this->initDestination(destination);
 
 
+    auto start = chrono::steady_clock::now();
     //threads init and run searches
     auto f1 = thread([this, origin, destination] {
         this->dijkstraShortestPathBi(origin, destination);
     });
 
     this->dijkstraShortestPathBiInv(origin, destination);
-    //check if searches visited the same vertex
     f1.join();
     auto end = chrono::steady_clock::now();
     time_elapsed = chrono::duration_cast<chrono::milliseconds>(end - start).count();
@@ -311,7 +310,6 @@ void Graph::biDirAstar(const Coordinates &origin, const Coordinates &destination
                        double (*heu)(const Vertex *, const Coordinates &), double &time_elapsed,
                        vector<Coordinates> &coordsPath,
                        deque<Edge *> &edgePath) {
-   auto start = chrono::steady_clock::now();
    this->invertGraph();
     Vertex* orig = findVertex(origin);
     Vertex* dest = findVertex(destination);
@@ -324,12 +322,13 @@ void Graph::biDirAstar(const Coordinates &origin, const Coordinates &destination
     this->initSingleSource(origin);
     this->initDestination(destination);
 
-    auto f1 = async([this, origin,heu, destination] {
+    auto start = chrono::steady_clock::now();
+    auto f1 = thread([this, origin,heu, destination] {
         this->aStarShortestPathBi(origin, destination, heu);
     });
     this->aStarShortestPathBiInv(origin, destination, heu);
 
-    f1.get();
+    f1.join();
     auto end = chrono::steady_clock::now();
     time_elapsed = chrono::duration_cast<chrono::milliseconds>(end - start).count();
 }
@@ -360,6 +359,10 @@ Vertex *Graph::isIntersecting(const vector<bool> &visited1, const vector<bool> &
     return nullptr;
 }
 
+bool Graph::isIntersecting(const vector<bool> &checking, Vertex * check) {
+    return checking[check->info.getId()];
+}
+
 void Graph::printPath(vector<Coordinates> coords) const {
     for( Coordinates c: coords)
         cout << c.getId() << " -> ";
@@ -374,8 +377,8 @@ void Graph::dijkstraShortestPathBi(const Coordinates &origin, const Coordinates 
     while( ! q.empty() ) {
         auto v = q.extractMin();
         v->visited = true;
-        this->visited[distance(this->vertexSet.begin(),find(this->vertexSet.begin(), this->vertexSet.end(), v))] = true;
-        if(this->isIntersecting(this->getVisited(), invertedVisited) != nullptr){
+        this->visited[v->info.getId()] = true;
+        if(this->isIntersecting(this->invertedVisited, v)){
             cout << "Num of iterations " << i << " " << this->vertexSet.size() << endl;
             break;
         }
@@ -392,18 +395,18 @@ void Graph::dijkstraShortestPathBiInv(const Coordinates &origin, const Coordinat
     while( ! q.empty() ) {
         auto v = q.extractMin();
         v->visited = true;
-        this->invertedVisited[distance(this->vertexSet.begin(),find(this->vertexSet.begin(), this->vertexSet.end(), v))] = true;
-        if(this->isIntersecting(this->getVisited(), this->invertedVisited) != nullptr){
+        this->invertedVisited[v->info.getId()] = true;
+        if(this->isIntersecting(this->visited, v)){
             cout << "Num of iterations " << i << " " << this->vertexSet.size() << endl;
             break;
         }
         for (auto e : v->inc) {
             if (relax(v, e->dest, e->weight)) {
                 e->dest->predecessor = e;
-                if (!q.find(e->orig))
-                    q.insert(e->orig);
+                if (!q.find(e->dest))
+                    q.insert(e->dest);
                 else
-                    q.decreaseKey(e->orig);
+                    q.decreaseKey(e->dest);
             }
         }
         i++;
@@ -418,9 +421,9 @@ void Graph::aStarShortestPathBi(const Coordinates &origin, const Coordinates &de
     int i = 0;
     while( ! q.empty() ) {
         auto v = q.extractMin();
-        this->visited[distance(this->vertexSet.begin(), find(this->vertexSet.begin(), this->vertexSet.end(), v))] = true;
+        this->visited[v->info.getId()] = true;
         v->visited = true;
-        if(this->isIntersecting(this->getVisited(), this->invertedVisited) != nullptr){
+        if(this->isIntersecting(this->invertedVisited, v)){
             cout << "Num of iterations " << i << " " << this->vertexSet.size() << endl;
             break;
         }
@@ -439,8 +442,8 @@ void Graph::aStarShortestPathBiInv(const Coordinates &origin, const Coordinates 
     while( ! q.empty() ) {
         auto v = q.extractMin();
         v->visited = true;
-        this->invertedVisited[distance(this->vertexSet.begin(), find(this->vertexSet.begin(), this->vertexSet.end(), v))] = true;
-        if(this->isIntersecting(this->getVisited(), this->invertedVisited) != nullptr){
+        this->invertedVisited[v->info.getId()] = true;
+        if(this->isIntersecting(this->visited, v)){
             cout << "Num of iterations " << i << " " << this->vertexSet.size() << endl;
             break;
         }

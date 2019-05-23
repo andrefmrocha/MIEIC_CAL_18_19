@@ -124,6 +124,7 @@ private:
                    const Coordinates &dest);
     void dijkstraStep(MutablePriorityQueue<Vertex> &q, Vertex *v);
     bool isInverted=false;
+    bool isIntersecting(const vector<bool> &checking, Vertex * check);
 public:
     Vertex *findVertex(const Coordinates &in) const;
     bool addVertex(const Coordinates &in);
