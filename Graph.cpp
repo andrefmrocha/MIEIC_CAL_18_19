@@ -87,7 +87,7 @@ bool Graph::addEdge(const Coordinates &sourc, const Coordinates &dest, double w,
     if (v1 == nullptr || v2 == nullptr)
         return false;
     v1->addEdge(v2, w,type);
-    edgeSet.push_back(new Edge(v1,v2,w,type));
+    edgeSet.push_back(v1->adj[v1->adj.size()-1]);
     return true;
 }
 
@@ -104,6 +104,7 @@ Vertex * Graph::initSingleSource(const Coordinates &origin) {
         v->weight = INF;
         v->path = nullptr;
         v->dist = INF;
+        v->predecessor = nullptr;
     }
     auto s = findVertex(origin);
     s->weight = 0;
@@ -129,7 +130,7 @@ inline bool Graph::relax(Vertex *v, Vertex *w, double weight) {
         return false;
 }
 
-void Graph::dijkstraShortestPath(const Coordinates &origin, const Coordinates &dest, double & time_elapsed) {
+void Graph::dijkstraShortestPath(const Coordinates &origin, const Coordinates &dest, double &time_elapsed) {
     auto start = chrono::steady_clock::now();
     auto s = initSingleSource(origin);
     MutablePriorityQueue<Vertex> q;
@@ -155,30 +156,41 @@ void Graph::dijkstraStep(MutablePriorityQueue<Vertex> &q, Vertex *v) {
 
     this->visited[distance(this->vertexSet.begin(),find(this->vertexSet.begin(), this->vertexSet.end(), v))] = true;
     for (auto e : v->adj) {
-        auto oldDist = e.dest->weight;
-        if (relax(v, e.dest, e.weight)) {
-            if (!q.find(e.dest))
-                q.insert(e.dest);
+        if (relax(v, e->dest, e->weight)) {
+            e->dest->predecessor = e;
+            if (!q.find(e->dest))
+                q.insert(e->dest);
             else
-                q.decreaseKey(e.dest);
+                q.decreaseKey(e->dest);
         }
     }
 }
 
-vector<Coordinates> Graph::getPath(const Coordinates &origin, const Coordinates &dest) const{
-    vector<Coordinates> res;
+void Graph::getPath(const Coordinates &origin, const Coordinates &dest, vector<Coordinates> &coords, deque<Edge *> &edges, bool isInverted) const{
+    vector<Coordinates> c;
     auto v = findVertex(dest);
     if (v == nullptr || v->weight == INF) // missing or disconnected
-        return res;
-    for ( ; v != nullptr; v = v->path)
-        res.push_back(v->info);
-    reverse(res.begin(), res.end());
-    return res;
+        return;
+    if( isInverted) {
+        for( ; v != nullptr && v->predecessor != nullptr; v = v->path) {
+            coords.push_back(v->info);
+            edges.push_back(v->predecessor->invertEdge());
+        }
+        coords.push_back(v->info);
+    }
+    else {
+        for( ; v != nullptr && v->predecessor != nullptr; v = v->path) {
+            c.push_back(v->info);
+            edges.push_front(v->predecessor);
+        }
+        c.push_back(v->info);
+        reverse(c.begin(), c.end());
+        coords.insert(coords.end(),c.begin(),c.end());
+    }
 }
 
-void Graph::aStarShortestPath(const Coordinates &origin, Coordinates &dest, double ( *heu)(Vertex *, Coordinates &),
-                              double & time_elapsed ) {
-                                  auto start = chrono::steady_clock::now();
+void Graph::aStarShortestPath(const Coordinates &origin, const Coordinates &dest, double ( *heu)(const Vertex *, const Coordinates &), double &time_elapsed) {
+    auto start = chrono::steady_clock::now();
     auto s = initSingleSource(origin);
     MutablePriorityQueue<Vertex> q;
     q.insert(s);
@@ -197,23 +209,26 @@ void Graph::aStarShortestPath(const Coordinates &origin, Coordinates &dest, doub
     time_elapsed = chrono::duration_cast<chrono::milliseconds>(end - start).count();
 }
 
-void Graph::aStarStep(double (*heu)(Vertex *, Coordinates &), MutablePriorityQueue<Vertex> &q, Vertex *origin, Coordinates &dest)  {
+void Graph::aStarStep(double (*heu)(const Vertex *, const Coordinates &), MutablePriorityQueue<Vertex> &q,
+                      Vertex *origin, const Coordinates &dest)  {
     if(isInverted) {
         origin = findVertex(origin->getInfo()); // do this only if its inverted graph
     }
 
     this->visited[distance(this->vertexSet.begin(), find(this->vertexSet.begin(), this->vertexSet.end(), origin))] = true;
     for (auto e : origin->adj) {
-        if (aStarRelax(origin, e.dest, e.weight, heu, dest)) {
-            if (!q.find(e.dest))
-                q.insert(e.dest);
+        if (aStarRelax(origin, e->dest, e->weight, heu, dest)) {
+            e->dest->predecessor = e;
+            if (!q.find(e->dest))
+                q.insert(e->dest);
             else
-                q.decreaseKey(e.dest);
+                q.decreaseKey(e->dest);
         }
     }
 }
 
-inline bool Graph::aStarRelax(Vertex *v, Vertex *w, double weight, double (*heu)(Vertex *, Coordinates &), Coordinates &dest) {
+inline bool Graph::aStarRelax(Vertex *v, Vertex *w, double weight, double (*heu)(const Vertex *, const Coordinates &),
+                              const Coordinates &dest) {
     if (v->weight + weight + heu(w, dest)< w->weight) {
         w->weight = v->weight + weight + heu(v, dest);
         w->dist = v->weight + weight;
@@ -248,8 +263,12 @@ Transport Edge::getType() const {
     return type;
 }
 
-void Graph::biDirDijkstra(const Coordinates &origin, const Coordinates &destination,
-double & time_elapsed) {
+Edge *Edge::invertEdge() {
+    return new Edge(this->dest,this->orig,this->weight,this->type);
+}
+
+void Graph::biDirDijkstra(const Coordinates &origin, const Coordinates &destination, double &time_elapsed,
+                          vector<Coordinates> &coordsPath, deque<Edge *> &edgesPath) {
     auto start = chrono::steady_clock::now();
     Graph inverted = this->invertGraph();
 
@@ -276,7 +295,6 @@ double & time_elapsed) {
     dest->visited = true;
     dest->path = nullptr;
 
-    vector<Coordinates> fullPath;
 
     while(!originalQ.empty() && !invertedQ.empty()) {
 
@@ -296,11 +314,8 @@ double & time_elapsed) {
         intersectV = isIntersecting(this->getVisited(), inverted.getVisited());
 
         if(intersectV != nullptr) {
-            fullPath = this->getPath(origin,intersectV->getInfo());
-            vector<Coordinates> inverseCoords = inverted.getPath(destination,intersectV->getInfo());
-            inverseCoords.pop_back();
-            reverse(inverseCoords.begin(),inverseCoords.end());
-            fullPath.insert(fullPath.end(),inverseCoords.begin(),inverseCoords.end());
+            this->getPath(origin, intersectV->getInfo(), coordsPath, edgesPath, false);
+            inverted.getPath(destination, intersectV->getInfo(), coordsPath, edgesPath, true);
             break;
         }
     }
@@ -308,8 +323,10 @@ double & time_elapsed) {
     time_elapsed = chrono::duration_cast<chrono::milliseconds>(end - start).count();
 }
 
-void Graph::biDirAstar(const Coordinates &origin, Coordinates &destination, double (*heu)(Vertex *,  Coordinates &),
-                       double &time_elapsed) {
+void Graph::biDirAstar(const Coordinates &origin, const Coordinates &destination,
+                       double (*heu)(const Vertex *, const Coordinates &), double &time_elapsed,
+                       vector<Coordinates> &coordsPath,
+                       deque<Edge *> &edgePath) {
                            auto start = chrono::steady_clock::now();
     Graph inverted = this->invertGraph();
 
@@ -336,7 +353,6 @@ void Graph::biDirAstar(const Coordinates &origin, Coordinates &destination, doub
     dest->visited = true;
     dest->path = nullptr;
 
-    vector<Coordinates> fullPath;
 
     while(!originalQ.empty() && !invertedQ.empty()) {
 
@@ -358,11 +374,8 @@ void Graph::biDirAstar(const Coordinates &origin, Coordinates &destination, doub
         intersectV = isIntersecting(this->getVisited(), inverted.getVisited());
 
         if(intersectV != nullptr) {
-            fullPath = this->getPath(origin,intersectV->getInfo());
-            vector<Coordinates> inverseCoords = inverted.getPath(destination,intersectV->getInfo());
-            inverseCoords.pop_back();
-            reverse(inverseCoords.begin(),inverseCoords.end());
-            fullPath.insert(fullPath.end(),inverseCoords.begin(),inverseCoords.end());
+            this->getPath(origin, intersectV->getInfo(), coordsPath, edgePath, false);
+            inverted.getPath(destination, intersectV->getInfo(),coordsPath,edgePath, true);
             break;
         }
     }
@@ -417,7 +430,7 @@ void Graph::printPath(vector<Coordinates> coords) const {
  * with a given destination vertex (d) and edge weight (w).
  */
 void Vertex::addEdge(Vertex *d, double w,Transport type) {
-    adj.push_back(Edge(this, d, w,type));
+    adj.push_back(new Edge(this, d, w,type));
 }
 
 Vertex::Vertex(Coordinates in): info(in) {}
