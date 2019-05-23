@@ -398,7 +398,7 @@ void generateTransportGraph(int n, Graph &ped, Graph &bus, Graph &metro) {
 
 void runTests() {
     ofstream dijkstra("djikstra.csv"), euclidean("euclidean.csv"), chebyshev("chebyshev.csv"), manhattan("manhattan.csv");
-    ofstream bidijkstra("bidjikstra.csv"), bieuclidean("bieuclidean.csv"), bichebyshev("chebyshev.csv"), bimanhattan("manhattan.csv");
+    ofstream bidijkstra("bidjikstra.csv"), bieuclidean("bieuclidean.csv"), bichebyshev("bichebyshev.csv"), bimanhattan("bimanhattan.csv");
     for(int i = 10; i < pow(10, 2) * 4 ; i += 10){
         cout << "Generating grid graph: " << i << "x" << i << endl;
         Graph graph;
