@@ -31,6 +31,7 @@ enum Transport  {
 class Vertex {
 	Coordinates info;                // contents
 	vector<Edge*> adj;  // outgoing edges
+	vector<Edge*> inc;  // incoming edges
 	bool visited;          // auxiliary field
 	double weight = 0;
 	double dist = 0;
@@ -39,6 +40,7 @@ class Vertex {
 	vector<Vertex* > disjSet;
 
 	void addEdge(Vertex *dest, double w,Transport type);
+	void addInvEdge(Vertex *dest, double w,Transport type);
 
     Edge *predecessor;
 public:
@@ -106,6 +108,7 @@ class Graph {
 	vector<bool> invertedVisited;
     const vector<bool> &getVisited() const;
     Vertex * isIntersecting(const vector<bool> &visited1, const vector<bool> &visited2);
+    void initDestination(const Coordinates & dest);
 
 private:
 
@@ -125,6 +128,7 @@ public:
     Vertex *findVertex(const Coordinates &in) const;
     bool addVertex(const Coordinates &in);
     bool addEdge(const Coordinates &sourc, const Coordinates &dest, double w,Transport type);
+    bool addInvEdge(const Coordinates &sourc, const Coordinates &dest, double w,Transport type);
     int getNumVertex() const;
     vector<Vertex *> getVertexSet() const;
     vector<Edge*> getEdgeSet() const;
@@ -152,7 +156,7 @@ public:
     void concateEdges(vector<Edge *> edges);
     void concateVertexs(vector<Vertex *> vertexs);
     void printPath(vector<Coordinates> coords) const;
-    Graph invertGraph();
+    void invertGraph();
 };
 
 #endif /* GRAPH_H_ */

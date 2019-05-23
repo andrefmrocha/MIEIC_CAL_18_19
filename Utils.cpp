@@ -14,7 +14,6 @@ void unifyGraphs(Graph &g1, Graph &g2, Graph &g3) {
 }
 
 void csv_writer(const pair<int, double> &values, ofstream & outfile) {
-    outfile << "V+E" << "," << "time(ms)" << endl;
     outfile << values.first << "," << values.second << endl;
 }
 
