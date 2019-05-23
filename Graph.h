@@ -132,10 +132,14 @@ public:
 	double getEdgeWeight(Edge e);
     void dijkstraShortestPath(const Coordinates &origin, const Coordinates &dest, double &time_elapsed);
     void dijkstraShortestPathBi(const Coordinates &origin, const Coordinates &dest);
-    void dijkstraShortestPathBiInv(const Coordinates &origin, const Coordinates &dest;
+    void dijkstraShortestPathBiInv(const Coordinates &origin, const Coordinates &dest);
     void aStarShortestPath(const Coordinates &origin, const Coordinates &dest, double ( *heu)(const Vertex *,
                                                                                               const Coordinates &),
                            double &time_elapsed);
+    void aStarShortestPathBi(const Coordinates &origin, const Coordinates &dest, double ( *heu)(const Vertex *,
+                                                                                              const Coordinates &));
+    void aStarShortestPathBiInv(const Coordinates &origin, const Coordinates &dest, double ( *heu)(const Vertex *,
+                                                                                              const Coordinates &));
     void getPath(const Coordinates &origin, const Coordinates &dest, vector<Coordinates> &coords, deque<Edge *> &edges,
                  bool isInverted) const;
 
