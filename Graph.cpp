@@ -335,19 +335,7 @@ void Graph::biDirAstar(const Coordinates &origin, const Coordinates &destination
 
 void Graph::concatenateEdges(vector<Edge *> edges) {
     for(Edge * edge : edges) {
-        auto source = findVertex(edge->getOrig()->getInfo());
-        auto dest = findVertex(edge->getOrig()->getInfo());
-
-        if(source == nullptr){
-            cout << "Falhou! ID: "<< edge->getOrig()->getInfo().getId() << endl;
-            continue;
-        }
-        else if(dest == nullptr) {
-            cout << "Falhou! ID: "<< edge->getDest()->getInfo().getId() << endl;
-            continue;
-        }
-
-        source->addEdge(dest, edge->getWeight(), edge->getType());
+        addEdge(edge->getOrig()->getInfo(), edge->getDest()->getInfo(), edge->getWeight(), edge->getType());
     }
 }
 
