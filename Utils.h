@@ -34,7 +34,7 @@ Graph loadPedestrian(std::string edgesPath, std::string nodesPath);
 Graph loadBus(std::string edgesPath, std::string nodesPath, const Graph &pedGraph);
 Graph loadSubway(std::string edgesPath, std::string nodesPath, const Graph &pedGraph);
 
-double haversine(const Coordinates &source, const Coordinates &dest, const Graph &graph);
+//double haversine(const Coordinates &source, const Coordinates &dest, const Graph &graph);
 double euclidean(const Coordinates &source, const Coordinates &dest, const Graph &graph);
 double toRadians(double degrees);
 

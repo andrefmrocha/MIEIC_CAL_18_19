@@ -8,6 +8,7 @@
 #include "Graph.h"
 #include "GraphViewer/GraphicalInterface.h"
 #include "TestGraph.h"
+#include "Utils.h"
 
 void route1();
 

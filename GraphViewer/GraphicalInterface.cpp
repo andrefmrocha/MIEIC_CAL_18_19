@@ -12,8 +12,9 @@ GraphicalInterface::GraphicalInterface(int width, int height) {
     this->id = 0;
 }
 
-int GraphicalInterface::calculateCoord(int maxScreen, double maxCoords, double coord){
-    return (int)((maxScreen * coord)/(double)maxCoords);
+double GraphicalInterface::calculateCoord(int maxScreen, double maxCoords, double coord){
+    //return (double)((maxScreen * coord)/(double)maxCoords);
+    return coord - maxCoords;
 }
 
 int GraphicalInterface::getEdgeId() {
@@ -23,13 +24,13 @@ int GraphicalInterface::getEdgeId() {
 
 void GraphicalInterface::showPath(std::deque<Edge*> path) {
     gv->createWindow(this->width, this->height);
-    double lat = 0;
-    double longi = 0;
+    double lat = INF;
+    double longi = INF;
     for(Edge* edge: path){
-        if(edge->getOrig()->getInfo().getY() > lat){
+        if(edge->getOrig()->getInfo().getY() < lat){
             lat = edge->getOrig()->getInfo().getY();
         }
-        if(edge->getOrig()->getInfo().getX() > longi){
+        if(edge->getOrig()->getInfo().getX() < longi){
             longi = edge->getOrig()->getInfo().getX();
         }
     }

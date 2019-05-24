@@ -154,8 +154,8 @@ public:
                     double (*heu)(const Vertex *, const Coordinates &), double &time_elapsed,
                     vector<Coordinates> &coordsPath,
                     deque<Edge *> &edgePath);
-    void concateEdges(vector<Edge *> edges);
-    void concateVertexs(vector<Vertex *> vertexs);
+    void concatenateEdges(vector<Edge *> edges);
+    void concatenateVertices(vector<Vertex *> vertices);
     void printPath(vector<Coordinates> coords) const;
     void invertGraph();
 };

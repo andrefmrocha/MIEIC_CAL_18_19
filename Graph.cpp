@@ -333,12 +333,26 @@ void Graph::biDirAstar(const Coordinates &origin, const Coordinates &destination
     time_elapsed = chrono::duration_cast<chrono::milliseconds>(end - start).count();
 }
 
-void Graph::concateEdges(vector<Edge *> edges) {
-    this->edgeSet.insert(this->edgeSet.end(), edges.begin(), edges.end());
+void Graph::concatenateEdges(vector<Edge *> edges) {
+    for(Edge * edge : edges) {
+        auto source = findVertex(edge->getOrig()->getInfo());
+        auto dest = findVertex(edge->getOrig()->getInfo());
+
+        if(source == nullptr){
+            cout << "Falhou! ID: "<< edge->getOrig()->getInfo().getId() << endl;
+            continue;
+        }
+        else if(dest == nullptr) {
+            cout << "Falhou! ID: "<< edge->getDest()->getInfo().getId() << endl;
+            continue;
+        }
+
+        source->addEdge(dest, edge->getWeight(), edge->getType());
+    }
 }
 
-void Graph::concateVertexs(vector<Vertex *> vertexs) {
-    this->vertexSet.insert(this->vertexSet.end(), vertexs.begin(), vertexs.end());
+void Graph::concatenateVertices(vector<Vertex *> vertices) {
+    this->vertexSet.insert(this->vertexSet.end(), vertices.begin(), vertices.end());
 }
 
 void Graph::invertGraph() {

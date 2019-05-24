@@ -12,8 +12,8 @@
 #include <signal.h>
 #include <string>
 
-#include "../edgetype.h"
-#include "../connection.h"
+#include "edgetype.h"
+#include "connection.h"
 
 #define BLUE "BLUE"
 #define RED "RED"

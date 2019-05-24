@@ -83,5 +83,16 @@ int main () {
     }*/
 
 
-    runTests();
+    //runTests();
+
+    Graph porto = loadGraph("Porto");
+    GraphicalInterface interface(1920, 1080);
+    deque<Edge *> path;
+
+    for(Edge *e : porto.getEdgeSet()) {
+        std::cout << "(" << e->getOrig()->getInfo().getId() << ", " << e->getDest()->getInfo().getId() << ") WEIGHT =" << e->getWeight() << std::endl;
+        path.push_back(e);
+    }
+
+    interface.showPath(path);
 }
