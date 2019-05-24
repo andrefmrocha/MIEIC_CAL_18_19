@@ -16,6 +16,10 @@ class Schedule {
 public:
     Schedule(const Coordinates &start, const Coordinates &end);
 
+    const Coordinates &getStart() const;
+
+    const Coordinates &getEnd() const;
+
     const std::list<Appointment> &getAppointments() const;
 
     void setAppointments(const std::list<Appointment> &appointments);

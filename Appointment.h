@@ -27,7 +27,7 @@ class Appointment {
 public:
     Appointment(const Coordinates &coord, const std::string &start, int duration);
 
-    const Coordinates &getCoord() const;
+    Coordinates getCoord() const;
 
     const tm &getStart() const;
 

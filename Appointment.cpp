@@ -24,7 +24,7 @@ struct tm Appointment::stringToTM(const std::string &input) {
     return time;
 }
 
-const Coordinates &Appointment::getCoord() const {
+Coordinates Appointment::getCoord() const {
     return coord;
 }
 

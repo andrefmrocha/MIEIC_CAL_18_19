@@ -9,6 +9,14 @@ Schedule::Schedule(const Coordinates &start, const Coordinates &end) :
         this->appointments = std::list<Appointment>();
 }
 
+const Coordinates &Schedule::getStart() const {
+    return start;
+}
+
+const Coordinates &Schedule::getEnd() const {
+    return end;
+}
+
 const std::list<Appointment> &Schedule::getAppointments() const {
     return appointments;
 }
