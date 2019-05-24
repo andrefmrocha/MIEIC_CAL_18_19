@@ -12,9 +12,9 @@ class Coordinates {
     unsigned long idNode;
 public:
     Coordinates(double y, double x, unsigned long idNode);
-    double getY();
-    double getX();
-    unsigned long getId();
+    double getY() const;
+    double getX() const ;
+    unsigned long getId() const;
     bool operator==(const Coordinates &right) const;
 };
 

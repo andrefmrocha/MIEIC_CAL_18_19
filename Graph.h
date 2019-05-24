@@ -30,7 +30,8 @@ enum Transport  {
 
 class Vertex {
 	Coordinates info;                // contents
-	vector<Edge> adj;  // outgoing edges
+	vector<Edge*> adj;  // outgoing edges
+	vector<Edge*> inc;  // incoming edges
 	bool visited;          // auxiliary field
 	double weight = 0;
 	double dist = 0;
@@ -39,8 +40,9 @@ class Vertex {
 	vector<Vertex* > disjSet;
 
 	void addEdge(Vertex *dest, double w,Transport type);
+	void addInvEdge(Vertex *dest, double w,Transport type);
 
-
+    Edge *predecessor;
 public:
 	Vertex(Coordinates in);
 	bool operator<(Vertex& vertex) const; // // required by MutablePriorityQueue
@@ -75,12 +77,15 @@ public:
 
     Vertex *getDest() const;
 
+    Edge* invertEdge();
+
 private:
     // Fp07
 	Vertex *dest;      // destination vertex
 	double weight;         // edge weight
 
 	bool selected; // Fp07
+
 
 public:
 	Edge(Vertex *o, Vertex *d, double w, Transport type);
@@ -100,44 +105,59 @@ class Graph {
 	vector<Vertex *> vertexSet;    // vertex set
 	vector<Edge*> edgeSet;
 	vector<bool> visited;
+	vector<bool> invertedVisited;
     const vector<bool> &getVisited() const;
     Vertex * isIntersecting(const vector<bool> &visited1, const vector<bool> &visited2);
+    void initDestination(const Coordinates & dest);
 
 private:
 
     // Fp05
 	Vertex * initSingleSource(const Coordinates &orig);
 	bool relax(Vertex *v, Vertex *w, double weight);
-    static bool aStarRelax(Vertex *v, Vertex *w, double weight, double ( *heu)(Vertex *, Vertex *));
+    static bool aStarRelax(Vertex *v, Vertex *w, double weight, double ( *heu)(const Vertex *, const Coordinates &),
+                           const Coordinates &dest);
     double ** W = nullptr;   // weight
 	int **P = nullptr;   // path
 	int findVertexIdx(const Coordinates &in) const;
-    void aStarStep(double (*heu)(Vertex *, Vertex *), MutablePriorityQueue<Vertex> &q, Vertex *v);
+    void aStarStep(double (*heu)(const Vertex *, const Coordinates &), MutablePriorityQueue<Vertex> &q, Vertex *origin,
+                   const Coordinates &dest);
     void dijkstraStep(MutablePriorityQueue<Vertex> &q, Vertex *v);
-
-    //check
     bool isInverted=false;
+    bool isIntersecting(const vector<bool> &checking, Vertex * check);
 public:
     Vertex *findVertex(const Coordinates &in) const;
     bool addVertex(const Coordinates &in);
     bool addEdge(const Coordinates &sourc, const Coordinates &dest, double w,Transport type);
+    bool addInvEdge(const Coordinates &sourc, const Coordinates &dest, double w,Transport type);
     int getNumVertex() const;
     vector<Vertex *> getVertexSet() const;
     vector<Edge*> getEdgeSet() const;
 
 	double getEdgeWeight(Edge e);
-    void dijkstraShortestPath(const Coordinates &s, const Coordinates &dest,  double & time_elapsed);
-    void aStarShortestPath(const Coordinates &origin, const Coordinates &dest, double ( *heu)(Vertex *, Vertex *),
-                           double & time_elapsed);
-    vector<Coordinates> getPath(const Coordinates &origin, const Coordinates &dest) const;
-    void biDirDijkstra(const Coordinates & origin, const Coordinates &destination,
-                     double & time_elapsed);
-    void biDirAstar(const Coordinates & origin, const Coordinates &destination, double ( *heu)(Vertex *, Vertex *),
-                       double & time_elapsed);
+    void dijkstraShortestPath(const Coordinates &origin, const Coordinates &dest, double &time_elapsed);
+    void dijkstraShortestPathBi(const Coordinates &origin, const Coordinates &dest);
+    void dijkstraShortestPathBiInv(const Coordinates &origin, const Coordinates &dest);
+    void aStarShortestPath(const Coordinates &origin, const Coordinates &dest, double ( *heu)(const Vertex *,
+                                                                                              const Coordinates &),
+                           double &time_elapsed);
+    void aStarShortestPathBi(const Coordinates &origin, const Coordinates &dest, double ( *heu)(const Vertex *,
+                                                                                              const Coordinates &));
+    void aStarShortestPathBiInv(const Coordinates &origin, const Coordinates &dest, double ( *heu)(const Vertex *,
+                                                                                              const Coordinates &));
+    void getPath(const Coordinates &origin, const Coordinates &dest, vector<Coordinates> &coords, deque<Edge *> &edges,
+                 bool isInverted) const;
+
+    void biDirDijkstra(const Coordinates &origin, const Coordinates &destination, double &time_elapsed,
+                       vector<Coordinates> &coordsPath, deque<Edge *> &edgesPath);
+    void biDirAstar(const Coordinates &origin, const Coordinates &destination,
+                    double (*heu)(const Vertex *, const Coordinates &), double &time_elapsed,
+                    vector<Coordinates> &coordsPath,
+                    deque<Edge *> &edgePath);
     void concateEdges(vector<Edge *> edges);
     void concateVertexs(vector<Vertex *> vertexs);
     void printPath(vector<Coordinates> coords) const;
-    Graph invertGraph();
+    void invertGraph();
 };
 
 #endif /* GRAPH_H_ */

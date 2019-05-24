@@ -30,6 +30,7 @@ public:
 	T * extractMin();
 	void decreaseKey(T * x);
 	bool empty();
+    bool find(T * x);
 };
 
 // Index calculations
@@ -100,6 +101,11 @@ template <class T>
 void MutablePriorityQueue<T>::set(unsigned i, T * x) {
 	H[i] = x;
 	x->queueIndex = i;
+}
+
+template<class T>
+bool MutablePriorityQueue<T>::find(T *x) {
+    return (std::find(this->H.begin(), this->H.end(), x) != this->H.end());
 }
 
 #endif /* SRC_MUTABLEPRIORITYQUEUE_H_ */

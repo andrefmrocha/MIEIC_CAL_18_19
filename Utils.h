@@ -24,9 +24,9 @@ void unifyGraphs(Graph &g1, Graph &g2, Graph &g3);
  *
  *
  * @param values pair where the first value is the number of vertexs + edges of the graph used
- * @param filename - the name of the file to save this information
+ * @param outfile stream where the information will be outputted
  */
-void csv_writer(const vector<pair<int, int>> &values, const string& filename);
+void csv_writer(const pair<int, double> &values, ofstream & outfile);
 
 Graph loadGraph(std::string city);
 

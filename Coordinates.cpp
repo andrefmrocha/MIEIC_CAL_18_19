@@ -11,14 +11,14 @@ bool Coordinates::operator==(const Coordinates &right) const {
     return this->idNode==right.idNode;
 }
 
-double Coordinates::getY() {
+double Coordinates::getY() const  {
     return this->y;
 }
 
-double Coordinates::getX() {
+double Coordinates::getX() const {
     return this->x;
 }
 
-unsigned long Coordinates::getId() {
+unsigned long Coordinates::getId() const  {
     return this->idNode;
 }
