@@ -12,10 +12,14 @@ GraphicalInterface::GraphicalInterface(int width, int height) {
     this->id = 0;
 }
 
-double GraphicalInterface::calculateCoord(int maxScreen, double maxCoords, double coord){
-    //return (double)((maxScreen * coord)/(double)maxCoords);
-    return coord - maxCoords;
+double GraphicalInterface::calculateX(double coord, double min, double med) {
+    return coord - min - med + this->width/2;
 }
+
+double GraphicalInterface::calculateY(double coord, double min, double med) {
+    return -coord + min + med + this->height/2;
+}
+
 
 int GraphicalInterface::getEdgeId() {
     return id;
@@ -24,27 +28,37 @@ int GraphicalInterface::getEdgeId() {
 
 void GraphicalInterface::showPath(std::deque<Edge*> path) {
     gv->createWindow(this->width, this->height);
-    double lat = INF;
-    double longi = INF;
+    double minY = INF;
+    double minX = INF;
+    double maxY = 0;
+    double maxX = 0;
     for(Edge* edge: path){
-        if(edge->getOrig()->getInfo().getY() < lat){
-            lat = edge->getOrig()->getInfo().getY();
+        if(edge->getOrig()->getInfo().getY() < minY){
+            minY = edge->getOrig()->getInfo().getY();
         }
-        if(edge->getOrig()->getInfo().getX() < longi){
-            longi = edge->getOrig()->getInfo().getX();
+        if(edge->getOrig()->getInfo().getX() < minX){
+            minX = edge->getOrig()->getInfo().getX();
+        }
+        if(edge->getOrig()->getInfo().getY() > maxY){
+            maxY = edge->getOrig()->getInfo().getY();
+        }
+        if(edge->getOrig()->getInfo().getX() > maxX){
+            maxX = edge->getOrig()->getInfo().getX();
         }
     }
 
+    double medY = (maxY - minY) / 2.0;
+    double medX = (maxX - minX) / 2.0;
     for(Edge* edge: path){
         Vertex * ori = edge->getOrig();
         this->gv->addNode(ori->getInfo().getId(),
-                this->calculateCoord(this->width, longi, ori->getInfo().getX()),
-                this->calculateCoord(this->height, lat, ori->getInfo().getY())
+                          calculateX(ori->getInfo().getX(), minX, medX),
+                          calculateY(ori->getInfo().getY(), minY, medY)
                         );
         Vertex * dest = edge->getDest();
         this->gv->addNode(dest->getInfo().getId(),
-                          this->calculateCoord(this->width, longi, dest->getInfo().getX()),
-                          this->calculateCoord(this->height, lat, dest->getInfo().getY())
+                          calculateX(ori->getInfo().getX(), minX, medX),
+                          calculateY(ori->getInfo().getY(), minY, medY)
                           );
         // TODO: Hashing the ID's?
         this->gv->addEdge(this->getEdgeId(),

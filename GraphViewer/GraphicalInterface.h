@@ -15,7 +15,8 @@ class GraphicalInterface {
     int height;
     int id;
 
-    static double calculateCoord(int maxScreen, double maxCoords, double coord);
+    double calculateX(double coord, double min, double med);
+    double calculateY(double coord, double min, double med);
     int getEdgeId();
     void incrementEdgeId();
 public:

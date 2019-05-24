@@ -272,7 +272,7 @@ void runTests() {
     }
 }
 
-/*void displayTest() {
+void displayTest() {
     Graph pedestrian;
     Graph busRoutes;
     Graph metroLines;
@@ -287,4 +287,4 @@ void runTests() {
     cout << "Time elapsed: " << time << endl;
     pedestrian.printPath(coords);
     interface.showPath(edges);
-}*/
+}

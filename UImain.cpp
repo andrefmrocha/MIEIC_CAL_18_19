@@ -4,9 +4,15 @@
 
 #include "UImain.h"
 
+Graph porto;
+GraphicalInterface interface(1920, 1080);
 
 void route1(){
-    //Load graph
+    deque<Edge *> path;
+    for(Edge * edge: porto.getEdgeSet()){
+        path.push_back(edge);
+    }
+    interface.showPath(path);
     //Calculate paths
     //Processing view of path
     //Display
@@ -14,6 +20,7 @@ void route1(){
 }
 
 void route2(){
+    displayTest();
     //Load graph
     //Calculate paths
     //Processing view of path
@@ -49,8 +56,10 @@ void showOptions() {
 }
 
 int main () {
-    /*cout << "////////////////////////////////////////////////////////////////////////////////////////////////" << endl;
+    cout << "////////////////////////////////////////////////////////////////////////////////////////////////" << endl;
     cout << "Welcome to our Scheduling Planning app" << endl;
+    cout << "Loading Map..." << endl;
+    porto = loadGraph("Porto");
     cout << "We have prepared some examples to demonstrate schedule planning in the beautiful city of Porto. " << endl;
     showOptions();
     char opt;
@@ -80,19 +89,5 @@ int main () {
                 continue;
         }
         cout << endl <<  "Choose another route to view or exit. Press 5 to view the options again." << endl;
-    }*/
-
-
-    //runTests();
-
-    Graph porto = loadGraph("Porto");
-    GraphicalInterface interface(1920, 1080);
-    deque<Edge *> path;
-
-    for(Edge *e : porto.getEdgeSet()) {
-        std::cout << "(" << e->getOrig()->getInfo().getId() << ", " << e->getDest()->getInfo().getId() << ") WEIGHT =" << e->getWeight() << std::endl;
-        path.push_back(e);
     }
-
-    interface.showPath(path);
 }
