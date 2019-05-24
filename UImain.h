@@ -9,6 +9,8 @@
 #include "GraphViewer/GraphicalInterface.h"
 #include "TestGraph.h"
 #include "Utils.h"
+#include "Schedule.h"
+#include "TripMate.h"
 
 void route1();
 

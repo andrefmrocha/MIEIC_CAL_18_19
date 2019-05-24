@@ -4,18 +4,19 @@
 
 #include "UImain.h"
 
-Graph porto;
+TripMate tripMate;
 GraphicalInterface interface(1920, 1080);
 
 void route1(){
+    Schedule sched3(Coordinates(0, 0, 446308245), Coordinates(0, 0, 412249443));
     deque<Edge *> path;
-    for(Edge * edge: porto.getEdgeSet()){
-        path.push_back(edge);
-    }
-    interface.showPath(path);
+
     //Calculate paths
-    //Processing view of path
+    tripMate.addSchedule(sched3);
+    path = tripMate.proccessSchedule();
+
     //Display
+    interface.showPath(path);
     cout << "Route 1 demonstration finished" << endl;
 }
 
@@ -29,7 +30,7 @@ void route2(){
 }
 
 void route3(){
-    //Load graph
+
     //Calculate paths
     //Processing view of path
     //Display
@@ -37,6 +38,11 @@ void route3(){
 }
 
 void route4(){
+    deque<Edge *> path;
+    for(Edge * edge: tripMate.getCity().getEdgeSet()){
+        path.push_back(edge);
+    }
+    interface.showPath(path);
     //Load graph
     //Calculate paths
     //Processing view of path
@@ -59,7 +65,7 @@ int main () {
     cout << "////////////////////////////////////////////////////////////////////////////////////////////////" << endl;
     cout << "Welcome to our Scheduling Planning app" << endl;
     cout << "Loading Map..." << endl;
-    porto = loadGraph("Porto");
+    tripMate.loadCity("Porto");
     cout << "We have prepared some examples to demonstrate schedule planning in the beautiful city of Porto. " << endl;
     showOptions();
     char opt;

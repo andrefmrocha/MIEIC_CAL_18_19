@@ -247,8 +247,6 @@ void generateTransportGraph(int n, Graph &ped, Graph &bus, Graph &metro) {
 
 void runTests() {
     ofstream bidijkstra("bidjikstra.csv"), bieuclidean("bieuclidean.csv"), bichebyshev("bichebyshev.csv"), bimanhattan("bimanhattan.csv");
-    vector<Coordinates> dummyVec;
-    deque<Edge*> dummyDeque;
     for(int i = 10; i < pow(10, 2) * 4 ; i += 10){
         cout << "Generating grid graph: " << i << "x" << i << endl;
         Graph graph;
@@ -257,13 +255,13 @@ void runTests() {
         double bidjisktraTime, bieuclideanTime, bichebyshevTime, bimanhattanTime;
         Coordinates origin = Coordinates(0, 0, 0);
         Coordinates dest = Coordinates(0, i - 1, (i - 1) * i + i - 1);
-        graph.biDirDijkstra(origin, dest, bidjisktraTime, dummyVec, dummyDeque);
+        graph.biDirDijkstra(origin, dest, bidjisktraTime);
         cout << "Finished bidjikstra. Elapsed Time: " << bidjisktraTime << endl;
-        graph.biDirAstar(origin, dest, euclidean_distance, bieuclideanTime, dummyVec, dummyDeque);
+        graph.biDirAstar(origin, dest, euclidean_distance, bieuclideanTime);
         cout << "Finished bieuclidean. Elapsed Time: " << bieuclideanTime << endl;
-        graph.biDirAstar(origin, dest, chebyshev_distance, bichebyshevTime, dummyVec, dummyDeque);
+        graph.biDirAstar(origin, dest, chebyshev_distance, bichebyshevTime);
         cout << "Finished bichebyshev. Elapsed Time: " << bichebyshevTime << endl;
-        graph.biDirAstar(origin, dest, manhattan_distance, bimanhattanTime, dummyVec, dummyDeque);
+        graph.biDirAstar(origin, dest, manhattan_distance, bimanhattanTime);
         cout << "Finished bimanhattan. Elapsed Time: " << bimanhattanTime << endl;
         csv_writer(make_pair(numVE, bidjisktraTime), bidijkstra);
         csv_writer(make_pair(numVE, bieuclideanTime), bieuclidean);
@@ -283,7 +281,7 @@ void displayTest() {
     vector<Coordinates> coords;
     //pedestrian.biDirAstar(Coordinates(3, 0, 150), Coordinates(8, 9, 409), euclidean_distance, time, coords, edges); // careful selecting coordinate id. id = y*n+x -> where n is the width/height of the grid
     pedestrian.aStarShortestPath(Coordinates(3, 0, 300), Coordinates(8, 9, 809), manhattan_distance, time);
-    pedestrian.getPath(Coordinates(3, 0, 300), Coordinates(8, 9, 809),coords,edges,false);
+    pedestrian.getPath(Coordinates(8, 9, 809), coords, edges);
     cout << "Time elapsed: " << time << endl;
     pedestrian.printPath(coords);
     interface.showPath(edges);

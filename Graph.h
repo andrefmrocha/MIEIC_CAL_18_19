@@ -57,35 +57,10 @@ public:
 /********************** Edge  ****************************/
 
 class Edge {
-
-
-
     Vertex *orig;
-
 	Transport type;
-public:
-    Transport getType() const;
-
-public:
-    bool isBus() const;
-
-    bool isSubway() const;
-
-    bool isOnFoot() const;
-
-    Vertex *getOrig() const;
-
-    Vertex *getDest() const;
-
-    Edge* invertEdge();
-
-private:
-    // Fp07
 	Vertex *dest;      // destination vertex
 	double weight;         // edge weight
-
-	bool selected; // Fp07
-
 
 public:
 	Edge(Vertex *o, Vertex *d, double w, Transport type);
@@ -94,8 +69,14 @@ public:
 	bool operator<(Edge edge) const;
 	bool operator==(Edge edge) const;
 
-	// Fp07
 	double getWeight() const;
+    Transport getType() const;
+    bool isBus() const;
+    bool isSubway() const;
+    bool isOnFoot() const;
+    Vertex *getOrig() const;
+    Vertex *getDest() const;
+    Edge* invertEdge();
 
 };
 
@@ -145,17 +126,12 @@ public:
                                                                                               const Coordinates &));
     void aStarShortestPathBiInv(const Coordinates &origin, const Coordinates &dest, double ( *heu)(const Vertex *,
                                                                                               const Coordinates &));
-    void getPath(const Coordinates &origin, const Coordinates &dest, vector<Coordinates> &coords, deque<Edge *> &edges,
-                 bool isInverted) const;
+    void getPath(const Coordinates &dest, vector<Coordinates> &coords, deque<Edge *> &edges) const;
 
-    void biDirDijkstra(const Coordinates &origin, const Coordinates &destination, double &time_elapsed,
-                       vector<Coordinates> &coordsPath, deque<Edge *> &edgesPath);
+    void biDirDijkstra(const Coordinates &origin, const Coordinates &destination, double &time_elapsed);
     void biDirAstar(const Coordinates &origin, const Coordinates &destination,
-                    double (*heu)(const Vertex *, const Coordinates &), double &time_elapsed,
-                    vector<Coordinates> &coordsPath,
-                    deque<Edge *> &edgePath);
-    void concatenateEdges(vector<Edge *> edges);
-    void concatenateVertices(vector<Vertex *> vertices);
+                    double (*heu)(const Vertex *, const Coordinates &), double &time_elapsed);
+    void concatenateEdges(const vector<Edge *>& edges);
     void printPath(vector<Coordinates> coords) const;
     void invertGraph();
 };
