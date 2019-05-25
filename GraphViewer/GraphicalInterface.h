@@ -10,20 +10,28 @@
 #include "graphviewer.h"
 
 class GraphicalInterface {
-    GraphViewer * gv;
+    GraphViewer *gv;
     int width;
     int height;
     int id;
+    double maxX;
+    double maxY;
+    double minX;
+    double minY;
 
-    double calculateX(double coord, double min, double med);
-    double calculateY(double coord, double min, double med);
+    double calculateX(double coord);
+
+    double calculateY(double coord);
+
     int getEdgeId();
+
     void incrementEdgeId();
+
 public:
-
     GraphicalInterface(int width, int height);
+    void setMapBounds(const Coordinates &maxCoord , const Coordinates &minCoord);
 
-    void showPath(std::deque<Edge*> path);
+    void showPath(std::deque<Edge *> path);
 };
 
 

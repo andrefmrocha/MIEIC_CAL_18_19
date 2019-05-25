@@ -4,20 +4,40 @@
 
 #include "GraphicalInterface.h"
 
+#define MAP_BACKGROUND "T11/Porto/map.png"
+#define PRECISION 10e9
+
 
 GraphicalInterface::GraphicalInterface(int width, int height) {
     this->gv = new GraphViewer(width, height, false);
     this->width = width;
-    this->height = width;
+    this->height = height;
+    this->maxX = 0;
+    this->maxY = 0;
+    this->minX = 0;
+    this->minY = 0;
     this->id = 0;
 }
 
-double GraphicalInterface::calculateX(double coord, double min, double med) {
-    return coord - min - med + this->width/2;
+void GraphicalInterface::setMapBounds(const Coordinates &maxCoord, const Coordinates &minCoord) {
+    this->maxX = maxCoord.getX();
+    this->maxY = maxCoord.getY();
+    this->minX = minCoord.getX();
+    this->minY = minCoord.getY();
 }
 
-double GraphicalInterface::calculateY(double coord, double min, double med) {
-    return -coord + min + med + this->height/2;
+double GraphicalInterface::calculateX(double coord) {
+    if ((maxX - minX) == 0)
+        return coord * PRECISION;
+    else
+        return (coord * PRECISION - minX * PRECISION) / ((maxX - minX) * PRECISION / width);
+}
+
+double GraphicalInterface::calculateY(double coord) {
+    if((maxY - minY) == 0)
+        return -coord * PRECISION;
+    else
+        return ((-coord * PRECISION + minY * PRECISION) + (maxY - minY) * PRECISION) / ((maxY - minY) * PRECISION / height);
 }
 
 
@@ -26,50 +46,31 @@ int GraphicalInterface::getEdgeId() {
 }
 
 
-void GraphicalInterface::showPath(std::deque<Edge*> path) {
+void GraphicalInterface::showPath(std::deque<Edge *> path) {
+    gv->setBackground(MAP_BACKGROUND);
     gv->createWindow(this->width, this->height);
-    double minY = INF;
-    double minX = INF;
-    double maxY = 0;
-    double maxX = 0;
-    for(Edge* edge: path){
-        if(edge->getOrig()->getInfo().getY() < minY){
-            minY = edge->getOrig()->getInfo().getY();
-        }
-        if(edge->getOrig()->getInfo().getX() < minX){
-            minX = edge->getOrig()->getInfo().getX();
-        }
-        if(edge->getOrig()->getInfo().getY() > maxY){
-            maxY = edge->getOrig()->getInfo().getY();
-        }
-        if(edge->getOrig()->getInfo().getX() > maxX){
-            maxX = edge->getOrig()->getInfo().getX();
-        }
-    }
 
-    double medY = (maxY - minY) / 2.0;
-    double medX = (maxX - minX) / 2.0;
-    for(Edge* edge: path){
-        Vertex * ori = edge->getOrig();
+    for (Edge *edge: path) {
+        Vertex *ori = edge->getOrig();
         this->gv->addNode(ori->getInfo().getId(),
-                          calculateX(ori->getInfo().getX(), minX, medX),
-                          calculateY(ori->getInfo().getY(), minY, medY)
-                        );
-        Vertex * dest = edge->getDest();
+                          calculateX(ori->getInfo().getX()),
+                          calculateY(ori->getInfo().getY())
+        );
+        Vertex *dest = edge->getDest();
         this->gv->addNode(dest->getInfo().getId(),
-                          calculateX(ori->getInfo().getX(), minX, medX),
-                          calculateY(ori->getInfo().getY(), minY, medY)
-                          );
+                          calculateX(ori->getInfo().getX()),
+                          calculateY(ori->getInfo().getY())
+        );
         // TODO: Hashing the ID's?
         this->gv->addEdge(this->getEdgeId(),
-                ori->getInfo().getId(),
-                dest->getInfo().getId(),
-                EdgeType::DIRECTED);
-        if(edge->isBus()){
+                          ori->getInfo().getId(),
+                          dest->getInfo().getId(),
+                          EdgeType::DIRECTED);
+        if (edge->isBus()) {
             this->gv->setVertexColor(ori->getInfo().getId(), BLUE);
             this->gv->setVertexColor(dest->getInfo().getId(), BLUE);
             this->gv->setEdgeColor(this->getEdgeId(), BLUE);
-        } else if(edge->isSubway()){
+        } else if (edge->isSubway()) {
             this->gv->setVertexColor(ori->getInfo().getId(), YELLOW);
             this->gv->setVertexColor(dest->getInfo().getId(), YELLOW);
             this->gv->setEdgeColor(this->getEdgeId(), YELLOW);
