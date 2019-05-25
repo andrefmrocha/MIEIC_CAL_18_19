@@ -37,6 +37,7 @@ class Vertex {
 	double weight = 0;
 	double dist = 0;
 	Vertex *path = nullptr;
+	Vertex *invPath = nullptr;
 	int queueIndex = 0; 		// required by MutablePriorityQueue
 	vector<Vertex* > disjSet;
 
@@ -44,6 +45,7 @@ class Vertex {
 	void addInvEdge(Vertex *dest, double w,Transport type);
 
     Edge *predecessor;
+    Edge *invPredecessor;
 public:
 	Vertex(Coordinates in);
 	bool operator<(Vertex& vertex) const; // // required by MutablePriorityQueue
@@ -128,6 +130,8 @@ public:
     void aStarShortestPathBiInv(const Coordinates &origin, const Coordinates &dest, double ( *heu)(const Vertex *,
                                                                                               const Coordinates &));
     void getPath(const Coordinates &dest, vector<Coordinates> &coords, deque<Edge *> &edges) const;
+    void getInvPath(const Coordinates &dest,vector<Coordinates> &coords,deque<Edge*> &edges) const;
+    void getBiDirPath(const Coordinates &dest,vector<Coordinates> & coords, deque<Edge*> &edges) const ;
 
     void biDirDijkstra(const Coordinates &origin, const Coordinates &destination, double &time_elapsed);
     void biDirAstar(const Coordinates &origin, const Coordinates &destination,
