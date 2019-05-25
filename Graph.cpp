@@ -111,17 +111,20 @@ bool Graph::addInvEdge(const Coordinates &sourc, const Coordinates &dest, double
  * Used by all single-source shortest path algorithms.
  */
 Vertex *Graph::initSingleSource(const Coordinates &origin) {
+    this->visited.clear();
+    this->invertedVisited.clear();
     for (auto v : vertexSet) {
         v->weight = INF;
         v->path = nullptr;
         v->dist = INF;
         v->predecessor = nullptr;
+        this->visited[v->info.getId()] = false;
+        this->invertedVisited[v->info.getId()] = false;
     }
     auto s = findVertex(origin);
     s->weight = 0;
     s->visited = true;
-    this->visited = vector<bool>(this->vertexSet.size(), false);
-    this->invertedVisited = vector<bool>(this->vertexSet.size(), false);
+
     return s;
 }
 
@@ -165,7 +168,7 @@ void Graph::dijkstraStep(MutablePriorityQueue<Vertex> &q, Vertex *v) {
         v = findVertex(v->getInfo()); // do this only if its inverted graph
     }
 
-    this->visited[distance(this->vertexSet.begin(), find(this->vertexSet.begin(), this->vertexSet.end(), v))] = true;
+    this->visited[v->info.getId()] = true;
     for (auto e : v->adj) {
         if (relax(v, e->dest, e->weight)) {
             e->dest->predecessor = e;
@@ -219,8 +222,7 @@ void Graph::aStarStep(double (*heu)(const Vertex *, const Coordinates &), Mutabl
         origin = findVertex(origin->getInfo()); // do this only if its inverted graph
     }
 
-    this->visited[distance(this->vertexSet.begin(),
-                           find(this->vertexSet.begin(), this->vertexSet.end(), origin))] = true;
+    this->visited[origin->info.getId()] = true;
     for (auto e : origin->adj) {
         if (aStarRelax(origin, e->dest, e->weight, heu, dest)) {
             e->dest->predecessor = e;
@@ -311,7 +313,6 @@ void Graph::biDirAstar(const Coordinates &origin, const Coordinates &destination
 
     this->initSingleSource(origin);
     this->initDestination(destination);
-    cout << "Reached! " << endl;
     auto start = chrono::steady_clock::now();
     auto f1 = thread([this, origin, heu, destination] {
         this->aStarShortestPathBi(origin, destination, heu);
@@ -335,10 +336,6 @@ void Graph::invertGraph() {
     }
 }
 
-const vector<bool> &Graph::getVisited() const {
-    return visited;
-}
-
 Vertex *Graph::isIntersecting(const vector<bool> &visited1, const vector<bool> &visited2) {
     for (int i = 0; i < visited1.size(); i++) {
         if (visited1[i] && visited2[i])
@@ -347,7 +344,7 @@ Vertex *Graph::isIntersecting(const vector<bool> &visited1, const vector<bool> &
     return nullptr;
 }
 
-bool Graph::isIntersecting(const vector<bool> &checking, Vertex *check) {
+bool Graph::isIntersecting(unordered_map<unsigned long, bool> &checking, Vertex *check) {
     return checking[check->info.getId()];
 }
 
@@ -407,10 +404,8 @@ void Graph::aStarShortestPathBi(const Coordinates &origin, const Coordinates &de
     MutablePriorityQueue<Vertex> q;
     q.insert(s);
     int i = 0;
-    cout << "Cycle in BI" << endl;
     while (!q.empty()) {
         auto v = q.extractMin();
-        cout << "THE SIZE in BI: " << this->visited.size() << endl;
         this->visited[v->info.getId()] = true;
         v->visited = true;
         if (this->isIntersecting(this->invertedVisited, v)) {
@@ -429,11 +424,9 @@ void Graph::aStarShortestPathBiInv(const Coordinates &origin, const Coordinates 
     MutablePriorityQueue<Vertex> q;
     q.insert(s);
     int i = 0;
-    cout << "Cycle in BI INV" << endl;
     while (!q.empty()) {
         auto v = q.extractMin();
         v->visited = true;
-        cout << "THE SIZE in BI INV: " << this->visited.size() << endl;
         this->invertedVisited[v->info.getId()] = true;
         if (this->isIntersecting(this->visited, v)) {
             cout << "Num of iterations " << i << " " << this->vertexSet.size() << endl;

@@ -8,6 +8,7 @@
 #include <queue>
 #include <limits>
 #include <algorithm>
+#include <unordered_map>
 #include <unordered_set>
 #include "MutablePriorityQueue.h"
 #include "Coordinates.h"
@@ -85,9 +86,9 @@ public:
 class Graph {
 	vector<Vertex *> vertexSet;    // vertex set
 	vector<Edge*> edgeSet;
-	vector<bool> visited;
-	vector<bool> invertedVisited;
-    const vector<bool> &getVisited() const;
+	unordered_map<unsigned long, bool> visited;
+    unordered_map<unsigned long, bool> invertedVisited;
+
     Vertex * isIntersecting(const vector<bool> &visited1, const vector<bool> &visited2);
     void initDestination(const Coordinates & dest);
 
@@ -105,7 +106,7 @@ private:
                    const Coordinates &dest);
     void dijkstraStep(MutablePriorityQueue<Vertex> &q, Vertex *v);
     bool isInverted=false;
-    bool isIntersecting(const vector<bool> &checking, Vertex * check);
+    bool isIntersecting(unordered_map<unsigned long, bool> &checking, Vertex * check);
 public:
     Vertex *findVertex(const Coordinates &in) const;
     bool addVertex(const Coordinates &in);

@@ -36,8 +36,9 @@ deque<Edge *> TripMate::proccessSchedule() {
 
     if(appointments.empty()){
         double timeElapsed;
-        city.biDirAstar(schedule.getStart(), schedule.getEnd(), euclidean_distance, timeElapsed);
-        //city.getPath(schedule.getEnd(), coords, path);
+        city.aStarShortestPath(schedule.getStart(), schedule.getEnd(), euclidean_distance, timeElapsed);
+        city.getPath(schedule.getEnd(), coords, path);
+        city.printPath(coords);
     }
 
     schedules.pop_front();
