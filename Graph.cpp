@@ -237,7 +237,7 @@ void Graph::aStarStep(double (*heu)(const Vertex *, const Coordinates &), Mutabl
 inline bool Graph::aStarRelax(Vertex *v, Vertex *w, double weight, double (*heu)(const Vertex *, const Coordinates &),
                               const Coordinates &dest) {
     if (v->weight + weight + heu(w, dest) < w->weight) {
-        w->weight = v->weight + weight + heu(v, dest);
+        w->weight = v->weight + weight + heu(w, dest);
         w->dist = v->weight + weight;
         w->path = v;
         return true;
