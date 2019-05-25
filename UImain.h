@@ -22,4 +22,6 @@ void route4();
 
 void showOptions();
 
+void configureInterface();
+
 #endif //MIEIC_CAL_PROJ_UIMAIN_H

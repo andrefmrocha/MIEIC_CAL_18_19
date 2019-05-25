@@ -8,6 +8,7 @@
 #include <deque>
 #include "../Graph.h"
 #include "graphviewer.h"
+#define PRECISION 10e9
 
 class GraphicalInterface {
     GraphViewer *gv;

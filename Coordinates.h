@@ -12,6 +12,7 @@ class Coordinates {
     unsigned long idNode;
 public:
     Coordinates(double y, double x, unsigned long idNode);
+    Coordinates(unsigned long idNode);
     double getY() const;
     double getX() const ;
     unsigned long getId() const;

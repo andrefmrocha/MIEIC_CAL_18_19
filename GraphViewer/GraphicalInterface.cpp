@@ -5,7 +5,6 @@
 #include "GraphicalInterface.h"
 
 #define MAP_BACKGROUND "T11/Porto/map.png"
-#define PRECISION 10e9
 
 
 GraphicalInterface::GraphicalInterface(int width, int height) {

@@ -8,7 +8,7 @@ TripMate tripMate;
 GraphicalInterface interface(1920, 1080);
 
 void route1(){
-    Schedule sched3(Coordinates(0, 0, 446308245), Coordinates(0, 0, 412249443));
+    Schedule sched3(Coordinates(446308245), Coordinates(412249443));
     deque<Edge *> path;
 
     //Calculate paths
@@ -61,12 +61,35 @@ void showOptions() {
     cout << "////////////////////////////////////////////////////////////////////////////////////////////////" << endl;
 }
 
+void configureInterface() {
+    double maxX = 0, maxY = 0;
+    double minX = INF, minY = INF;
+
+    for(Vertex* vertex: tripMate.getCity().getVertexSet()){
+        if(vertex->getInfo().getY() < minY){
+            minY = vertex->getInfo().getY();
+        }
+        if(vertex->getInfo().getX() < minX){
+            minX = vertex->getInfo().getX();
+        }
+        if(vertex->getInfo().getY() > maxY){
+            maxY = vertex->getInfo().getY();
+        }
+        if(vertex->getInfo().getX() > maxX){
+            maxX = vertex->getInfo().getX();
+        }
+    }
+
+
+    interface.setMapBounds(Coordinates(maxY, maxX, 0), Coordinates(minY, minX, 0));
+}
+
 int main () {
-    displayTest();
-    /*cout << "////////////////////////////////////////////////////////////////////////////////////////////////" << endl;
+    cout << "////////////////////////////////////////////////////////////////////////////////////////////////" << endl;
     cout << "Welcome to our Scheduling Planning app" << endl;
     cout << "Loading Map..." << endl;
     tripMate.loadCity("Porto");
+    configureInterface();
     cout << "We have prepared some examples to demonstrate schedule planning in the beautiful city of Porto. " << endl;
     showOptions();
     char opt;
@@ -96,5 +119,5 @@ int main () {
                 continue;
         }
         cout << endl <<  "Choose another route to view or exit. Press 5 to view the options again." << endl;
-    }*/
+    }
 }

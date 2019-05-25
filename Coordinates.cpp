@@ -22,3 +22,6 @@ double Coordinates::getX() const {
 unsigned long Coordinates::getId() const  {
     return this->idNode;
 }
+
+Coordinates::Coordinates(unsigned long idNode) : Coordinates(0,0,idNode) {
+}
