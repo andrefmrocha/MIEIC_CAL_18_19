@@ -62,7 +62,8 @@ void showOptions() {
 }
 
 int main () {
-    cout << "////////////////////////////////////////////////////////////////////////////////////////////////" << endl;
+    displayTest();
+    /*cout << "////////////////////////////////////////////////////////////////////////////////////////////////" << endl;
     cout << "Welcome to our Scheduling Planning app" << endl;
     cout << "Loading Map..." << endl;
     tripMate.loadCity("Porto");
@@ -95,5 +96,5 @@ int main () {
                 continue;
         }
         cout << endl <<  "Choose another route to view or exit. Press 5 to view the options again." << endl;
-    }
+    }*/
 }

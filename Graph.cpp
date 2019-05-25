@@ -103,8 +103,6 @@ bool Graph::addInvEdge(const Coordinates &sourc, const Coordinates &dest, double
 }
 
 
-/**************** Single Source Shortest Path algorithms ************/
-
 /**
  * Initializes single source shortest path data (path, dist).
  * Receives the content of the source vertex and returns a pointer to the source vertex.
@@ -136,7 +134,7 @@ Vertex *Graph::initSingleSource(const Coordinates &origin) {
 inline bool Graph::relax(Vertex *v, Vertex *w, double weight) {
     if (v->weight + weight < w->weight) {
         w->weight = v->weight + weight;
-        w->path = v;
+
         w->visited = true;
 
         return true;
@@ -171,6 +169,7 @@ void Graph::dijkstraStep(MutablePriorityQueue<Vertex> &q, Vertex *v) {
     this->visited[v->info.getId()] = true;
     for (auto e : v->adj) {
         if (relax(v, e->dest, e->weight)) {
+            e->dest->path = v;
             e->dest->predecessor = e;
             if (!q.find(e->dest))
                 q.insert(e->dest);
@@ -194,6 +193,42 @@ void Graph::getPath(const Coordinates &dest, vector<Coordinates> &coords, deque<
     reverse(c.begin(), c.end());
     coords.insert(coords.end(), c.begin(), c.end());
 }
+
+void Graph::getInvPath(const Coordinates &dest, vector<Coordinates> &coords, deque<Edge *> &edges) const {
+
+    auto v = findVertex(dest);
+    if (v == nullptr || v->weight == INF) // missing or disconnected
+        return;
+    for (; v != nullptr && v->invPredecessor != nullptr; v = v->invPath) {
+        edges.push_back(v->invPredecessor);
+        if(v->getInfo() == dest) {
+            continue;
+        }
+        coords.push_back(v->info);
+    }
+    coords.push_back(v->info);
+}
+
+void Graph::getBiDirPath(const Coordinates &dest, vector<Coordinates> &coords, deque<Edge *> &edges) const  {
+    long intID = -1 ;
+    for(auto itr =this->visited.begin() ; itr != this->visited.end(); itr++) {
+        auto it2 = this->invertedVisited.find(itr->first);
+        if( itr->second && it2 != this->invertedVisited.end() && it2->second) {
+            intID = itr->first;
+            break;
+        }
+    }
+
+    if(intID == -1) {
+        return;
+    }
+
+    Vertex* intV = findVertex(Coordinates(0,0,intID));
+    getPath(intV->getInfo(),coords,edges);
+    getInvPath(intV->getInfo(),coords,edges);
+}
+
+/**************** Single Source Shortest Path algorithms ************/
 
 void Graph::aStarShortestPath(const Coordinates &origin, const Coordinates &dest,
                               double ( *heu)(const Vertex *, const Coordinates &), double &time_elapsed) {
@@ -225,6 +260,7 @@ void Graph::aStarStep(double (*heu)(const Vertex *, const Coordinates &), Mutabl
     this->visited[origin->info.getId()] = true;
     for (auto e : origin->adj) {
         if (aStarRelax(origin, e->dest, e->weight, heu, dest)) {
+            e->dest->path = origin;
             e->dest->predecessor = e;
             if (!q.find(e->dest))
                 q.insert(e->dest);
@@ -239,7 +275,7 @@ inline bool Graph::aStarRelax(Vertex *v, Vertex *w, double weight, double (*heu)
     if (v->weight + weight + heu(w, dest) < w->weight) {
         w->weight = v->weight + weight + heu(w, dest);
         w->dist = v->weight + weight;
-        w->path = v;
+
         return true;
     } else
         return false;
@@ -258,8 +294,8 @@ vector<Edge *> Graph::getEdgeSet() const {
     return edgeSet;
 }
 
-Edge::Edge(Vertex *o, Vertex *d, double w, Transport type) : orig(o), dest(d), weight(w), type(type) {}
 
+Edge::Edge(Vertex *o, Vertex *d, double w, Transport type) : orig(o), dest(d), weight(w), type(type) {}
 
 double Edge::getWeight() const {
     return weight;
@@ -387,7 +423,8 @@ void Graph::dijkstraShortestPathBiInv(const Coordinates &origin, const Coordinat
         }
         for (auto e : v->inc) {
             if (relax(v, e->dest, e->weight)) {
-                e->dest->predecessor = e;
+                e->dest->invPath = v;
+                e->dest->invPredecessor = e;
                 if (!q.find(e->dest))
                     q.insert(e->dest);
                 else
@@ -434,7 +471,8 @@ void Graph::aStarShortestPathBiInv(const Coordinates &origin, const Coordinates 
         }
         for (auto e : v->inc) {
             if (aStarRelax(v, e->dest, e->weight, heu, origin)) {
-                e->dest->predecessor = e;
+                e->dest->invPath = v;
+                e->dest->invPredecessor = e;
                 if (!q.find(e->dest))
                     q.insert(e->dest);
                 else
@@ -452,8 +490,9 @@ void Graph::initDestination(const Coordinates &dest) {
 
 
 
+
+
 //////////////////Vertex Method/////////////////////////////////////////
-//Added here because compilation errors
 /*
  * Auxiliary function to add an outgoing edge to a vertex (this),
  * with a given destination vertex (d) and edge weight (w).

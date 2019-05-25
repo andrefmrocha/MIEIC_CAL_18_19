@@ -274,14 +274,13 @@ void displayTest() {
     Graph pedestrian;
     Graph busRoutes;
     Graph metroLines;
-    generateTransportGraph(100,pedestrian,pedestrian,pedestrian);
+    generateTransportGraph(30,pedestrian,pedestrian,pedestrian);
     GraphicalInterface interface = GraphicalInterface(800, 800);
     deque<Edge*> edges;
     double time;
     vector<Coordinates> coords;
-    //pedestrian.biDirAstar(Coordinates(3, 0, 150), Coordinates(8, 9, 409), euclidean_distance, time, coords, edges); // careful selecting coordinate id. id = y*n+x -> where n is the width/height of the grid
-    pedestrian.aStarShortestPath(Coordinates(3, 0, 300), Coordinates(8, 9, 809), manhattan_distance, time);
-    pedestrian.getPath(Coordinates(8, 9, 809), coords, edges);
+    pedestrian.biDirDijkstra(Coordinates(0, 0, 0), Coordinates(29, 29, 899), time); // careful selecting coordinate id. id = y*n+x -> where n is the width/height of the grid
+    pedestrian.getBiDirPath(Coordinates(29,29, 899), coords, edges);
     cout << "Time elapsed: " << time << endl;
     pedestrian.printPath(coords);
     interface.showPath(edges);
