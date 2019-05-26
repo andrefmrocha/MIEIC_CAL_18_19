@@ -37,10 +37,21 @@ void route2(){
 }
 
 void route3(){
+    Schedule schedule(Coordinates(445439258), Coordinates(112686789));
+    deque<Edge *> path;
+
+    //Preparing Schedule
+    schedule.addAppointment(Appointment(Coordinates(285948656), "2019-06-03 10:30:00", 180));
+    schedule.addAppointment(Appointment(Coordinates(475413943), "2019-06-03 14:00:00", 45));
+    schedule.addAppointment(Appointment(Coordinates(128677717), "2019-06-03 15:00:00", 180));
+    schedule.addAppointment(Appointment(Coordinates(1279864321), "2019-06-03 18:15:00", 90));
 
     //Calculate paths
-    //Processing view of path
+    tripMate.addSchedule(schedule);
+    path = tripMate.proccessSchedule();
+
     //Display
+    interface.showPath(path);
     cout << "Route 3 demonstration finished" << endl;
 }
 

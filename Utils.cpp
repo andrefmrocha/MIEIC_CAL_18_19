@@ -119,8 +119,10 @@ Graph loadPedestrian(std::string edgesPath, std::string nodesPath) {
 
         Coordinates source(0, 0, stod(args[0])), dest(0, 0, stod(args[1]));
         double dist = euclidean(source, dest, myGraph);
-        if (dist != 0)
+        if (dist != 0) {
             myGraph.addEdge(source, dest, dist / WALKING_SPEED, foot);
+            myGraph.addEdge(dest, source, dist / WALKING_SPEED, foot);
+        }
     }
 
     return myGraph;
