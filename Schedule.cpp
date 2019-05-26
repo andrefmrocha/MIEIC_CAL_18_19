@@ -25,7 +25,7 @@ void Schedule::setAppointments(const std::list<Appointment> &appointments) {
     Schedule::appointments = appointments;
 }
 
-bool Schedule::addAppointment(Appointment &appointment) {
+bool Schedule::addAppointment(Appointment appointment) {
     std::list<Appointment>::iterator it;
     for(it = appointments.begin(); it != appointments.end(); it++){
         if(appointment == *it){

@@ -25,13 +25,13 @@ class Appointment {
     struct tm stringToTM(const std::string &input);
 
 public:
-    Appointment(const Coordinates &coord, const std::string &start, int duration);
+    Appointment(const Coordinates &coord, const std::string &start, int durationMinutes);
 
     Coordinates getCoord() const;
 
     const tm &getStart() const;
 
-    const deque<Edge *> &getPath() const;
+    deque<Edge *> *getPath();
 
     void setPath(const deque<Edge *> &path);
 

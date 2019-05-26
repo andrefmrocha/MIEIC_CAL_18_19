@@ -8,11 +8,11 @@ TripMate tripMate;
 GraphicalInterface interface(1920, 1080);
 
 void route1(){
-    Schedule sched3(Coordinates(446308245), Coordinates(412249443));
+    Schedule sched1(Coordinates(445439258), Coordinates(430006683));
     deque<Edge *> path;
 
     //Calculate paths
-    tripMate.addSchedule(sched3);
+    tripMate.addSchedule(sched1);
     path = tripMate.proccessSchedule();
 
     //Display
@@ -21,11 +21,18 @@ void route1(){
 }
 
 void route2(){
-    displayTest();
-    //Load graph
-    //Calculate paths
-    //Processing view of path
+    Schedule schedule(Coordinates(445439258), Coordinates(445439258));
+    deque<Edge *> path;
+
+    //Preparing Schedule
+    schedule.addAppointment(Appointment(Coordinates(430006683), "2019-05-29 11:30:00", 120));
+
+    //Calculate path
+    tripMate.addSchedule(schedule);
+    path = tripMate.proccessSchedule();
+
     //Display
+    interface.showPath(path);
     cout << "Route 2 demonstration finished" << endl;
 }
 
@@ -53,7 +60,7 @@ void route4(){
 void showOptions() {
     cout << "////////////////////////////////////////////////////////////////////////////////////////////////" << endl;
     cout << "Please choose the route desired: (1-4)" << endl;
-    cout << "1 - Path between two points, one way and the other." << endl;
+    cout << "1 - Path between two points." << endl;
     cout << "2 - Path from one point to another, with a middle point." << endl;
     cout << "3 - Path from one point to another, with 3 middle points." << endl;
     cout << "4 - Path from one point to another, with 5 middle points and return to the origin." << endl;

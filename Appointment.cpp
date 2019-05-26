@@ -4,8 +4,8 @@
 
 #include "Appointment.h"
 
-Appointment::Appointment(const Coordinates &coord, const std::string &start, int duration) :
-        coord(coord), duration(duration) {
+Appointment::Appointment(const Coordinates &coord, const std::string &start, int durationMinutes) :
+        coord(coord), duration(durationMinutes) {
     this->path = deque<Edge *>();
     this->start = stringToTM(start);
 }
@@ -32,8 +32,8 @@ const tm &Appointment::getStart() const {
     return start;
 }
 
-const deque<Edge *> &Appointment::getPath() const {
-    return path;
+deque<Edge *> *Appointment::getPath() {
+    return &path;
 }
 
 void Appointment::setPath(const deque<Edge *> &path) {

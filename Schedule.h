@@ -29,7 +29,7 @@ public:
      * @param appointment Appointment to be added.
      * @return True if the insertion was successful and False otherwise.
      */
-    bool addAppointment(Appointment &appointment);
+    bool addAppointment(Appointment appointment);
 
     /**
      * @brief Removes an appointment from the list of appointments.
