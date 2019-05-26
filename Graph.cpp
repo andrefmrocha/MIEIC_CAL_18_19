@@ -38,10 +38,6 @@ bool Edge::isOnFoot() const {
     return type == foot;
 }
 
-int Graph::getNumVertex() const {
-    return vertexSet.size();
-}
-
 vector<Vertex *> Graph::getVertexSet() const {
     return vertexSet;
 }
@@ -54,16 +50,6 @@ Vertex *Graph::findVertex(const Coordinates &in) const {
         if (v->info == in) //TODO overload operator==
             return v;
     return nullptr;
-}
-
-/*
- * Finds the index of the vertex with a given content.
- */
-int Graph::findVertexIdx(const Coordinates &in) const {
-    for (unsigned i = 0; i < vertexSet.size(); i++)
-        if (vertexSet[i]->info == in)
-            return i;
-    return -1;
 }
 
 /*
@@ -281,15 +267,6 @@ inline bool Graph::aStarRelax(Vertex *v, Vertex *w, double weight, double (*heu)
         return false;
 }
 
-double Graph::getEdgeWeight(Edge e) {
-    for (Edge *edge: edgeSet) {
-        if (edge->getWeight() == e.getWeight() && edge->orig == e.orig && edge->dest == e.dest) {
-            return e.getWeight();
-        }
-    }
-    return -1;
-}
-
 vector<Edge *> Graph::getEdgeSet() const {
     return edgeSet;
 }
@@ -303,10 +280,6 @@ double Edge::getWeight() const {
 
 Transport Edge::getType() const {
     return type;
-}
-
-Edge *Edge::invertEdge() {
-    return new Edge(this->dest, this->orig, this->weight, this->type);
 }
 
 void Graph::biDirDijkstra(const Coordinates &origin, const Coordinates &destination, double &time_elapsed) {
@@ -370,14 +343,6 @@ void Graph::invertGraph() {
     for (auto i: this->getEdgeSet()) {
         this->addInvEdge(i->getDest()->getInfo(), i->getOrig()->getInfo(), i->getWeight(), i->getType());
     }
-}
-
-Vertex *Graph::isIntersecting(const vector<bool> &visited1, const vector<bool> &visited2) {
-    for (int i = 0; i < visited1.size(); i++) {
-        if (visited1[i] && visited2[i])
-            return this->vertexSet[i];
-    }
-    return nullptr;
 }
 
 bool Graph::isIntersecting(unordered_map<unsigned long, bool> &checking, Vertex *check) {
@@ -516,10 +481,3 @@ Coordinates Vertex::getInfo() const {
     return this->info;
 }
 
-double Vertex::getWeight() const {
-    return this->weight;
-}
-
-Vertex *Vertex::getPath() const {
-    return this->path;
-}

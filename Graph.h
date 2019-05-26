@@ -39,9 +39,8 @@ class Vertex {
 	Vertex *path = nullptr;
 	Vertex *invPath = nullptr;
 	int queueIndex = 0; 		// required by MutablePriorityQueue
-	vector<Vertex* > disjSet;
 
-	void addEdge(Vertex *dest, double w,Transport type);
+    void addEdge(Vertex *dest, double w,Transport type);
 	void addInvEdge(Vertex *dest, double w,Transport type);
 
     Edge *predecessor;
@@ -51,9 +50,7 @@ public:
 	bool operator<(Vertex& vertex) const; // // required by MutablePriorityQueue
 	bool operator==(Vertex v) const;
 	Coordinates getInfo() const;
-	double getWeight() const;
-	Vertex *getPath() const;
-	friend class Graph;
+    friend class Graph;
 	friend class MutablePriorityQueue<Vertex>;
 };
 
@@ -79,7 +76,6 @@ public:
     bool isOnFoot() const;
     Vertex *getOrig() const;
     Vertex *getDest() const;
-    Edge* invertEdge();
 
 };
 
@@ -91,19 +87,14 @@ class Graph {
 	unordered_map<unsigned long, bool> visited;
     unordered_map<unsigned long, bool> invertedVisited;
 
-    Vertex * isIntersecting(const vector<bool> &visited1, const vector<bool> &visited2);
     void initDestination(const Coordinates & dest);
 
 private:
 
-    // Fp05
 	Vertex * initSingleSource(const Coordinates &orig);
 	bool relax(Vertex *v, Vertex *w, double weight);
     static bool aStarRelax(Vertex *v, Vertex *w, double weight, double ( *heu)(const Vertex *, const Coordinates &),
                            const Coordinates &dest);
-    double ** W = nullptr;   // weight
-	int **P = nullptr;   // path
-	int findVertexIdx(const Coordinates &in) const;
     void aStarStep(double (*heu)(const Vertex *, const Coordinates &), MutablePriorityQueue<Vertex> &q, Vertex *origin,
                    const Coordinates &dest);
     void dijkstraStep(MutablePriorityQueue<Vertex> &q, Vertex *v);
@@ -114,11 +105,10 @@ public:
     bool addVertex(const Coordinates &in);
     bool addEdge(const Coordinates &sourc, const Coordinates &dest, double w,Transport type);
     bool addInvEdge(const Coordinates &sourc, const Coordinates &dest, double w,Transport type);
-    int getNumVertex() const;
+
     vector<Vertex *> getVertexSet() const;
     vector<Edge*> getEdgeSet() const;
 
-	double getEdgeWeight(Edge e);
     void dijkstraShortestPath(const Coordinates &origin, const Coordinates &dest, double &time_elapsed);
     void dijkstraShortestPathBi(const Coordinates &origin, const Coordinates &dest);
     void dijkstraShortestPathBiInv(const Coordinates &origin, const Coordinates &dest);
