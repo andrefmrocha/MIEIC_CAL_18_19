@@ -51,21 +51,23 @@ deque<Edge *> TripMate::proccessSchedule() {
         city.getPath(appointments.front().getCoord(), coords, *path);
         result.insert(result.end(), path->begin(), path->end());
         city.printPath(coords);
+
+        source = appointments.front().getCoord();
+        calculatedApps.push_back(appointments.front());
+        appointments.pop_front();
         //Between appointments
         for(Appointment appointment : appointments) {
-            source = appointments.front().getCoord();
-            calculatedApps.push_back(appointments.front());
-            appointments.pop_front();
             path = appointments.front().getPath();
             city.aStarShortestPath(source, appointments.front().getCoord(), euclidean_distance, timeElapsed);
             city.getPath(appointments.front().getCoord(), coords, *path);
             result.insert(result.end(), path->begin(), path->end());
             city.printPath(coords);
+
+            source = appointments.front().getCoord();
+            calculatedApps.push_back(appointments.front());
+            appointments.pop_front();
         }
         //From last appointment to ending
-        source = appointments.front().getCoord();
-        calculatedApps.push_back(appointments.front());
-        appointments.pop_front();
         deque<Edge *> lastPath;
         city.aStarShortestPath(source, schedule.getEnd(), euclidean_distance, timeElapsed);
         city.getPath(schedule.getEnd(), coords, lastPath);
