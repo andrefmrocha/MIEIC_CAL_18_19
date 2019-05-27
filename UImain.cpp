@@ -8,7 +8,7 @@ static TripMate tripMate;
 static GraphicalInterface interface(1920, 1080);
 
 void route1(){
-    Schedule sched1(Coordinates(445439258), Coordinates(430006683));
+    Schedule sched1(Coordinates(445439258), Coordinates(430006682));
     deque<Edge *> path;
 
     //Calculate paths
@@ -17,6 +17,7 @@ void route1(){
 
     //Display
     interface.showPath(path);
+    tripMate.clearCheckpoints();
     cout << "Route 1 demonstration finished" << endl;
 }
 
@@ -33,6 +34,7 @@ void route2(){
 
     //Display
     interface.showPath(path);
+    tripMate.clearCheckpoints();
     cout << "Route 2 demonstration finished" << endl;
 }
 
@@ -52,21 +54,22 @@ void route3(){
 
     //Display
     interface.showPath(path);
+    tripMate.clearCheckpoints();
     cout << "Route 3 demonstration finished" << endl;
 }
 
 void route4(){
-    Schedule schedule(Coordinates(445439258), Coordinates(112686789));
+    Schedule schedule(Coordinates(445439258), Coordinates(445439258));
     deque<Edge *> path;
 
-    /*for(Edge * edge: tripMate.getCity().getEdgeSet()){
+    for(Edge * edge: tripMate.getCity().getEdgeSet()){
         path.push_back(edge);
     }
-    interface.showPath(path);*/
+    interface.showPath(path);
 
     //Preparing Schedule
     schedule.addAppointment(Appointment(Coordinates(125384237), "2019-06-02 10:00:00", 120));
-    schedule.addAppointment(Appointment(Coordinates(445439258), "2019-06-02 13:00:00", 60));
+    schedule.addAppointment(Appointment(Coordinates(285948656), "2019-06-02 13:00:00", 60));
     schedule.addAppointment(Appointment(Coordinates(135837695), "2019-06-02 15:00:00", 210));
     //schedule.addAppointment(Appointment(Coordinates(1279864321), "2019-06-03 18:15:00", 90));
 
@@ -75,7 +78,8 @@ void route4(){
     path = tripMate.proccessSchedule();
 
     //Display
-    interface.showPath(path);
+    //interface.showPath(path);
+    tripMate.clearCheckpoints();
     cout << "Route 4 demonstration finished" << endl;
 }
 

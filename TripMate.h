@@ -26,6 +26,7 @@ public:
     void addSchedule(const Schedule &sched);
     void removeSchedule(const Schedule &sched);
     deque<Edge *> proccessSchedule();
+    void clearCheckpoints();
 };
 
 

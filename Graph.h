@@ -13,10 +13,12 @@
 #include "MutablePriorityQueue.h"
 #include "Coordinates.h"
 
-using namespace std;
+#define INF std::numeric_limits<double>::max()
 
+using namespace std;
 class Edge;
 class Graph;
+
 class Vertex;
 
 //type of transportation
@@ -25,7 +27,14 @@ enum Transport  {
     bus,
     subway
 };
-#define INF std::numeric_limits<double>::max()
+
+//type of vertex (for drawing purposes)
+enum Checkpoint {
+    startPoint,
+    middlePoint,
+    endPoint,
+    none
+};
 
 /************************* Vertex  **************************/
 
@@ -39,6 +48,7 @@ class Vertex {
 	Vertex *path = nullptr;
 	Vertex *invPath = nullptr;
 	int queueIndex = 0; 		// required by MutablePriorityQueue
+	Checkpoint checkpoint;
 
     void addEdge(Vertex *dest, double w,Transport type);
 	void addInvEdge(Vertex *dest, double w,Transport type);
@@ -46,10 +56,15 @@ class Vertex {
     Edge *predecessor;
     Edge *invPredecessor;
 public:
-	Vertex(Coordinates in);
+	explicit Vertex(Coordinates in);
 	bool operator<(Vertex& vertex) const; // // required by MutablePriorityQueue
 	bool operator==(Vertex v) const;
 	Coordinates getInfo() const;
+	void setCheckpoint(Checkpoint t);
+	bool isStartPoint();
+    bool isMiddlePoint();
+    bool isEndPoint();
+    bool isCheckpoint();
     friend class Graph;
 	friend class MutablePriorityQueue<Vertex>;
 };
@@ -129,6 +144,7 @@ public:
     void concatenateEdges(const vector<Edge *>& edges);
     void printPath(vector<Coordinates> coords) const;
     void invertGraph();
+    void clearCheckpoints();
 };
 
 #endif /* GRAPH_H_ */

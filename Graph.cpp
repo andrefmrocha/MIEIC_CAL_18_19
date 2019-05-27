@@ -227,7 +227,7 @@ void Graph::aStarShortestPath(const Coordinates &origin, const Coordinates &dest
         auto v = q.extractMin();
         v->visited = true;
         if (v->getInfo() == dest) {
-            cout << "Num of iterations " << i << " " << this->vertexSet.size() << endl;
+            //cout << "Num of iterations " << i << " " << this->vertexSet.size() << endl;
             break;
         }
         aStarStep(heu, q, v, dest);
@@ -453,8 +453,11 @@ void Graph::initDestination(const Coordinates &dest) {
     destination->weight = 0;
 }
 
-
-
+void Graph::clearCheckpoints() {
+    for(auto v : vertexSet) {
+        v->checkpoint = none;
+    }
+}
 
 
 //////////////////Vertex Method/////////////////////////////////////////
@@ -470,7 +473,7 @@ void Vertex::addInvEdge(Vertex *d, double w, Transport type) {
     inc.push_back(new Edge(this, d, w, type));
 }
 
-Vertex::Vertex(Coordinates in) : info(in) {}
+Vertex::Vertex(Coordinates in) : info(in), checkpoint(none) {}
 
 
 bool Vertex::operator<(Vertex &vertex) const {
@@ -479,5 +482,25 @@ bool Vertex::operator<(Vertex &vertex) const {
 
 Coordinates Vertex::getInfo() const {
     return this->info;
+}
+
+void Vertex::setCheckpoint(Checkpoint t) {
+    this->checkpoint = t;
+}
+
+bool Vertex::isStartPoint() {
+    return checkpoint == startPoint;
+}
+
+bool Vertex::isMiddlePoint() {
+    return checkpoint == middlePoint;
+}
+
+bool Vertex::isEndPoint() {
+    return checkpoint == endPoint;
+}
+
+bool Vertex::isCheckpoint() {
+    return checkpoint != none;
 }
 

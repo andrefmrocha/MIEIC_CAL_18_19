@@ -33,10 +33,11 @@ double GraphicalInterface::calculateX(double coord) {
 }
 
 double GraphicalInterface::calculateY(double coord) {
-    if((maxY - minY) == 0)
+    if ((maxY - minY) == 0)
         return -coord * PRECISION;
     else
-        return ((-coord * PRECISION + minY * PRECISION) + (maxY - minY) * PRECISION) / ((maxY - minY) * PRECISION / height);
+        return ((-coord * PRECISION + minY * PRECISION) + (maxY - minY) * PRECISION) /
+               ((maxY - minY) * PRECISION / height);
 }
 
 
@@ -65,19 +66,41 @@ void GraphicalInterface::showPath(std::deque<Edge *> path) {
                           ori->getInfo().getId(),
                           dest->getInfo().getId(),
                           EdgeType::DIRECTED);
+
+
+        if (ori->isStartPoint()) {
+            this->gv->setVertexColor(ori->getInfo().getId(), WHITE);
+        }
+        if (dest->isEndPoint()) {
+            this->gv->setVertexColor(dest->getInfo().getId(), BLACK);
+        }
+        if (ori->isMiddlePoint()) {
+            this->gv->setVertexColor(ori->getInfo().getId(), RED);
+        }
+        if (dest->isMiddlePoint()) {
+            this->gv->setVertexColor(dest->getInfo().getId(), RED);
+        }
+
         if (edge->isBus()) {
-            this->gv->setVertexColor(ori->getInfo().getId(), BLUE);
-            this->gv->setVertexColor(dest->getInfo().getId(), BLUE);
+            if(!ori->isCheckpoint())
+                this->gv->setVertexColor(ori->getInfo().getId(), BLUE);
+            if(!dest->isCheckpoint())
+                this->gv->setVertexColor(dest->getInfo().getId(), BLUE);
             this->gv->setEdgeColor(this->getEdgeId(), BLUE);
         } else if (edge->isSubway()) {
-            this->gv->setVertexColor(ori->getInfo().getId(), YELLOW);
-            this->gv->setVertexColor(dest->getInfo().getId(), YELLOW);
+            if(!ori->isCheckpoint())
+                this->gv->setVertexColor(ori->getInfo().getId(), YELLOW);
+            if(!dest->isCheckpoint())
+                this->gv->setVertexColor(dest->getInfo().getId(), YELLOW);
             this->gv->setEdgeColor(this->getEdgeId(), YELLOW);
         } else {
-            this->gv->setVertexColor(ori->getInfo().getId(), GREEN);
-            this->gv->setVertexColor(dest->getInfo().getId(), GREEN);
+            if(!ori->isCheckpoint())
+                this->gv->setVertexColor(ori->getInfo().getId(), GREEN);
+            if(!dest->isCheckpoint())
+                this->gv->setVertexColor(dest->getInfo().getId(), GREEN);
             this->gv->setEdgeColor(this->getEdgeId(), GREEN);
         }
+
         this->gv->rearrange();
         this->incrementEdgeId();
         //sleep(1);
