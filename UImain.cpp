@@ -62,23 +62,24 @@ void route4(){
     Schedule schedule(Coordinates(445439258), Coordinates(445439258));
     deque<Edge *> path;
 
-    for(Edge * edge: tripMate.getCity().getEdgeSet()){
+    /*for(Edge * edge: tripMate.getCity().getEdgeSet()){
         path.push_back(edge);
     }
-    interface.showPath(path);
+    interface.showPath(path);*/
 
     //Preparing Schedule
     schedule.addAppointment(Appointment(Coordinates(125384237), "2019-06-02 10:00:00", 120));
     schedule.addAppointment(Appointment(Coordinates(285948656), "2019-06-02 13:00:00", 60));
     schedule.addAppointment(Appointment(Coordinates(135837695), "2019-06-02 15:00:00", 210));
-    //schedule.addAppointment(Appointment(Coordinates(1279864321), "2019-06-03 18:15:00", 90));
+    schedule.addAppointment(Appointment(Coordinates(111648004), "2019-06-02 19:00:00", 90));
+    schedule.addAppointment(Appointment(Coordinates(112651995), "2019-06-02 21:00:00", 180));
 
     //Calculate paths
     tripMate.addSchedule(schedule);
     path = tripMate.proccessSchedule();
 
     //Display
-    //interface.showPath(path);
+    interface.showPath(path);
     tripMate.clearCheckpoints();
     cout << "Route 4 demonstration finished" << endl;
 }
@@ -118,6 +119,8 @@ void configureInterface() {
 }
 
 int main () {
+    signal(SIGINT, SIG_IGN);
+
     cout << "////////////////////////////////////////////////////////////////////////////////////////////////" << endl;
     cout << "Welcome to our Scheduling Planning app" << endl;
     cout << "Loading Map..." << endl;

@@ -8,7 +8,6 @@
 
 
 GraphicalInterface::GraphicalInterface(int width, int height) {
-    this->gv = new GraphViewer(width, height, false);
     this->width = width;
     this->height = height;
     this->maxX = 0;
@@ -47,6 +46,7 @@ int GraphicalInterface::getEdgeId() {
 
 
 void GraphicalInterface::showPath(std::deque<Edge *> path) {
+    this->gv = new GraphViewer(width, height, false);
     gv->setBackground(MAP_BACKGROUND);
     gv->createWindow(this->width, this->height);
 
