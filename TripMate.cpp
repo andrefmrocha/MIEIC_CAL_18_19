@@ -101,3 +101,10 @@ const Graph &TripMate::getCity() const {
 void TripMate::clearCheckpoints() {
     city.clearCheckpoints();
 }
+
+void TripMate::testConectivity() {
+    vector<Coordinates> search;
+    this->city.dfsVisit(this->city.findVertex(Coordinates(445439258)), search);
+    cout << "Num of vertex's in graph: " << this->city.getVertexSet().size() << endl;
+    cout << "Num of vertex's found through dfs: " << search.size() << endl;
+}

@@ -462,6 +462,34 @@ void Graph::clearCheckpoints() {
     }
 }
 
+vector<Coordinates> Graph::dfs() const {
+    typename vector<Vertex *>::const_iterator it;
+    vector<Coordinates> res;
+    for(it = this->vertexSet.begin(); it != this->vertexSet.end(); it++){
+        (*it)->visited = false;
+    }
+
+
+    for(it  = this->vertexSet.begin(); it != this->vertexSet.end(); it++){
+        if(!(*it)->visited){
+            dfsVisit(*it, res);
+        }
+    }
+    return res;
+}
+
+void Graph::dfsVisit(Vertex *v, vector<Coordinates> & res) const {
+    v->visited = true;
+    res.push_back(v->info);
+    for (auto it: v->adj) {
+        if (!it->dest->visited) {
+            dfsVisit(it->dest, res);
+        }
+
+    }
+}
+
+
 
 //////////////////Vertex Method/////////////////////////////////////////
 /*

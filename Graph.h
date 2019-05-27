@@ -115,6 +115,7 @@ private:
     void dijkstraStep(MutablePriorityQueue<Vertex> &q, Vertex *v);
     bool isInverted=false;
     bool isIntersecting(unordered_map<unsigned long, bool> &checking, Vertex * check);
+
 public:
     Vertex *findVertex(const Coordinates &in) const;
     bool addVertex(const Coordinates &in);
@@ -145,6 +146,8 @@ public:
     void printPath(vector<Coordinates> coords) const;
     void invertGraph();
     void clearCheckpoints();
+    vector<Coordinates> dfs() const;
+    void dfsVisit(Vertex *v, vector<Coordinates> & res) const;
 };
 
 #endif /* GRAPH_H_ */
