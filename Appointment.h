@@ -29,7 +29,7 @@ public:
 
     Coordinates getCoord() const;
 
-    const tm &getStart() const;
+    struct tm &getStart();
 
     deque<Edge *> *getPath();
 

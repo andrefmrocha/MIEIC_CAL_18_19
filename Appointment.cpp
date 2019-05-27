@@ -16,9 +16,9 @@ struct tm Appointment::stringToTM(const std::string &input) {
     time.tm_year = stoi(input.substr(0, 4)) - 1900;
     time.tm_mon = stoi(input.substr(5, 2)) - 1;
     time.tm_mday = stoi(input.substr(9, 2));
-    time.tm_hour = stoi(input.substr(12, 2));
-    time.tm_min = stoi(input.substr(15, 2));
-    time.tm_sec = stoi(input.substr(18, 2));
+    time.tm_hour = stoi(input.substr(11, 2));
+    time.tm_min = stoi(input.substr(14, 2));
+    time.tm_sec = stoi(input.substr(17, 2));
     time.tm_isdst = -1;
 
     return time;
@@ -28,7 +28,7 @@ Coordinates Appointment::getCoord() const {
     return coord;
 }
 
-const tm &Appointment::getStart() const {
+struct tm &Appointment::getStart() {
     return start;
 }
 
