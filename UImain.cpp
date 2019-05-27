@@ -4,8 +4,8 @@
 
 #include "UImain.h"
 
-TripMate tripMate;
-GraphicalInterface interface(1920, 1080);
+static TripMate tripMate;
+static GraphicalInterface interface(1920, 1080);
 
 void route1(){
     Schedule sched1(Coordinates(445439258), Coordinates(430006683));
@@ -56,15 +56,26 @@ void route3(){
 }
 
 void route4(){
+    Schedule schedule(Coordinates(445439258), Coordinates(112686789));
     deque<Edge *> path;
-    for(Edge * edge: tripMate.getCity().getEdgeSet()){
+
+    /*for(Edge * edge: tripMate.getCity().getEdgeSet()){
         path.push_back(edge);
     }
-    interface.showPath(path);
-    //Load graph
+    interface.showPath(path);*/
+
+    //Preparing Schedule
+    schedule.addAppointment(Appointment(Coordinates(125384237), "2019-06-02 10:00:00", 120));
+    schedule.addAppointment(Appointment(Coordinates(445439258), "2019-06-02 13:00:00", 60));
+    schedule.addAppointment(Appointment(Coordinates(135837695), "2019-06-02 15:00:00", 210));
+    //schedule.addAppointment(Appointment(Coordinates(1279864321), "2019-06-03 18:15:00", 90));
+
     //Calculate paths
-    //Processing view of path
+    tripMate.addSchedule(schedule);
+    path = tripMate.proccessSchedule();
+
     //Display
+    interface.showPath(path);
     cout << "Route 4 demonstration finished" << endl;
 }
 
