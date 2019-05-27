@@ -165,15 +165,17 @@ void Graph::dijkstraStep(MutablePriorityQueue<Vertex> &q, Vertex *v) {
     }
 }
 
-void Graph::getPath(const Coordinates &dest, vector<Coordinates> &coords, deque<Edge *> &edges) const {
+void Graph::getPath(const Coordinates &dest, vector<Coordinates> &coords, deque<Edge *> &edges, double& totalWeight) const {
     vector<Coordinates> c;
     auto v = findVertex(dest);
     if (v == nullptr || v->weight == INF) // missing or disconnected
         return;
 
+    totalWeight = 0;
     for (; v != nullptr && v->predecessor != nullptr; v = v->path) {
         c.push_back(v->info);
         edges.push_front(v->predecessor);
+        totalWeight+=v->predecessor->getWeight();
     }
     c.push_back(v->info);
     reverse(c.begin(), c.end());
@@ -197,6 +199,7 @@ void Graph::getInvPath(const Coordinates &dest, vector<Coordinates> &coords, deq
 
 void Graph::getBiDirPath(const Coordinates &dest, vector<Coordinates> &coords, deque<Edge *> &edges) const  {
     long intID = -1 ;
+    double dummy;
     for(auto itr =this->visited.begin() ; itr != this->visited.end(); itr++) {
         auto it2 = this->invertedVisited.find(itr->first);
         if( itr->second && it2 != this->invertedVisited.end() && it2->second) {
@@ -210,7 +213,7 @@ void Graph::getBiDirPath(const Coordinates &dest, vector<Coordinates> &coords, d
     }
 
     Vertex* intV = findVertex(Coordinates(0,0,intID));
-    getPath(intV->getInfo(),coords,edges);
+    getPath(intV->getInfo(),coords,edges, dummy);
     getInvPath(intV->getInfo(),coords,edges);
 }
 

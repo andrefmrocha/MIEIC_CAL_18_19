@@ -134,7 +134,7 @@ public:
                                                                                               const Coordinates &));
     void aStarShortestPathBiInv(const Coordinates &origin, const Coordinates &dest, double ( *heu)(const Vertex *,
                                                                                               const Coordinates &));
-    void getPath(const Coordinates &dest, vector<Coordinates> &coords, deque<Edge *> &edges) const;
+    void getPath(const Coordinates &dest, vector<Coordinates> &coords, deque<Edge *> &edges, double& totalWeight) const;
     void getInvPath(const Coordinates &dest,vector<Coordinates> &coords,deque<Edge*> &edges) const;
     void getBiDirPath(const Coordinates &dest,vector<Coordinates> & coords, deque<Edge*> &edges) const ;
 

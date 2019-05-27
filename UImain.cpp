@@ -62,11 +62,6 @@ void route4(){
     Schedule schedule(Coordinates(445439258), Coordinates(445439258));
     deque<Edge *> path;
 
-    /*for(Edge * edge: tripMate.getCity().getEdgeSet()){
-        path.push_back(edge);
-    }
-    interface.showPath(path);*/
-
     //Preparing Schedule
     schedule.addAppointment(Appointment(Coordinates(125384237), "2019-06-02 10:00:00", 120));
     schedule.addAppointment(Appointment(Coordinates(285948656), "2019-06-02 13:00:00", 60));

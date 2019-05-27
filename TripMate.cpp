@@ -34,22 +34,26 @@ deque<Edge *> TripMate::proccessSchedule() {
     list<Appointment> calculatedApps;
     vector<Coordinates> coords;
     deque<Edge *> result;
+    double totalTime = 0;
 
     if(appointments.empty()){
         double timeElapsed;
         city.aStarShortestPath(schedule.getStart(), schedule.getEnd(), euclidean_distance, timeElapsed);
-        city.getPath(schedule.getEnd(), coords, result);
+        city.getPath(schedule.getEnd(), coords, result, totalTime);
+        cout << "Trip length: " << round(totalTime) << " min" << endl;
         result.front()->getOrig()->setCheckpoint(startPoint);
         result.back()->getDest()->setCheckpoint(endPoint);
     }
     else {
+        int tripNumber = 2;
         double timeElapsed;
         Coordinates source(0);
         deque<Edge *>* path = appointments.front().getPath();
 
         //From beginning to first appointment
         city.aStarShortestPath(schedule.getStart(), appointments.front().getCoord(), euclidean_distance, timeElapsed);
-        city.getPath(appointments.front().getCoord(), coords, *path);
+        city.getPath(appointments.front().getCoord(), coords, *path, totalTime);
+        cout << "First Trip : " << round(totalTime) << " min" << endl;
         //city.printPath(coords);
         path->front()->getOrig()->setCheckpoint(startPoint);
         path->back()->getDest()->setCheckpoint(middlePoint);
@@ -62,7 +66,9 @@ deque<Edge *> TripMate::proccessSchedule() {
         while(!appointments.empty()) {
             path = appointments.front().getPath();
             city.aStarShortestPath(source, appointments.front().getCoord(), euclidean_distance, timeElapsed);
-            city.getPath(appointments.front().getCoord(), coords, *path);
+            city.getPath(appointments.front().getCoord(), coords, *path, totalTime);
+            cout << "Trip " << tripNumber << ": " << round(totalTime) << " min" << endl;
+            tripNumber++;
             //city.printPath(coords);
             path->front()->getOrig()->setCheckpoint(middlePoint);
             path->back()->getDest()->setCheckpoint(middlePoint);
@@ -75,7 +81,8 @@ deque<Edge *> TripMate::proccessSchedule() {
         //From last appointment to ending
         deque<Edge *> lastPath;
         city.aStarShortestPath(source, schedule.getEnd(), euclidean_distance, timeElapsed);
-        city.getPath(schedule.getEnd(), coords, lastPath);
+        city.getPath(schedule.getEnd(), coords, lastPath, totalTime);
+        cout << "Last Trip: " << round(totalTime) << " min" << endl;
         //city.printPath(coords);
         lastPath.front()->getOrig()->setCheckpoint(middlePoint);
         lastPath.back()->getDest()->setCheckpoint(endPoint);
