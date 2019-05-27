@@ -82,10 +82,10 @@ void route4(){
 void showOptions() {
     cout << "////////////////////////////////////////////////////////////////////////////////////////////////" << endl;
     cout << "Please choose the route desired: (1-4)" << endl;
-    cout << "1 - Path between two points." << endl;
-    cout << "2 - Path from one point to another, with a middle point." << endl;
-    cout << "3 - Path from one point to another, with 3 middle points." << endl;
-    cout << "4 - Path from one point to another, with 5 middle points and return to the origin." << endl;
+    cout << "1 - From home to FEUP." << endl;
+    cout << "2 - Attending a class." << endl;
+    cout << "3 - Students also wander." << endl;
+    cout << "4 - Going further away." << endl;
     cout << "0 - Exit." << endl;
     cout << "////////////////////////////////////////////////////////////////////////////////////////////////" << endl;
 }
@@ -117,7 +117,7 @@ int main () {
     signal(SIGINT, SIG_IGN);
 
     cout << "////////////////////////////////////////////////////////////////////////////////////////////////" << endl;
-    cout << "Welcome to our Scheduling Planning app" << endl;
+    cout << "\t\t\t\t\t\t\tWelcome to our Scheduling Planning Demo" << endl;
     cout << "Loading Map..." << endl;
     tripMate.loadCity("Porto");
     configureInterface();
