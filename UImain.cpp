@@ -117,7 +117,7 @@ int main () {
     signal(SIGINT, SIG_IGN);
 
     cout << "////////////////////////////////////////////////////////////////////////////////////////////////" << endl;
-    cout << "\t\t\t\t\t\t\tWelcome to our Scheduling Planning Demo" << endl;
+    cout << "Welcome to our Scheduling Planning Demo" << endl;
     cout << "Loading Map..." << endl;
     tripMate.loadCity("Porto");
     configureInterface();
