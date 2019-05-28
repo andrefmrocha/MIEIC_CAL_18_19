@@ -1,0 +1,86 @@
+{
+    "sort": null,
+    "recordsReturned": 13,
+    "totalRecords": 13,
+    "records": [{
+        "zone": "PRT1",
+        "code": "MCE4",
+        "name": "MUSEU C. ELÉTRICO",
+        "address": "ALAM.BASÍLIO TELES",
+        "sequence": 1
+    }, {
+        "zone": "PRT1",
+        "code": "IGRM1",
+        "name": "IGREJA DE MASSARELOS",
+        "address": "R.RESTAURAÇÃO",
+        "sequence": 2
+    }, {
+        "zone": "PRT1",
+        "code": "EQ3",
+        "name": "ENTRE QUINTAS",
+        "address": "R.RESTAURAÇÃO",
+        "sequence": 3
+    }, {
+        "zone": "PRT1",
+        "code": "PAL7",
+        "name": "PALÁCIO",
+        "address": "R.RESTAURAÇÃO",
+        "sequence": 4
+    }, {
+        "zone": "PRT1",
+        "code": "VTO4",
+        "name": "VIRIATO",
+        "address": "R.RESTAURAÇÃO",
+        "sequence": 5
+    }, {
+        "zone": "PRT1",
+        "code": "CMO1",
+        "name": "CARMO",
+        "address": "R.CARMO",
+        "sequence": 6
+    }, {
+        "zone": "PRT1",
+        "code": "CMO",
+        "name": "CARMO",
+        "address": "R.CARMO",
+        "sequence": 7
+    }, {
+        "zone": "PRT1",
+        "code": "HSA1",
+        "name": "HOSP. STO. ANTÓNIO",
+        "address": "R.ALBERTO AIRES GOUVEIA",
+        "sequence": 8
+    }, {
+        "zone": "PRT1",
+        "code": "PAL6",
+        "name": "PALÁCIO",
+        "address": "R.RESTAURAÇÃO",
+        "sequence": 9
+    }, {
+        "zone": "PRT1",
+        "code": "EQ4",
+        "name": "ENTRE QUINTAS",
+        "address": "R.RESTAURAÇÃO",
+        "sequence": 10
+    }, {
+        "zone": "PRT1",
+        "code": "IGRM2",
+        "name": "IGREJA DE MASSARELOS",
+        "address": "R.RESTAURAÇÃO",
+        "sequence": 11
+    }, {
+        "zone": "PRT1",
+        "code": "MCE3",
+        "name": "MUSEU C. ELÉCTRICO",
+        "address": "ALAM.BASÍLIO TELES",
+        "sequence": 12
+    }, {
+        "zone": "PRT1",
+        "code": "MCE4",
+        "name": "MUSEU C. ELÉTRICO",
+        "address": "ALAM.BASÍLIO TELES",
+        "sequence": 13
+    }],
+    "startIndex": 0,
+    "dir": "asc"
+}

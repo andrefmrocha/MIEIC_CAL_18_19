@@ -1,0 +1,86 @@
+{
+    "sort": null,
+    "recordsReturned": 13,
+    "totalRecords": 13,
+    "records": [{
+        "zone": "PRT2",
+        "code": "PASS2",
+        "name": "PASSEIO ALEGRE",
+        "address": "R.PASSEIO ALEGRE",
+        "sequence": 1
+    }, {
+        "zone": "PRT2",
+        "code": "CNT4",
+        "name": "CANTAREIRA",
+        "address": "R.PASSEIO ALEGRE",
+        "sequence": 2
+    }, {
+        "zone": "PRT2",
+        "code": "DL6",
+        "name": "D.LEONOR",
+        "address": "R.PASSEIO ALEGRE",
+        "sequence": 3
+    }, {
+        "zone": "PRT2",
+        "code": "FLU6",
+        "name": "FLUVIAL",
+        "address": "LGO.ANTÓNIO CÁLEM",
+        "sequence": 4
+    }, {
+        "zone": "PRT2",
+        "code": "OURO4",
+        "name": "OURO",
+        "address": "R.OURO",
+        "sequence": 5
+    }, {
+        "zone": "PRT2",
+        "code": "ENCO4",
+        "name": "ENCOSTA DA ARRÁBIDA",
+        "address": "R.OURO",
+        "sequence": 6
+    }, {
+        "zone": "PRT1",
+        "code": "PARR4",
+        "name": "PONTE ARRÁBIDA",
+        "address": "R.OURO",
+        "sequence": 7
+    }, {
+        "zone": "PRT1",
+        "code": "BIC4",
+        "name": "BICALHO",
+        "address": "R.OURO",
+        "sequence": 8
+    }, {
+        "zone": "PRT1",
+        "code": "MCE4",
+        "name": "MUSEU C. ELÉTRICO",
+        "address": "ALAM.BASÍLIO TELES",
+        "sequence": 9
+    }, {
+        "zone": "PRT1",
+        "code": "CAIS2",
+        "name": "CAIS DAS PEDRAS",
+        "address": "CAIS DAS PEDRAS",
+        "sequence": 10
+    }, {
+        "zone": "PRT1",
+        "code": "MON4",
+        "name": "MONCHIQUE",
+        "address": "R.MONCHIQUE",
+        "sequence": 11
+    }, {
+        "zone": "PRT1",
+        "code": "ALFG5",
+        "name": "ALFÂNDEGA",
+        "address": "R.NOVA ALFÂNDEGA",
+        "sequence": 12
+    }, {
+        "zone": "PRT1",
+        "code": "INF1",
+        "name": "INFANTE",
+        "address": "LGO.S.FRANCISCO",
+        "sequence": 13
+    }],
+    "startIndex": 0,
+    "dir": "asc"
+}

@@ -1,0 +1,86 @@
+{
+    "sort": null,
+    "recordsReturned": 13,
+    "totalRecords": 13,
+    "records": [{
+        "zone": "PRT1",
+        "code": "INF1",
+        "name": "INFANTE",
+        "address": "LGO.S.FRANCISCO",
+        "sequence": 1
+    }, {
+        "zone": "PRT1",
+        "code": "ALFG1",
+        "name": "ALFÂNDEGA",
+        "address": "R.NOVA ALFÂNDEGA",
+        "sequence": 2
+    }, {
+        "zone": "PRT1",
+        "code": "MON3",
+        "name": "MONCHIQUE",
+        "address": "R.MONCHIQUE",
+        "sequence": 3
+    }, {
+        "zone": "PRT1",
+        "code": "CAIS1",
+        "name": "CAIS DAS PEDRAS",
+        "address": "CAIS DAS PEDRAS",
+        "sequence": 4
+    }, {
+        "zone": "PRT1",
+        "code": "MCE3",
+        "name": "MUSEU C. ELÉCTRICO",
+        "address": "ALAM.BASÍLIO TELES",
+        "sequence": 5
+    }, {
+        "zone": "PRT1",
+        "code": "BIC3",
+        "name": "BICALHO",
+        "address": "R.OURO",
+        "sequence": 6
+    }, {
+        "zone": "PRT1",
+        "code": "PARR3",
+        "name": "PONTE ARRÁBIDA",
+        "address": "R.OURO",
+        "sequence": 7
+    }, {
+        "zone": "PRT2",
+        "code": "ENCO3",
+        "name": "ENCOSTA DA ARRÁBIDA",
+        "address": "R.OURO",
+        "sequence": 8
+    }, {
+        "zone": "PRT2",
+        "code": "OURO3",
+        "name": "OURO",
+        "address": "R.OURO",
+        "sequence": 9
+    }, {
+        "zone": "PRT2",
+        "code": "FLU2",
+        "name": "FLUVIAL",
+        "address": "LGO.ANT.CÁLEM",
+        "sequence": 10
+    }, {
+        "zone": "PRT2",
+        "code": "DL5",
+        "name": "D.LEONOR",
+        "address": "R.PASSEIO ALEGRE",
+        "sequence": 11
+    }, {
+        "zone": "PRT2",
+        "code": "CNT3",
+        "name": "CANTAREIRA",
+        "address": "R.PASSEIO ALEGRE",
+        "sequence": 12
+    }, {
+        "zone": "PRT2",
+        "code": "PASS",
+        "name": "PASSEIO ALEGRE",
+        "address": "R.PASSEIO ALEGRE",
+        "sequence": 13
+    }],
+    "startIndex": 0,
+    "dir": "asc"
+}

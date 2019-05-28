@@ -1,0 +1,182 @@
+{
+    "sort": null,
+    "recordsReturned": 29,
+    "totalRecords": 29,
+    "records": [{
+        "zone": "PRT1",
+        "code": "C24A4",
+        "name": "CAMPO 24 AGOSTO",
+        "address": "AV.FERNÃO MAGALHAES",
+        "sequence": 1
+    }, {
+        "zone": "PRT1",
+        "code": "DJOA4",
+        "name": "D. JOÃO IV",
+        "address": "R.FERNANDES TOMÁS",
+        "sequence": 2
+    }, {
+        "zone": "PRT1",
+        "code": "RFZ1",
+        "name": "RUA FIRMEZA",
+        "address": "R.D.JOÃO IV",
+        "sequence": 3
+    }, {
+        "zone": "PRT1",
+        "code": "MOR2",
+        "name": "MOREIRA",
+        "address": "R.D.JOÃO IV",
+        "sequence": 4
+    }, {
+        "zone": "PRT1",
+        "code": "ESCN2",
+        "name": "ESCOLA NORMAL",
+        "address": "R.D.JOÃO IV",
+        "sequence": 5
+    }, {
+        "zone": "PRT1",
+        "code": "SI2",
+        "name": "STO. ISIDRO",
+        "address": "R.ALEGRIA",
+        "sequence": 6
+    }, {
+        "zone": "PRT1",
+        "code": "AUS",
+        "name": "ESC. AURÉLIA SOUSA",
+        "address": "R.ALEGRIA",
+        "sequence": 7
+    }, {
+        "zone": "PRT1",
+        "code": "MPL7",
+        "name": "MARQUÊS",
+        "address": "R.CONSTITUIÇÃO",
+        "sequence": 8
+    }, {
+        "zone": "PRT1",
+        "code": "FG1",
+        "name": "FARIA GUIMARÃES",
+        "address": "R.CONSTITUIÇÃO",
+        "sequence": 9
+    }, {
+        "zone": "PRT1",
+        "code": "AQL1",
+        "name": "ANTERO DE QUENTAL",
+        "address": "R.CONSTITUIÇÃO",
+        "sequence": 10
+    }, {
+        "zone": "PRT1",
+        "code": "PISC",
+        "name": "PISCINA CONSTIT.",
+        "address": "R.CONSTITUIÇÃO",
+        "sequence": 11
+    }, {
+        "zone": "PRT1",
+        "code": "BSB",
+        "name": "SAPADOR. BOMBEIROS",
+        "address": "R.CONSTITUIÇÃO",
+        "sequence": 12
+    }, {
+        "zone": "PRT1",
+        "code": "BCG",
+        "name": "BCG",
+        "address": "R.CONSTITUIÇÃO",
+        "sequence": 13
+    }, {
+        "zone": "PRT1",
+        "code": "SP",
+        "name": "SERPA PINTO",
+        "address": "R.SERPA PINTO",
+        "sequence": 14
+    }, {
+        "zone": "PRT1",
+        "code": "RA2",
+        "name": "RAMADA ALTA",
+        "address": "R.SERPA PINTO",
+        "sequence": 15
+    }, {
+        "zone": "PRT1",
+        "code": "CZV4",
+        "name": "CRUZ VERMELHA",
+        "address": "R.N.SRA FÁTIMA",
+        "sequence": 16
+    }, {
+        "zone": "PRT1",
+        "code": "BCM1",
+        "name": "BOAVISTA-CASA DA MÚSICA",
+        "address": "PR.MOUZINHO ALBUQUERQUE",
+        "sequence": 17
+    }, {
+        "zone": "PRT1",
+        "code": "BVCM3",
+        "name": "BOAVISTA CEMITÉRIO",
+        "address": "PR.MOUZINHO ALBUQUERQUE",
+        "sequence": 18
+    }, {
+        "zone": "PRT1",
+        "code": "BS2",
+        "name": "BOAVISTA - B.SUCESSO",
+        "address": "LGO.FERREIRA LAPA",
+        "sequence": 19
+    }, {
+        "zone": "PRT1",
+        "code": "PRG2",
+        "name": "PR. DA GALIZA",
+        "address": "R.JÚLIO DINIS",
+        "sequence": 20
+    }, {
+        "zone": "PRT1",
+        "code": "PAL4",
+        "name": "PALÁCIO",
+        "address": "R.D.MANUEL II",
+        "sequence": 21
+    }, {
+        "zone": "PRT1",
+        "code": "HSA",
+        "name": "HOSP.STO. ANTÓNIO",
+        "address": "R.ALBERTO AIRES GOUVEIA",
+        "sequence": 22
+    }, {
+        "zone": "PRT1",
+        "code": "CORD7",
+        "name": "CORDOARIA",
+        "address": "C.MÁRTIRES PÁTRIA",
+        "sequence": 23
+    }, {
+        "zone": "PRT1",
+        "code": "SBNT2",
+        "name": "EST.S.BENTO",
+        "address": "PR.ALMEIDA GARRETT",
+        "sequence": 24
+    }, {
+        "zone": "PRT1",
+        "code": "LPDZ",
+        "name": "L.GO 1º DEZEMBRO",
+        "address": "R.SARAIVA DE CARVALHO",
+        "sequence": 25
+    }, {
+        "zone": "PRT1",
+        "code": "BTLH6",
+        "name": "BATALHA",
+        "address": "R.DUQUE LOULÉ",
+        "sequence": 26
+    }, {
+        "zone": "PRT1",
+        "code": "SLZ1",
+        "name": "S. LÁZARO",
+        "address": "AV.RODRIGUES FREITAS",
+        "sequence": 27
+    }, {
+        "zone": "PRT1",
+        "code": "PDR4",
+        "name": "PADRÃO",
+        "address": "R.MORGADO MATEUS",
+        "sequence": 28
+    }, {
+        "zone": "PRT1",
+        "code": "C24A4",
+        "name": "CAMPO 24 AGOSTO",
+        "address": "AV.FERNÃO MAGALHAES",
+        "sequence": 29
+    }],
+    "startIndex": 0,
+    "dir": "asc"
+}
